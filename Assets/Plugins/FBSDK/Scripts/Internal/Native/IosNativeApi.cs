@@ -1,7 +1,8 @@
+#if UNITY_IOS
+
 using UnityEngine;
 using UnityEngine.Purchasing;
 
-#if UNITY_IOS
 namespace FbSdk.Internal.Native
 {
     public class IosNativeApi : INativeApi, IStoreListener

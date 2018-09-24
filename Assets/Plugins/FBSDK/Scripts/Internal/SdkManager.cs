@@ -1,6 +1,4 @@
-﻿#undef UNITY_EDITOR
-
-using System.Collections;
+﻿using System.Collections;
 using FbSdk.Internal.Native;
 using UnityEngine;
 
