@@ -62,7 +62,7 @@ namespace FbSdk.Internal.Native
                 Debug.LogWarning("FBSDK is not initialized");
                 return;
             }
-            if (_purchaseInProgress == true)
+            if (_purchaseInProgress)
             {
                 Debug.Log("Please wait, purchase in progress");
                 return;

@@ -28,12 +28,16 @@ namespace FbSdk
         /// <param name="forceShowUi">强制显示UI，不使用缓存token</param>
         public static void Login(bool forceShowUi = false)
         {
-            if (!IsInitialized) return;
+            if (!CheckInitialize()) return;
 
             if (forceShowUi)
+            {
                 SdkManager.Ui.ShowLogin();
+            }
             else
+            {
                 SdkManager.Auth.LoginByCache();
+            }
         }
 
         /// <summary>
@@ -41,7 +45,7 @@ namespace FbSdk
         /// </summary>
         public static void Logout()
         {
-            if (!IsInitialized) return;
+            if (!CheckInitialize()) return;
 
             SdkManager.Auth.Logout();
         }
@@ -51,7 +55,7 @@ namespace FbSdk
         /// </summary>
         public static void OpenUserCenter()
         {
-            if (!IsInitialized) return;
+            if (!CheckInitialize()) return;
 
             SdkManager.Ui.ShowGameCenter();
         }
@@ -61,6 +65,8 @@ namespace FbSdk
         /// </summary>
         public static void Pay(string productId, string name, int price)
         {
+            if (!CheckInitialize()) return;
+
             SdkManager.Order.Pay(productId, name, price);
         }
 
@@ -69,8 +75,23 @@ namespace FbSdk
         /// </summary>
         public static void ExitGame()
         {
+            if (!CheckInitialize()) return;
+
             var dialog = SdkManager.Ui.Dialog;
             dialog.Show("确定退出游戏嘛？", "再玩一会儿", dialog.Hide, "就此别过", Application.Quit);
+        }
+
+        private static bool CheckInitialize()
+        {
+            if (!IsInitialized)
+            {
+                Debug.LogWarning("Not IsInitialized");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         #endregion
@@ -83,8 +104,8 @@ namespace FbSdk
             IsInitialized = true;
             var handler = InitializeSuccess;
             if (handler != null) handler();
-        }        
-        
+        }
+
         internal static void OnInitializeFailure(string err)
         {
             Debug.Log("OnInitializeFailure: " + err);
@@ -107,19 +128,22 @@ namespace FbSdk
         }
 
         internal static void OnPaySuccess()
-        {Debug.Log("OnPaySuccess");
+        {
+            Debug.Log("OnPaySuccess");
             var handler = PaySuccess;
             if (handler != null) handler();
         }
 
         internal static void OnPayFailure(string err)
-        {Debug.Log("OnPayFailure: " + err);
+        {
+            Debug.Log("OnPayFailure: " + err);
             var handler = PayFailure;
             if (handler != null) handler(err);
         }
 
         internal static void OnPayCancel()
-        {Debug.Log("OnPayCancel");
+        {
+            Debug.Log("OnPayCancel");
             var handler = PayCancel;
             if (handler != null) handler();
         }

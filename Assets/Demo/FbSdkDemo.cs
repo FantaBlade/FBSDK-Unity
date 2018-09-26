@@ -13,9 +13,14 @@ public class FbSdkDemo : MonoBehaviour
     private void Start()
     {
         Sdk.Init("44I1ucBEaIRvm4Re");
+        Sdk.InitializeSuccess += OnInitializeSuccess;
         Sdk.LoginSuccess += OnLoginSuccess;
         Sdk.PaySuccess += OnPaySuccess;
-        Sdk.PayCancel += OnPayCancel;
+        Sdk.PayCancel += OnPayCancel;  
+    }
+
+    private void OnInitializeSuccess()
+    {
         Sdk.Login();
     }
 
