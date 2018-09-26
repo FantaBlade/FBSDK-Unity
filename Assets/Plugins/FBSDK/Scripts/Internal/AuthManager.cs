@@ -53,7 +53,7 @@ namespace FbSdk.Internal
 
         public bool IsLoggingIn;
 
-        public void OnLoginCallback(string err, PlatformApi.TokenResponse resp)
+        public void OnLoginCallback(string err, PlatformApi.ResponseMetaInfo meta, PlatformApi.TokenResponse resp)
         {
             IsLoggingIn = false;
 
@@ -76,7 +76,7 @@ namespace FbSdk.Internal
             {
                 {"uniqueDeviceId", SystemInfo.deviceUniqueIdentifier},
             };
-            SdkManager.StartCoroutine(PlatformApi.User.QuickLogin.Post(form, OnLoginCallback));
+            PlatformApi.User.QuickLogin.Post(form, OnLoginCallback);
         }
 
         public void LoginByCache()
@@ -87,7 +87,7 @@ namespace FbSdk.Internal
             }
             else
             {
-                SdkManager.StartCoroutine(PlatformApi.User.RefreshToken.Get((err, resp) =>
+                PlatformApi.User.RefreshToken.Get((err, meta, resp) =>
                 {
                     if (err != null)
                     {
@@ -97,7 +97,7 @@ namespace FbSdk.Internal
                     {
                         LoginSuccess(resp.token);
                     }
-                }));
+                });
             }
         }
 
@@ -109,7 +109,7 @@ namespace FbSdk.Internal
                 {"identifier", identifier},
                 {"password", password}
             };
-            SdkManager.StartCoroutine(PlatformApi.User.Login.Post(form, OnLoginCallback));
+            PlatformApi.User.Login.Post(form, OnLoginCallback);
         }
 
         private void LoginSuccess(string token)
@@ -152,11 +152,11 @@ namespace FbSdk.Internal
                 request = PlatformApi.User.RequestValidateCodeForRigister;
             }
 
-            SdkManager.StartCoroutine(
-                request.Post(form, (err, resp) =>
+            
+                request.Post(form, (err, meta, resp) =>
                 {
                     if (callback != null) callback(err);
-                }));
+                });
         }
 
         public void Register(string username, string password, string mobileNumber, string vacode)
@@ -169,7 +169,7 @@ namespace FbSdk.Internal
                 {"username", username},
                 {"vacode", vacode}
             };
-            SdkManager.StartCoroutine(PlatformApi.User.Register.Post(form, OnLoginCallback));
+            PlatformApi.User.Register.Post(form, OnLoginCallback);
         }
 
         public void TouristUpgrade(string username, string password, string mobileNumber, string vacode)
@@ -182,7 +182,7 @@ namespace FbSdk.Internal
                 {"username", username},
                 {"vacode", vacode}
             };
-            SdkManager.StartCoroutine(PlatformApi.User.TouristUpgrade.Post(form, (err, resp) =>
+            PlatformApi.User.TouristUpgrade.Post(form, (err, meta, resp) =>
             {
                 IsLoggingIn = false;
 
@@ -196,7 +196,7 @@ namespace FbSdk.Internal
                     SdkManager.Ui.Dialog.Show("恭喜你！已经成功升级为正式账号!", "好的");
                     SdkManager.Ui.HideGameCenter();
                 }
-            }));
+            });
         }
 
         private static string Base64Encode(string str)

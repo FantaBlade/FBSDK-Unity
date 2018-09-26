@@ -1,5 +1,4 @@
-﻿using System;
-using FbSdk;
+﻿using FbSdk;
 using UnityEngine;
 
 public class FbSdkDemo : MonoBehaviour
@@ -37,6 +36,6 @@ public class FbSdkDemo : MonoBehaviour
 
     private void OnGUI()
     {
-        if (GUILayout.Button("pay", GUILayout.Width(300), GUILayout.Height(300))) Sdk.Pay("炫辣鸡腿堡套餐", "加大", 1);
+        if (GUILayout.Button("pay", GUILayout.Width(300), GUILayout.Height(300))) Sdk.Pay("currency_charge_1001", "充值6元", 6);
     }
 }

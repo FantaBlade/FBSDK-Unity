@@ -13,11 +13,17 @@ namespace FbSdk.Internal.Native
             var currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
             _nativeApi = new AndroidJavaObject("com.fantablade.fbsdk.Api", currentActivity, SdkManager.AccessKeyId);
             _nativeApi.Call("setListener", new AndroidSdkCallback());
+            Sdk.OnInitializeSuccess();
         }
 
-        public void Pay(string commodityName, string commodityInfo, int orderAmount)
+        public void Pay(string productId, string name, int price)
         {
-            _nativeApi.Call("pay", commodityName, commodityInfo, orderAmount);
+            if (!Sdk.IsInitialized)
+            {
+                Debug.LogWarning("FBSDK is not initialized");
+                return;
+            }
+            _nativeApi.Call("pay", productId, name, price);
         }
     }
 }

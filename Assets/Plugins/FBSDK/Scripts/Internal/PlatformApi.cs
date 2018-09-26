@@ -3,17 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
 
 namespace FbSdk.Internal
 {
     internal class PlatformApi
     {
-        private static readonly string _host = "https://test.api.fantablade.com";
         private static readonly string _version = "v0.1";
+        private static readonly string _host = "https://test.api.fantablade.com/" + _version;
 
         public class WebRequest<TResponse> where TResponse : Response
         {
+            public delegate void WebResponseEventHandler(string err, ResponseMetaInfo metaInfo, TResponse response);
+
             private readonly Uri _uri;
 
             private WebRequest()
@@ -24,7 +25,7 @@ namespace FbSdk.Internal
             {
                 try
                 {
-                    _uri = new Uri(string.Join("/", new[] {_host, _version, path}));
+                    _uri = new Uri(string.Join("/", new[] {_host, path}));
                 }
                 catch (UriFormatException e)
                 {
@@ -38,52 +39,60 @@ namespace FbSdk.Internal
                 return new WebRequest<TResponse>(path);
             }
 
-            public IEnumerator Get(Action<string, TResponse> callback)
+            public Coroutine Get(WebResponseEventHandler callback)
+            {
+                return SdkManager.StartCoroutine(GetCoroutine(callback));
+            }
+
+            public Coroutine Post(Dictionary<string, string> form, WebResponseEventHandler callback)
+            {
+                return SdkManager.StartCoroutine(PostCoroutine(form, callback));
+            }
+
+            private IEnumerator GetCoroutine(WebResponseEventHandler callback)
             {
                 var request = UnityWebRequest.Get(_uri.AbsoluteUri);
                 yield return SendRequest(request, callback);
             }
 
-            public IEnumerator Post(Dictionary<string, string> form, Action<string, TResponse> callback)
+
+            private IEnumerator PostCoroutine(Dictionary<string, string> form, WebResponseEventHandler callback)
             {
                 var request = UnityWebRequest.Post(_uri.AbsoluteUri, form);
                 yield return SendRequest(request, callback);
             }
 
-            private IEnumerator SendRequest(UnityWebRequest request, Action<string, TResponse> callback)
-
+            private static IEnumerator SendRequest(UnityWebRequest request, WebResponseEventHandler callback)
             {
                 request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
-                if (SdkManager.Auth.Token != null)
-                {
-                    request.SetRequestHeader("Authorization", SdkManager.Auth.Token);
-                }
+                if (SdkManager.Auth.Token != null) request.SetRequestHeader("Authorization", SdkManager.Auth.Token);
 
                 yield return request.SendWebRequest();
+                string err = null;
+                var metaInfo = new ResponseMetaInfo(request.responseCode, request.error);
+                TResponse response = null;
                 if (request.isNetworkError)
                 {
                     Debug.LogError(request.error);
-                    if (callback != null) callback(request.error, default(TResponse));
+                    err = request.error;
                 }
                 else if (request.isHttpError)
                 {
                     Debug.LogError(string.Format("{0} {1}\n{2}", request.responseCode, request.error,
                         request.downloadHandler.text));
-                    if (callback != null) callback(request.error, default(TResponse));
+                    err = request.error;
                 }
                 else
                 {
                     var result = request.downloadHandler.text;
-                    var response = JsonUtility.FromJson<TResponse>(result);
+                    response = JsonUtility.FromJson<TResponse>(result);
                     if (response.code != 0)
                     {
-                        if (callback != null) callback(response.message, default(TResponse));
-                    }
-                    else
-                    {
-                        if (callback != null) callback(null, response);
+                        err = response.message;
                     }
                 }
+
+                if (callback != null) callback(err, metaInfo, response);
             }
         }
 
@@ -102,19 +111,37 @@ namespace FbSdk.Internal
             public static readonly WebRequest<Response> RequestValidateCodeForLogin = Prefix + "vacode/login";
         }
 
+        public static class Iap
+        {
+            private const string Server = "order";
+            private const string Prefix = Server + "/iap/";
+
+            public static readonly WebRequest<Response> PurchaseNotify = Prefix + "notify";
+        }
+
         [Serializable]
-        public class Response
+        public struct ResponseMetaInfo
         {
             /// <summary>
             ///     http status
             /// </summary>
-            public string status;
+            public long Status;
 
             /// <summary>
             ///     http error
             /// </summary>
-            public string error;
+            public string Error;
 
+            public ResponseMetaInfo(long status, string error)
+            {
+                Status = status;
+                Error = error;
+            }
+        }
+
+        [Serializable]
+        public class Response
+        {
             /// <summary>
             ///     error code
             /// </summary>

@@ -11,10 +11,7 @@ namespace FbSdk
     {
         #region API
 
-        public static bool IsInitialized
-        {
-            get { return SdkManager.IsInitialized; }
-        }
+        public static bool IsInitialized { get; private set; }
 
         /// <summary>
         ///     初始化SDK
@@ -31,7 +28,7 @@ namespace FbSdk
         /// <param name="forceShowUi">强制显示UI，不使用缓存token</param>
         public static void Login(bool forceShowUi = false)
         {
-            if (!SdkManager.IsInitialized) return;
+            if (!IsInitialized) return;
 
             if (forceShowUi)
                 SdkManager.Ui.ShowLogin();
@@ -44,7 +41,7 @@ namespace FbSdk
         /// </summary>
         public static void Logout()
         {
-            if (!SdkManager.IsInitialized) return;
+            if (!IsInitialized) return;
 
             SdkManager.Auth.Logout();
         }
@@ -54,7 +51,7 @@ namespace FbSdk
         /// </summary>
         public static void OpenUserCenter()
         {
-            if (!SdkManager.IsInitialized) return;
+            if (!IsInitialized) return;
 
             SdkManager.Ui.ShowGameCenter();
         }
@@ -62,9 +59,9 @@ namespace FbSdk
         /// <summary>
         ///     支付
         /// </summary>
-        public static void Pay(string commodityName, string commodityInfo, int orderAmount)
+        public static void Pay(string productId, string name, int price)
         {
-            SdkManager.Order.Pay(commodityName, commodityInfo, orderAmount);
+            SdkManager.Order.Pay(productId, name, price);
         }
 
         /// <summary>
@@ -80,38 +77,49 @@ namespace FbSdk
 
         #region Event invoker
 
-        internal static void OnInitialize()
+        internal static void OnInitializeSuccess()
         {
-            var handler = Initialize;
+            Debug.Log("OnInitialized");
+            IsInitialized = true;
+            var handler = InitializeSuccess;
             if (handler != null) handler();
+        }        
+        
+        internal static void OnInitializeFailure(string err)
+        {
+            Debug.Log("OnInitializeFailure: " + err);
+            var handler = InitializeFailure;
+            if (handler != null) handler(err);
         }
 
         internal static void OnLoginSuccess(string token)
         {
+            Debug.Log("OnLoginSuccess: " + token);
             var handler = LoginSuccess;
             if (handler != null) handler(token);
         }
 
         internal static void OnLogoutSuccess()
         {
+            Debug.Log("OnLogoutSuccess");
             var handler = LogoutSuccess;
             if (handler != null) handler();
         }
 
         internal static void OnPaySuccess()
-        {
+        {Debug.Log("OnPaySuccess");
             var handler = PaySuccess;
             if (handler != null) handler();
         }
 
-        internal static void OnPayFailure(string obj)
-        {
+        internal static void OnPayFailure(string err)
+        {Debug.Log("OnPayFailure: " + err);
             var handler = PayFailure;
-            if (handler != null) handler(obj);
+            if (handler != null) handler(err);
         }
 
         internal static void OnPayCancel()
-        {
+        {Debug.Log("OnPayCancel");
             var handler = PayCancel;
             if (handler != null) handler();
         }
@@ -123,7 +131,12 @@ namespace FbSdk
         /// <summary>
         ///     初始化完成
         /// </summary>
-        public static event Action Initialize;
+        public static event Action InitializeSuccess;
+
+        /// <summary>
+        ///     初始化失败
+        /// </summary>
+        public static event Action<string> InitializeFailure;
 
         /// <summary>
         ///     登陆成功

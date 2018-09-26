@@ -4,6 +4,6 @@ namespace FbSdk.Internal.Native
     {
         void Init();
         
-        void Pay(string commodityName, string commodityInfo, int orderAmount);
+        void Pay(string productId, string name, int price);
     }
 }

@@ -8,8 +8,6 @@ namespace FbSdk.Internal
     {
         public static SdkManager Instance { get; private set; }
 
-        public static bool IsInitialized { get; private set; }
-
         public static string AccessKeyId { get; private set; }
 
         public static readonly UiManager Ui = new UiManager();
@@ -37,11 +35,9 @@ namespace FbSdk.Internal
             var ui = Resources.Load<GameObject>("fbsdk/prefab/fbsdk");
             ui = Instantiate(ui);
             DontDestroyOnLoad(ui);
+            ui.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
             Instance = ui.AddComponent<SdkManager>();
             Ui.Init();
-
-            IsInitialized = true;
-            Sdk.OnInitialize();
         }
 
         public new static Coroutine StartCoroutine(IEnumerator coroutine)

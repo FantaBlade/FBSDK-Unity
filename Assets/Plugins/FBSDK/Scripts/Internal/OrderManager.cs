@@ -2,9 +2,9 @@ namespace FbSdk.Internal
 {
     public class OrderManager
     {
-        public void Pay(string commodityName, string commodityInfo, int orderAmount)
+        public void Pay(string productId, string name, int price)
         {
-            SdkManager.NativeApi.Pay(commodityInfo, commodityInfo, orderAmount);
+            SdkManager.NativeApi.Pay(productId, name, price);
         }
     }
 }
