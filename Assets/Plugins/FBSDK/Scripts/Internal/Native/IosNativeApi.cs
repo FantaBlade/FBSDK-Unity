@@ -15,9 +15,9 @@ namespace FbSdk.Internal.Native
         private IAppleExtensions _appleExtensions;
         private ITransactionHistoryExtensions _transactionHistoryExtensions;
 
-        private string _lastTransactionId;
-
         private bool _purchaseInProgress;
+
+        private Queue<Product> _purchaseQueue = new Queue<Product>();
 
         public void Init()
         {
@@ -53,6 +53,7 @@ namespace FbSdk.Internal.Native
             }
 
             UnityPurchasing.Initialize(this, builder);
+            Sdk.LoginSuccess += OnLoginSuccess;
         }
 
         public void Pay(string productId, string name, int price)
@@ -62,6 +63,7 @@ namespace FbSdk.Internal.Native
                 Debug.LogWarning("FBSDK is not initialized");
                 return;
             }
+
             if (_purchaseInProgress)
             {
                 Debug.Log("Please wait, purchase in progress");
@@ -72,13 +74,12 @@ namespace FbSdk.Internal.Native
             if (product != null && product.availableToPurchase)
             {
                 _controller.InitiatePurchase(product);
+                _purchaseInProgress = true;
             }
             else
             {
                 Sdk.OnPayFailure("illegal product id:" + productId);
             }
-
-            _purchaseInProgress = true;
         }
 
         public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
@@ -97,12 +98,10 @@ namespace FbSdk.Internal.Native
                         {
                             item.metadata.localizedTitle,
                             item.metadata.localizedDescription,
-                            item.metadata.localizedDescription,
                             item.metadata.isoCurrencyCode,
                             item.metadata.localizedPrice.ToString(CultureInfo.InvariantCulture),
                             item.metadata.localizedPriceString,
-                            item.transactionID,
-                            item.receipt
+                            item.transactionID
                         }));
 
 #if INTERCEPT_PROMOTIONAL_PURCHASES
@@ -133,7 +132,7 @@ namespace FbSdk.Internal.Native
                     Debug.Log("No products available for purchase!");
                     break;
             }
-            
+
             _purchaseInProgress = false;
 
             Sdk.OnInitializeFailure(error.ToString());
@@ -143,21 +142,11 @@ namespace FbSdk.Internal.Native
         {
             var product = e.purchasedProduct;
             Debug.Log("Purchase OK: " + product.definition.id);
-            Debug.Log("Receipt: " + product.receipt);
 
-            _lastTransactionId = product.transactionID;
             _purchaseInProgress = false;
-
-            var form = new Dictionary<string, string>
-            {
-                {"transactionId", product.transactionID},
-                {"receipt", product.receipt}
-            };
-            PlatformApi.Iap.PurchaseNotify.Post(form, (err, meta, resp) =>
-            {
-                Debug.Log(err);
-                _controller.ConfirmPendingPurchase(product);
-            });
+            _purchaseQueue.Enqueue(product);
+            HandlePurchaseQueue();
+            
             return PurchaseProcessingResult.Pending;
         }
 
@@ -187,6 +176,40 @@ namespace FbSdk.Internal.Native
         private void OnDeferred(Product item)
         {
             Debug.Log("Purchase deferred: " + item.definition.id);
+        }
+
+        private void OnLoginSuccess(string s)
+        {
+            HandlePurchaseQueue();
+        }
+
+        private void HandlePurchaseQueue()
+        {
+            while (_purchaseQueue.Count != 0)
+            {
+                var product = _purchaseQueue.Dequeue();
+                var form = new Dictionary<string, string>
+                {
+                    {"transactionId", product.transactionID},
+                    {"receipt", product.receipt}
+                };
+                PlatformApi.Iap.PurchaseNotify.Post(form, (err, meta, resp) =>
+                {
+                    if (err != null)
+                    {
+                        Debug.Log(err);
+                    }
+
+                    if (meta.Status == 200)
+                    {
+                        _controller.ConfirmPendingPurchase(product);
+                    }
+                    else
+                    {
+                        _purchaseQueue.Enqueue(product);
+                    }
+                });
+            }
         }
     }
 }
