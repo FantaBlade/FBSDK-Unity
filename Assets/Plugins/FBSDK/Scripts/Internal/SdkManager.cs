@@ -30,14 +30,14 @@ namespace FbSdk.Internal
             if (Instance != null) return;
             AccessKeyId = accessKeyId;
 
-            NativeApi.Init();
-
             var ui = Resources.Load<GameObject>("fbsdk/prefab/fbsdk");
             ui = Instantiate(ui);
             DontDestroyOnLoad(ui);
             ui.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
             Instance = ui.AddComponent<SdkManager>();
             Ui.Init();
+            
+            NativeApi.Init();
         }
 
         public new static Coroutine StartCoroutine(IEnumerator coroutine)

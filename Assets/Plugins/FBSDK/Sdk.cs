@@ -100,7 +100,7 @@ namespace FbSdk
 
         internal static void OnInitializeSuccess()
         {
-            Debug.Log("OnInitialized");
+            Debug.Log("OnInitializeSuccess");
             IsInitialized = true;
             var handler = InitializeSuccess;
             if (handler != null) handler();
