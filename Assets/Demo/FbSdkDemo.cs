@@ -16,7 +16,7 @@ public class FbSdkDemo : MonoBehaviour
         Sdk.LoginSuccess += OnLoginSuccess;
         Sdk.PaySuccess += OnPaySuccess;
         Sdk.PayCancel += OnPayCancel;
-        Sdk.Init("44I1ucBEaIRvm4Re");
+        Sdk.Init("44I1ucBEaIRvm4Re", false);
     }
 
     private void OnInitializeSuccess()

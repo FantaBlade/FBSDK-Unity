@@ -11,15 +11,33 @@ namespace FbSdk
     {
         #region API
 
-        public static bool IsInitialized { get; private set; }
+        private static bool _isInitialized;
+
+        /// <summary>
+        ///     是否初始化完成
+        /// </summary>
+        public static bool IsInitialized
+        {
+            get
+            {
+                if (!_isInitialized)
+                {
+                    Debug.LogWarning("FBSDK not initialized");
+                }
+
+                return _isInitialized;
+            }
+            private set { _isInitialized = value; }
+        }
 
         /// <summary>
         ///     初始化SDK
         /// </summary>
         /// <param name="accessKey">AccessKey</param>
-        public static void Init(string accessKey)
+        /// <param name="showFloatingWindow">显示悬浮窗</param>
+        public static void Init(string accessKey, bool showFloatingWindow = true)
         {
-            SdkManager.Init(accessKey);
+            SdkManager.Init(accessKey, showFloatingWindow);
         }
 
         /// <summary>
@@ -28,7 +46,7 @@ namespace FbSdk
         /// <param name="forceShowUi">强制显示UI，不使用缓存token</param>
         public static void Login(bool forceShowUi = false)
         {
-            if (!CheckInitialize()) return;
+            if (!IsInitialized) return;
 
             if (forceShowUi)
             {
@@ -45,7 +63,7 @@ namespace FbSdk
         /// </summary>
         public static void Logout()
         {
-            if (!CheckInitialize()) return;
+            if (!IsInitialized) return;
 
             SdkManager.Auth.Logout();
         }
@@ -55,7 +73,7 @@ namespace FbSdk
         /// </summary>
         public static void OpenUserCenter()
         {
-            if (!CheckInitialize()) return;
+            if (!IsInitialized) return;
 
             SdkManager.Ui.ShowGameCenter();
         }
@@ -65,7 +83,7 @@ namespace FbSdk
         /// </summary>
         public static void Pay(string productId, string name, int price)
         {
-            if (!CheckInitialize()) return;
+            if (!IsInitialized) return;
 
             SdkManager.Order.Pay(productId, name, price);
         }
@@ -75,23 +93,10 @@ namespace FbSdk
         /// </summary>
         public static void ExitGame()
         {
-            if (!CheckInitialize()) return;
+            if (!IsInitialized) return;
 
             var dialog = SdkManager.Ui.Dialog;
             dialog.Show("确定退出游戏嘛？", "再玩一会儿", dialog.Hide, "就此别过", Application.Quit);
-        }
-
-        private static bool CheckInitialize()
-        {
-            if (!IsInitialized)
-            {
-                Debug.LogWarning("Not IsInitialized");
-                return false;
-            }
-            else
-            {
-                return true;
-            }
         }
 
         #endregion

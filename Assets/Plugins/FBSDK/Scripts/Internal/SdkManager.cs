@@ -23,7 +23,7 @@ namespace FbSdk.Internal
             new IosNativeApi();
 #endif
 
-        public static void Init(string accessKeyId)
+        public static void Init(string accessKeyId, bool showFloatingWindow)
         {
             if (Instance != null) return;
             Instance = FindObjectOfType<SdkManager>();
@@ -36,6 +36,7 @@ namespace FbSdk.Internal
             ui.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
             Instance = ui.AddComponent<SdkManager>();
             Ui.Init();
+            Ui.FloatingWindow.IsActive = showFloatingWindow;
             
             NativeApi.Init();
         }

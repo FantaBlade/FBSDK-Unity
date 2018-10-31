@@ -7,6 +7,8 @@ namespace FbSdk.UI
     {
         private FloatingWindow _floatingWindow;
 
+        public bool IsActive;
+
         public void Init()
         {
             _floatingWindow = GetComponentInChildren<FloatingWindow>(true);
@@ -15,6 +17,11 @@ namespace FbSdk.UI
 
         public void Show()
         {
+            if (!IsActive)
+            {
+                return;
+            }
+
             gameObject.SetActive(true);
         }
 
