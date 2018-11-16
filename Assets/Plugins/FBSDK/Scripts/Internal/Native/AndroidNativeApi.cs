@@ -16,6 +16,26 @@ namespace FbSdk.Internal.Native
             Sdk.OnInitializeSuccess();
         }
 
+        public void SetToken(string token)
+        {
+            if (!Sdk.IsInitialized)
+            {
+                Debug.LogWarning("FBSDK is not initialized");
+                return;
+            }
+            _nativeApi.Call("setToken", token);
+        }
+
+        public void Logout()
+        {
+            if (!Sdk.IsInitialized)
+            {
+                Debug.LogWarning("FBSDK is not initialized");
+                return;
+            }
+            _nativeApi.Call("logout");
+        }
+
         public void Pay(string productId, string name, int price)
         {
             if (!Sdk.IsInitialized)

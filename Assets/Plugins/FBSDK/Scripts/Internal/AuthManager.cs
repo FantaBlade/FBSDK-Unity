@@ -117,7 +117,7 @@ namespace FbSdk.Internal
             Token = token;
             Sdk.OnLoginSuccess(token);
 #if UNITY_ANDROID && !UNITY_EDITOR
-            SdkManager.NativeApi.Call("setToken", token);
+            ((Native.AndroidNativeApi)SdkManager.NativeApi).SetToken(token);
 #endif
             SdkManager.Ui.FloatingWindow.Show();
         }
@@ -127,7 +127,7 @@ namespace FbSdk.Internal
             Token = null;
             Sdk.OnLogoutSuccess();
 #if UNITY_ANDROID && !UNITY_EDITOR
-            SdkManager.NativeApi.Call("logout");
+            ((Native.AndroidNativeApi)SdkManager.NativeApi).Logout();
 #endif
             SdkManager.Ui.FloatingWindow.Hide();
         }
