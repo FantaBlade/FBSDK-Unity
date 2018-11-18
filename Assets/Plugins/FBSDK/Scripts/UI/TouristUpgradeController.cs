@@ -4,68 +4,19 @@ using UnityEngine.UI;
 
 namespace FbSdk.UI
 {
-    public class TouristUpgradeController : MonoBehaviour, IController
+    [RequireComponent(typeof(MobileValidateController))]
+    internal class TouristUpgradeController : MonoBehaviour, IController
     {
         [SerializeField] private InputField _username;
         [SerializeField] private InputField _password;
-        [SerializeField] private InputField _mobileNumber;
-        [SerializeField] private InputField _validateCode;
-        [SerializeField] private Button _requestValidateCodeButton;
-        private Text _requestValidateCodeText;
 
-        private bool _isRequestingMobileValidate;
-        private string _mobileNumberCache;
-
-        private Countdown _countdown;
+        private Window _window;
+        private MobileValidateController _mobileValidate;
 
         public void Init()
         {
-            _countdown = new Countdown(SdkManager.Instance);
-            _requestValidateCodeText = _requestValidateCodeButton.GetComponentInChildren<Text>(true);
-        }
-
-        public void OnRequestMobileValidate()
-        {
-            if (_isRequestingMobileValidate)
-            {
-                return;
-            }
-
-            _mobileNumberCache = _mobileNumber.text;
-            if (_mobileNumberCache.Length == 11)
-            {
-                _isRequestingMobileValidate = true;
-                SdkManager.Auth.RequestValidateCode(_mobileNumberCache, err =>
-                {
-                    _isRequestingMobileValidate = false;
-                    if (err != null)
-                    {
-                        SdkManager.Ui.Dialog.Show(err, "好的");
-                    }
-                    else
-                    {
-                        _validateCode.interactable = true;
-                        _requestValidateCodeButton.interactable = false;
-                        _countdown.Start(60, s =>
-                        {
-                            if (s == 0)
-                            {
-                                ResetValidateCodeButton();
-                            }
-                            else
-                            {
-                                _requestValidateCodeText.text = s.ToString();
-                            }
-                        });
-                    }
-                }, false);
-            }
-        }
-
-        private void ResetValidateCodeButton()
-        {
-            _requestValidateCodeButton.interactable = true;
-            _requestValidateCodeText.text = "获取验证码";
+            _window = GetComponent<Window>();
+            _mobileValidate = GetComponent<MobileValidateController>();
         }
 
         public void OnRequestUpgrade()
@@ -77,7 +28,8 @@ namespace FbSdk.UI
 
             var username = _username.text;
             var password = _password.text;
-            var validateCode = _validateCode.text;
+            var mobileNumber = _mobileValidate.MobileNumber;
+            var validateCode = _mobileValidate.ValidateCode;
 
             if (string.IsNullOrEmpty(username))
             {
@@ -91,7 +43,7 @@ namespace FbSdk.UI
                 return;
             }
 
-            if (string.IsNullOrEmpty(_mobileNumberCache))
+            if (string.IsNullOrEmpty(mobileNumber))
             {
                 SdkManager.Ui.Dialog.Show("请输入手机号码，并获取验证码", "好的");
                 return;
@@ -103,27 +55,8 @@ namespace FbSdk.UI
                 return;
             }
 
-            SdkManager.Auth.TouristUpgrade(username, password, _mobileNumberCache, validateCode);
-        }
-
-        private void OnEnable()
-        {
-            _validateCode.interactable = false;
-            _validateCode.text = null;
-        }
-
-        private void OnDisable()
-        {
-            ResetValidateCodeButton();
-            _countdown.Reset();
-        }
-
-        private void OnApplicationFocus(bool hasFocus)
-        {
-            if (hasFocus)
-            {
-                _countdown.UpdateTime();
-            }
+            _window.Disappear();
+            SdkManager.Auth.TouristUpgrade(username, password, mobileNumber, validateCode);
         }
     }
 }

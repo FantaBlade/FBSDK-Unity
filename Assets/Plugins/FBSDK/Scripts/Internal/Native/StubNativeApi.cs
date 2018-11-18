@@ -1,6 +1,6 @@
 namespace FbSdk.Internal.Native
 {
-    public class StubNativeApi:INativeApi
+    internal class StubNativeApi : INativeApi
     {
         public void Init()
         {

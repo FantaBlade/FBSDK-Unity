@@ -7,7 +7,7 @@ using UnityEngine.Purchasing;
 
 namespace FbSdk.Internal.Native
 {
-    public class IosNativeApi : INativeApi, IStoreListener
+    internal class IosNativeApi : INativeApi, IStoreListener
     {
         private IStoreController _controller;
 
@@ -105,8 +105,8 @@ namespace FbSdk.Internal.Native
                         }));
 
 #if INTERCEPT_PROMOTIONAL_PURCHASES
-// Set all these products to be visible in the user's App Store according to Apple's Promotional IAP feature
-// https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/StoreKitGuide/PromotingIn-AppPurchases/PromotingIn-AppPurchases.html
+                // Set all these products to be visible in the user's App Store according to Apple's Promotional IAP feature
+                // https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/StoreKitGuide/PromotingIn-AppPurchases/PromotingIn-AppPurchases.html
                 m_AppleExtensions.SetStorePromotionVisibility(item, AppleStorePromotionVisibility.Show);
 #endif
                 }

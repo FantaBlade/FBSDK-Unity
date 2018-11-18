@@ -1,6 +1,6 @@
 namespace FbSdk.Internal.Native
 {
-    public interface IAndroidSdkCallback
+    internal interface IAndroidSdkCallback
     {
         /// <summary>
         ///     登陆成功

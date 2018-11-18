@@ -5,7 +5,7 @@ namespace FbSdk.Internal.Native
 {
     #if UNITY_ANDROID && !UNITY_EDITOR
     
-    public class AndroidSdkCallback : AndroidJavaProxy, IAndroidSdkCallback
+    internal class AndroidSdkCallback : AndroidJavaProxy, IAndroidSdkCallback
     {
         public AndroidSdkCallback() : base("com.fantablade.fbsdk.FbSdkListener")
         {

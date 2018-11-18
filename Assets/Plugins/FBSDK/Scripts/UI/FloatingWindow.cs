@@ -21,12 +21,10 @@ namespace FbSdk.UI
 
         public void OnDrag(PointerEventData eventData)
         {
-            Vector3 pos;
-            if (RectTransformUtility.ScreenPointToWorldPointInRectangle(_rectTransform,
-                eventData.position, _worldCamera, out pos))
-            {
-                _rectTransform.position = pos;
-            }
+            Vector2 position = eventData.position;
+            position = Vector2.Max(position, Vector2.zero);
+            position = Vector2.Min(position, _canvas.pixelRect.size);
+            _rectTransform.position = position;
         }
 
         public void OnPointerClick(PointerEventData eventData)

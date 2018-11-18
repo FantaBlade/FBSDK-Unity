@@ -1,6 +1,6 @@
 namespace FbSdk.Internal
 {
-    public class OrderManager
+    internal class OrderManager
     {
         public void Pay(string productId, string name, int price)
         {
