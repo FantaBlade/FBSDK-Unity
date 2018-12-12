@@ -9,7 +9,7 @@ namespace FbSdk.Internal
     internal class PlatformApi
     {
         private static readonly string _version = "v0.1";
-        private static readonly string _host = "https://test.api.fantablade.com/" + _version;
+        private static readonly string _host = "https://api.test.fantablade.com/" + _version;
 
         public class WebRequest<TResponse> where TResponse : Response
         {
