@@ -70,6 +70,11 @@ namespace FbSdk.Internal
 
         public void QuickLogin()
         {
+            if (SystemInfo.deviceUniqueIdentifier == SystemInfo.unsupportedIdentifier)
+            {
+                SdkManager.Ui.Dialog.Show("抱歉，该设备暂时无法使用快速游戏功能，请注册后登陆。", "好的");
+            }
+
             IsLoggingIn = true;
 
             var form = new Dictionary<string, string>

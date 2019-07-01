@@ -8,8 +8,11 @@ namespace FbSdk.Internal
 {
     internal class PlatformApi
     {
+        public static readonly string UserCenterHost = "https://test.fantablade.com/";
+
+        private static readonly string _apiHost = "https://api.test.fantablade.com/";
         private static readonly string _version = "v0.1";
-        private static readonly string _host = "https://api.test.fantablade.com/" + _version;
+        private static readonly string _apiUrl = _apiHost + _version;
 
         public class WebRequest<TResponse> where TResponse : Response
         {
@@ -25,7 +28,7 @@ namespace FbSdk.Internal
             {
                 try
                 {
-                    _uri = new Uri(string.Join("/", new[] {_host, path}));
+                    _uri = new Uri(string.Join("/", new[] {_apiUrl, path}));
                 }
                 catch (UriFormatException e)
                 {

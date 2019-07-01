@@ -20,6 +20,11 @@ namespace FbSdk.UI
             SdkManager.Ui.HideGameCenter();
         }
 
+        public void OnOpenProfile()
+        {
+            Application.OpenURL(PlatformApi.UserCenterHost + "auth?authToken=" + SdkManager.Auth.Token);
+        }
+
         public void OnTouristUpgrade()
         {
         }
