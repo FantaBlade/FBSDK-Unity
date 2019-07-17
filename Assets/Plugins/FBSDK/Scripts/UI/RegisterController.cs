@@ -7,11 +7,13 @@ namespace FbSdk.UI
     [RequireComponent(typeof(MobileValidateController))]
     internal class RegisterController : MonoBehaviour, IController
     {
+        private static string _defaultCountryCode;
+        
         [SerializeField] private InputField _username;
         [SerializeField] private InputField _password;
-        
+
         private MobileValidateController _mobileValidate;
-        
+
         public void Init()
         {
             _mobileValidate = GetComponent<MobileValidateController>();
@@ -26,6 +28,7 @@ namespace FbSdk.UI
 
             var username = _username.text;
             var password = _password.text;
+            var countryCode = _mobileValidate.CountryCode;
             var mobileNumber = _mobileValidate.MobileNumber;
             var validateCode = _mobileValidate.ValidateCode;
 
@@ -53,7 +56,7 @@ namespace FbSdk.UI
                 return;
             }
 
-            SdkManager.Auth.Register(username, password, mobileNumber, validateCode);
+            SdkManager.Auth.Register(username, password, countryCode, mobileNumber, validateCode);
         }
     }
 }

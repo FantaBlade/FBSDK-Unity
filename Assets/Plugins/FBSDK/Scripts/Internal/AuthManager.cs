@@ -106,11 +106,12 @@ namespace FbSdk.Internal
             }
         }
 
-        public void Login(string identifier, string password)
+        public void Login(string identifier, string password, string countryCode = "")
         {
             IsLoggingIn = true;
             var form = new Dictionary<string, string>
             {
+                {"countryCode", countryCode},
                 {"identifier", identifier},
                 {"password", password}
             };
@@ -137,10 +138,12 @@ namespace FbSdk.Internal
             SdkManager.Ui.FloatingWindow.Hide();
         }
 
-        public void RequestValidateCode(string mobileNumber, Action<string> callback, bool? registered = null)
+        public void RequestValidateCode(string countryCode, string mobileNumber, Action<string> callback,
+            bool? registered = null)
         {
             var form = new Dictionary<string, string>
             {
+                {"countryCode", countryCode},
                 {"mobile", mobileNumber}
             };
             PlatformApi.WebRequest<PlatformApi.Response> request;
@@ -157,18 +160,19 @@ namespace FbSdk.Internal
                 request = PlatformApi.User.RequestValidateCodeForRigister;
             }
 
-            
-                request.Post(form, (err, meta, resp) =>
-                {
-                    if (callback != null) callback(err);
-                });
+
+            request.Post(form, (err, meta, resp) =>
+            {
+                if (callback != null) callback(err);
+            });
         }
 
-        public void Register(string username, string password, string mobileNumber, string vacode)
+        public void Register(string username, string password, string countryCode, string mobileNumber, string vacode)
         {
             IsLoggingIn = true;
             var form = new Dictionary<string, string>
             {
+                {"countryCode", countryCode},
                 {"mobile", mobileNumber},
                 {"password", password},
                 {"username", username},
@@ -177,11 +181,13 @@ namespace FbSdk.Internal
             PlatformApi.User.Register.Post(form, OnLoginCallback);
         }
 
-        public void TouristUpgrade(string username, string password, string mobileNumber, string vacode)
+        public void TouristUpgrade(string username, string password, string countryCode, string mobileNumber,
+            string vacode)
         {
             IsLoggingIn = true;
             var form = new Dictionary<string, string>
             {
+                {"countryCode", countryCode},
                 {"mobile", mobileNumber},
                 {"password", password},
                 {"username", username},

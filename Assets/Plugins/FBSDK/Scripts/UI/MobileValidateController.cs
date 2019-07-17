@@ -1,4 +1,3 @@
-using System;
 using FbSdk.Internal;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +24,11 @@ namespace FbSdk.UI
             Guest,
         }
 
+        public string CountryCode
+        {
+            get { return _mobileController.CountryCode; }
+        }
+
         public string MobileNumber
         {
             get { return _mobileNumberCache; }
@@ -36,13 +40,18 @@ namespace FbSdk.UI
         }
 
         [SerializeField] private ValidateMode _validateMode;
-        [SerializeField] private InputField _mobileNumber;
+        [SerializeField] private MobileController _mobileController;
         [SerializeField] private InputField _validateCode;
         [SerializeField] private Button _requestValidateCodeButton;
         private Text _requestValidateCodeText;
 
         private bool _isRequestingMobileValidate;
 
+        /// <summary>
+        ///     缓存国别码，确保获取国别码与之前请求验证码的国别码一致
+        /// </summary>
+        private string _countryCodeCache; 
+        
         /// <summary>
         ///     缓存手机号码，确保获取手机号与之前请求验证码的号码一致
         /// </summary>
@@ -64,11 +73,12 @@ namespace FbSdk.UI
                 return;
             }
 
-            _mobileNumberCache = _mobileNumber.text;
+            _countryCodeCache = _mobileController.CountryCode;
+            _mobileNumberCache = _mobileController.MobileNumber;
             if (_mobileNumberCache.Length == 11)
             {
                 _isRequestingMobileValidate = true;
-                SdkManager.Auth.RequestValidateCode(_mobileNumberCache, err =>
+                SdkManager.Auth.RequestValidateCode(_countryCodeCache, _mobileNumberCache, err =>
                     {
                         _isRequestingMobileValidate = false;
                         if (err != null)

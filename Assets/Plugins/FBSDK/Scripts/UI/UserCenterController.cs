@@ -34,19 +34,19 @@ namespace FbSdk.UI
             var dialog = SdkManager.Ui.Dialog;
             if (SdkManager.Auth.IsTourist)
             {
-                dialog.Show("当前为游客账号，切换账号可能导致账号丢失，依然要切换吗？", "不了不了", dialog.Hide, "我偏要", () =>
+                dialog.Show("当前为游客账号，切换账号可能导致账号丢失，依然要切换吗？", "我偏要", () =>
                 {
                     SwitchUser();
                     dialog.Hide();
-                });
+                }, "不了不了");
             }
             else
             {
-                dialog.Show("确认切换账号吗？", "取消", dialog.Hide, "确认", () =>
+                dialog.Show("确认切换账号吗？", "确认", () =>
                 {
                     SwitchUser();
                     dialog.Hide();
-                });
+                }, "取消");
             }
         }
 

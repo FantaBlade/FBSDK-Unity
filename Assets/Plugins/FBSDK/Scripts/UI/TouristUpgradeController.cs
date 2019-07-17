@@ -11,6 +11,7 @@ namespace FbSdk.UI
         [SerializeField] private InputField _password;
 
         private Window _window;
+        
         private MobileValidateController _mobileValidate;
 
         public void Init()
@@ -28,6 +29,7 @@ namespace FbSdk.UI
 
             var username = _username.text;
             var password = _password.text;
+            var countryCode = _mobileValidate.CountryCode;
             var mobileNumber = _mobileValidate.MobileNumber;
             var validateCode = _mobileValidate.ValidateCode;
 
@@ -56,7 +58,7 @@ namespace FbSdk.UI
             }
 
             _window.Disappear();
-            SdkManager.Auth.TouristUpgrade(username, password, mobileNumber, validateCode);
+            SdkManager.Auth.Register(username, password, countryCode, mobileNumber, validateCode);
         }
     }
 }

@@ -114,6 +114,22 @@ namespace FbSdk.Internal
             public static readonly WebRequest<Response> RequestValidateCodeForLogin = Prefix + "vacode/login";
         }
 
+        public static class Feedback
+        {
+            private const string Server = "account";
+            private const string Prefix = Server + "/feedback/";
+
+            public static readonly WebRequest<Response> Submit = Prefix + "submit";
+        }
+
+        public static class Util
+        {
+            private const string Server = "account";
+            private const string Prefix = Server + "/util/";
+            
+            public static readonly WebRequest<Response> GetIpInfo = Prefix + "getIpInfo";
+        }
+
         public static class Iap
         {
             private const string Server = "order";
