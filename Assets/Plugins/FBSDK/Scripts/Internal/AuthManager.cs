@@ -70,7 +70,8 @@ namespace FbSdk.Internal
 
         public void QuickLogin()
         {
-            if (SystemInfo.deviceUniqueIdentifier == SystemInfo.unsupportedIdentifier)
+            var deviceUniqueIdentifier = SystemInfo.deviceUniqueIdentifier;
+            if (deviceUniqueIdentifier == SystemInfo.unsupportedIdentifier)
             {
                 SdkManager.Ui.Dialog.Show("抱歉，该设备暂时无法使用快速游戏功能，请注册后登陆。", "好的");
             }
@@ -79,7 +80,7 @@ namespace FbSdk.Internal
 
             var form = new Dictionary<string, string>
             {
-                {"uniqueDeviceId", SystemInfo.deviceUniqueIdentifier},
+                {"uniqueDeviceId", deviceUniqueIdentifier},
             };
             PlatformApi.User.QuickLogin.Post(form, OnLoginCallback);
         }
@@ -123,7 +124,10 @@ namespace FbSdk.Internal
             Token = token;
             Sdk.OnLoginSuccess(token);
 #if UNITY_ANDROID && !UNITY_EDITOR
-            ((Native.AndroidNativeApi)SdkManager.NativeApi).SetToken(token);
+            if (SdkManager.UseAndroidNativeApi)
+            {
+                ((Native.AndroidNativeApi)SdkManager.NativeApi).SetToken(token);
+            }
 #endif
             SdkManager.Ui.FloatingWindow.Show();
         }
@@ -133,7 +137,10 @@ namespace FbSdk.Internal
             Token = null;
             Sdk.OnLogoutSuccess();
 #if UNITY_ANDROID && !UNITY_EDITOR
-            ((Native.AndroidNativeApi)SdkManager.NativeApi).Logout();
+            if (SdkManager.UseAndroidNativeApi)
+            {
+                ((Native.AndroidNativeApi)SdkManager.NativeApi).Logout();
+            }
 #endif
             SdkManager.Ui.FloatingWindow.Hide();
         }

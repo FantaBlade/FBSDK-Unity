@@ -6,7 +6,7 @@ namespace FbSdk.UI
 {
     internal class MobileValidateController : MonoBehaviour, IController
     {
-        enum ValidateMode
+        private enum ValidateMode
         {
             /// <summary>
             ///     不验证

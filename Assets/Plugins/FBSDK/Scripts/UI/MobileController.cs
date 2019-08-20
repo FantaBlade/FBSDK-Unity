@@ -45,7 +45,7 @@ namespace FbSdk.UI
                 {
                     if (err == null)
                     {
-                        var countryCode = response.message;
+                        var countryCode = response.countryCode;
                         for (var i = 0; i < _countryInfos.Length; i++)
                         {
                             if (countryCode == _countryInfos[i].CountryCodeIso2)

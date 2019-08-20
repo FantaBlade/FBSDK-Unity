@@ -6,6 +6,10 @@ namespace FbSdk.Internal
 {
     internal class SdkManager : MonoBehaviour
     {
+        public static bool DebugMode = false;
+        public static Sdk.PublishRegion PublishRegion;
+        public static bool UseAndroidNativeApi;
+
         public static SdkManager Instance { get; private set; }
 
         public static string AccessKeyId { get; private set; }
@@ -14,17 +18,42 @@ namespace FbSdk.Internal
         public static readonly AuthManager Auth = new AuthManager();
         public static readonly OrderManager Order = new OrderManager();
 
-        internal static readonly INativeApi NativeApi =
-#if UNITY_EDITOR
-            new StubNativeApi();
-#elif UNITY_ANDROID
-            new AndroidNativeApi();
-#elif UNITY_IOS
-            new IosNativeApi();
+        /// <summary>
+        ///     原生层 API
+        /// </summary>
+        internal static INativeApi NativeApi;
+
+        /// <summary>
+        ///     支付 API
+        /// </summary>
+        internal static IPaymentApi PaymentApi;
+
+
+        public static void Init(string accessKeyId, bool showFloatingWindow, Sdk.PublishRegion publishRegion,
+            string productCatalogJson)
+        {
+            Log.CurrentLevel = DebugMode ? Log.LogLevel.Debug : Log.LogLevel.Info;
+
+            PublishRegion = publishRegion;
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+            UseAndroidNativeApi = PublishRegion == Sdk.PublishRegion.China;
+            if (UseAndroidNativeApi)
+            {
+                var androidNativeApi = new AndroidNativeApi();
+                NativeApi = androidNativeApi;
+                PaymentApi = androidNativeApi;
+            }
+            else
+            {
+                PaymentApi = new UnityIapPaymentApi();
+            }
+#elif UNITY_IOS && !UNITY_EDITOR
+            PaymentApi = new UnityIapPaymentApi();
+#else
+            PaymentApi = new StubPaymentApi();
 #endif
 
-        public static void Init(string accessKeyId, bool showFloatingWindow)
-        {
             if (Instance != null) return;
             Instance = FindObjectOfType<SdkManager>();
             if (Instance != null) return;
@@ -37,8 +66,9 @@ namespace FbSdk.Internal
             Instance = ui.AddComponent<SdkManager>();
             Ui.Init();
             Ui.FloatingWindow.IsActive = showFloatingWindow;
-            
-            NativeApi.Init();
+
+            Order.SetProductCatalog(productCatalogJson);
+            PaymentApi.Init();
         }
 
         public new static Coroutine StartCoroutine(IEnumerator coroutine)

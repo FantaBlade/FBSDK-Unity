@@ -1,72 +1,48 @@
-#if UNITY_IOS
-
 using System.Collections.Generic;
 using System.Globalization;
-using UnityEngine;
 using UnityEngine.Purchasing;
 
 namespace FbSdk.Internal.Native
 {
-    internal class IosNativeApi : INativeApi, IStoreListener
+    internal class UnityIapPaymentApi : IPaymentApi, IStoreListener
     {
         private IStoreController _controller;
-
         private IExtensionProvider _extensions;
         private IAppleExtensions _appleExtensions;
         private ITransactionHistoryExtensions _transactionHistoryExtensions;
 
         private bool _purchaseInProgress;
 
-        private Queue<Product> _purchaseQueue = new Queue<Product>();
+        private readonly Queue<Product> _purchaseQueue = new Queue<Product>();
 
         public void Init()
         {
-            var module = StandardPurchasingModule.Instance();
-
-            // The FakeStore supports: no-ui (always succeeding), basic ui (purchase pass/fail), and
-            // developer ui (initialization, purchase, failure code setting). These correspond to
-            // the FakeStoreUIMode Enum values passed into StandardPurchasingModule.useFakeStoreUIMode.
-            module.useFakeStoreUIMode = FakeStoreUIMode.DeveloperUser;
-
-            var builder = ConfigurationBuilder.Instance(module);
-
-            // Use the products defined in the IAP Catalog GUI.
-            // E.g. Menu: "Window" > "Unity IAP" > "IAP Catalog", then add products, then click "App Store Export".
-            var catalog = ProductCatalog.LoadDefaultCatalog();
-
-            foreach (var product in catalog.allValidProducts)
-            {
-                if (product.allStoreIDs.Count > 0)
-                {
-                    var ids = new IDs();
-                    foreach (var storeId in product.allStoreIDs)
-                    {
-                        ids.Add(storeId.id, storeId.store);
-                    }
-
-                    builder.AddProduct(product.id, product.type, ids);
-                }
-                else
-                {
-                    builder.AddProduct(product.id, product.type);
-                }
-            }
-
+            var builder = SdkManager.Order.GetConfigurationBuilder();
             UnityPurchasing.Initialize(this, builder);
             Sdk.LoginSuccess += OnLoginSuccess;
         }
 
-        public void Pay(string productId, string name, int price)
+        public Product GetProductById(string id)
+        {
+            return _controller.products.WithID(id);
+        }
+
+        public Product[] GetProducts()
+        {
+            return _controller.products.all;
+        }
+
+        public void Pay(string productId)
         {
             if (!Sdk.IsInitialized)
             {
-                Debug.LogWarning("FBSDK is not initialized");
+                Log.Warning("FBSDK is not initialized");
                 return;
             }
 
             if (_purchaseInProgress)
             {
-                Debug.Log("Please wait, purchase in progress");
+                Log.Info("Please wait, purchase in progress");
                 return;
             }
 
@@ -93,13 +69,13 @@ namespace FbSdk.Internal.Native
             {
                 if (item.availableToPurchase)
                 {
-                    Debug.Log(string.Join(" - ",
+                    Log.Debug(string.Join(" - ",
                         new[]
                         {
+                            item.definition.id,
                             item.metadata.localizedTitle,
                             item.metadata.localizedDescription,
                             item.metadata.isoCurrencyCode,
-                            item.metadata.localizedPrice.ToString(CultureInfo.InvariantCulture),
                             item.metadata.localizedPriceString,
                             item.transactionID
                         }));
@@ -107,7 +83,7 @@ namespace FbSdk.Internal.Native
 #if INTERCEPT_PROMOTIONAL_PURCHASES
                 // Set all these products to be visible in the user's App Store according to Apple's Promotional IAP feature
                 // https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/StoreKitGuide/PromotingIn-AppPurchases/PromotingIn-AppPurchases.html
-                m_AppleExtensions.SetStorePromotionVisibility(item, AppleStorePromotionVisibility.Show);
+                _appleExtensions.SetStorePromotionVisibility(item, AppleStorePromotionVisibility.Show);
 #endif
                 }
             }
@@ -117,31 +93,34 @@ namespace FbSdk.Internal.Native
 
         public void OnInitializeFailed(InitializationFailureReason error)
         {
-            Debug.Log("Billing failed to initialize!");
+            string errorStr = "Billing failed to initialize!";
+            Log.Info(errorStr);
             switch (error)
             {
                 case InitializationFailureReason.AppNotKnown:
-                    Debug.LogError("Is your App correctly uploaded on the relevant publisher console?");
+                    Log.Error("Is your App correctly uploaded on the relevant publisher console?");
                     break;
                 case InitializationFailureReason.PurchasingUnavailable:
                     // Ask the user if billing is disabled in device settings.
-                    Debug.Log("Billing disabled!");
+                    errorStr = "Billing disabled!";
+                    Log.Info(errorStr);
                     break;
                 case InitializationFailureReason.NoProductsAvailable:
                     // Developer configuration error; check product metadata.
-                    Debug.Log("No products available for purchase!");
+                    errorStr = "No products available for purchase!";
+                    Log.Info(errorStr);
                     break;
             }
 
             _purchaseInProgress = false;
 
-            Sdk.OnInitializeFailure(error.ToString());
+            Sdk.OnInitializeFailure(errorStr);
         }
 
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs e)
         {
             var product = e.purchasedProduct;
-            Debug.Log("Purchase OK: " + product.definition.id);
+            Log.Info("Purchase OK: " + product.definition.id);
 
             _purchaseInProgress = false;
             _purchaseQueue.Enqueue(product);
@@ -152,13 +131,13 @@ namespace FbSdk.Internal.Native
 
         public void OnPurchaseFailed(Product item, PurchaseFailureReason p)
         {
-            Debug.Log("Purchase failed: " + item.definition.id);
+            Log.Info("Purchase failed: " + item.definition.id);
             // Detailed debugging information
-            Debug.Log("Store specific error code: " +
+            Log.Info("Store specific error code: " +
                       _transactionHistoryExtensions.GetLastStoreSpecificPurchaseErrorCode());
             if (_transactionHistoryExtensions.GetLastPurchaseFailureDescription() != null)
             {
-                Debug.Log("Purchase failure description message: " +
+                Log.Info("Purchase failure description message: " +
                           _transactionHistoryExtensions.GetLastPurchaseFailureDescription().message);
             }
 
@@ -175,7 +154,7 @@ namespace FbSdk.Internal.Native
 
         private void OnDeferred(Product item)
         {
-            Debug.Log("Purchase deferred: " + item.definition.id);
+            Log.Info("Purchase deferred: " + item.definition.id);
         }
 
         private void OnLoginSuccess(string s)
@@ -190,19 +169,19 @@ namespace FbSdk.Internal.Native
                 var product = _purchaseQueue.Dequeue();
                 var form = new Dictionary<string, string>
                 {
-                    {"transactionId", product.transactionID},
                     {"receipt", product.receipt}
                 };
                 PlatformApi.Iap.PurchaseNotify.Post(form, (err, meta, resp) =>
                 {
                     if (err != null)
                     {
-                        Debug.Log(err);
+                        Log.Info(err);
                     }
 
                     if (meta.Status == 200)
                     {
                         _controller.ConfirmPendingPurchase(product);
+                        Sdk.OnPaySuccess();
                     }
                     else
                     {
@@ -213,4 +192,3 @@ namespace FbSdk.Internal.Native
         }
     }
 }
-#endif

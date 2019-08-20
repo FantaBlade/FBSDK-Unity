@@ -1,14 +1,35 @@
 ﻿using System;
 using FbSdk.Internal;
 using UnityEngine;
+using UnityEngine.Purchasing;
 
 namespace FbSdk
 {
     /// <summary>
     ///     Fantablade Platform SDK API
     /// </summary>
-    public class Sdk
+    public static class Sdk
     {
+        #region Enum
+
+        /// <summary>
+        ///     发行区域
+        /// </summary>
+        public enum PublishRegion
+        {
+            /// <summary>
+            /// 中国
+            /// </summary>
+            China,
+
+            /// <summary>
+            /// 海外
+            /// </summary>
+            Overseas
+        }
+
+        #endregion
+
         #region API
 
         private static bool _isInitialized;
@@ -22,7 +43,7 @@ namespace FbSdk
             {
                 if (!_isInitialized)
                 {
-                    Debug.LogWarning("FBSDK not initialized");
+                    Log.Warning("FBSDK not initialized");
                 }
 
                 return _isInitialized;
@@ -35,9 +56,12 @@ namespace FbSdk
         /// </summary>
         /// <param name="accessKey">AccessKey</param>
         /// <param name="showFloatingWindow">显示悬浮窗</param>
-        public static void Init(string accessKey, bool showFloatingWindow = true)
+        /// <param name="publishRegion">发行区域</param>
+        /// <param name="productCatalogJson">IAP 商品目录</param>
+        public static void Init(string accessKey, bool showFloatingWindow = true,
+            PublishRegion publishRegion = PublishRegion.China, string productCatalogJson = null)
         {
-            SdkManager.Init(accessKey, showFloatingWindow);
+            SdkManager.Init(accessKey, showFloatingWindow, publishRegion, productCatalogJson);
         }
 
         /// <summary>
@@ -81,11 +105,25 @@ namespace FbSdk
         /// <summary>
         ///     支付
         /// </summary>
-        public static void Pay(string productId, string name, int price)
+        public static void Pay(string productId)
         {
             if (!IsInitialized) return;
 
-            SdkManager.Order.Pay(productId, name, price);
+            SdkManager.Order.Pay(productId);
+        }
+
+        public static Product GetProductById(string id)
+        {
+            if (!IsInitialized) return null;
+
+            return SdkManager.PaymentApi.GetProductById(id);
+        }
+
+        public static Product[] GetProducts()
+        {
+            if (!IsInitialized) return null;
+
+            return SdkManager.PaymentApi.GetProducts();
         }
 
         /// <summary>
@@ -105,7 +143,7 @@ namespace FbSdk
 
         internal static void OnInitializeSuccess()
         {
-            Debug.Log("OnInitializeSuccess");
+            Log.Info("OnInitializeSuccess");
             IsInitialized = true;
             var handler = InitializeSuccess;
             if (handler != null) handler();
@@ -113,42 +151,42 @@ namespace FbSdk
 
         internal static void OnInitializeFailure(string err)
         {
-            Debug.Log("OnInitializeFailure: " + err);
+            Log.Info("OnInitializeFailure: " + err);
             var handler = InitializeFailure;
             if (handler != null) handler(err);
         }
 
         internal static void OnLoginSuccess(string token)
         {
-            Debug.Log("OnLoginSuccess: " + token);
+            Log.Info("OnLoginSuccess: " + token);
             var handler = LoginSuccess;
             if (handler != null) handler(token);
         }
 
         internal static void OnLogoutSuccess()
         {
-            Debug.Log("OnLogoutSuccess");
+            Log.Info("OnLogoutSuccess");
             var handler = LogoutSuccess;
             if (handler != null) handler();
         }
 
         internal static void OnPaySuccess()
         {
-            Debug.Log("OnPaySuccess");
+            Log.Info("OnPaySuccess");
             var handler = PaySuccess;
             if (handler != null) handler();
         }
 
         internal static void OnPayFailure(string err)
         {
-            Debug.Log("OnPayFailure: " + err);
+            Log.Info("OnPayFailure: " + err);
             var handler = PayFailure;
             if (handler != null) handler(err);
         }
 
         internal static void OnPayCancel()
         {
-            Debug.Log("OnPayCancel");
+            Log.Info("OnPayCancel");
             var handler = PayCancel;
             if (handler != null) handler();
         }

@@ -32,7 +32,7 @@ namespace FbSdk.Internal
                 }
                 catch (UriFormatException e)
                 {
-                    Debug.LogError(e);
+                    Log.Error(e);
                     throw;
                 }
             }
@@ -76,12 +76,12 @@ namespace FbSdk.Internal
                 TResponse response = null;
                 if (request.isNetworkError)
                 {
-                    Debug.LogError(request.error);
+                    Log.Error(request.error);
                     err = request.error;
                 }
                 else if (request.isHttpError)
                 {
-                    Debug.LogError(string.Format("{0} {1}\n{2}", request.responseCode, request.error,
+                    Log.Error(string.Format("{0} {1}\n{2}", request.responseCode, request.error,
                         request.downloadHandler.text));
                     err = request.error;
                 }
@@ -127,7 +127,7 @@ namespace FbSdk.Internal
             private const string Server = "account";
             private const string Prefix = Server + "/util/";
             
-            public static readonly WebRequest<Response> GetIpInfo = Prefix + "getIpInfo";
+            public static readonly WebRequest<IpInfoResponse> GetIpInfo = Prefix + "getIpInfo";
         }
 
         public static class Iap
@@ -176,6 +176,12 @@ namespace FbSdk.Internal
         public class TokenResponse : Response
         {
             public string token;
+        }
+
+        [Serializable]
+        public class IpInfoResponse : Response
+        {
+            public string countryCode;
         }
     }
 }

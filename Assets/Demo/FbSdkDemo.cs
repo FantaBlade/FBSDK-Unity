@@ -1,5 +1,7 @@
-﻿using FbSdk;
+﻿using System.Globalization;
+using FbSdk;
 using UnityEngine;
+using UnityEngine.Purchasing;
 
 public class FbSdkDemo : MonoBehaviour
 {
@@ -17,7 +19,7 @@ public class FbSdkDemo : MonoBehaviour
         Sdk.LogoutSuccess += OnLogoutSuccess;
         Sdk.PaySuccess += OnPaySuccess;
         Sdk.PayCancel += OnPayCancel;
-        Sdk.Init("44I1ucBEaIRvm4Re");
+        Sdk.Init("44I1ucBEaIRvm4Re", true, Sdk.PublishRegion.Overseas);
     }
 
     private void OnInitializeSuccess()
@@ -45,8 +47,34 @@ public class FbSdkDemo : MonoBehaviour
         Debug.Log("OnPayCancel");
     }
 
-    private void OnGUI()
+    public void Pay()
     {
-        if (GUILayout.Button("pay", GUILayout.Width(300), GUILayout.Height(300))) Sdk.Pay("currency_charge_1001", "充值6元", 6);
+        Sdk.Pay("android.test.purchased");
+    }
+
+    public void ShowProducts()
+    {
+        var products = Sdk.GetProducts();
+        if (products != null)
+        {
+            foreach (var product in products)
+            {
+                LogProduct(product);
+            }
+        }
+    }
+
+    private void LogProduct(Product product)
+    {
+        Debug.Log(string.Join(" - ",
+            new[]
+            {
+                product.definition.id,
+                product.metadata.localizedTitle,
+                product.metadata.localizedDescription,
+                product.metadata.isoCurrencyCode,
+                product.metadata.localizedPriceString,
+                product.transactionID
+            }));
     }
 }
