@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using FbSdk;
+using FantaBlade;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -14,17 +14,17 @@ public class FbSdkDemo : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        Sdk.InitializeSuccess += OnInitializeSuccess;
-        Sdk.LoginSuccess += OnLoginSuccess;
-        Sdk.LogoutSuccess += OnLogoutSuccess;
-        Sdk.PaySuccess += OnPaySuccess;
-        Sdk.PayCancel += OnPayCancel;
-        Sdk.Init("44I1ucBEaIRvm4Re", true, Sdk.PublishRegion.Overseas);
+        Api.InitializeSuccess += OnInitializeSuccess;
+        Api.LoginSuccess += OnLoginSuccess;
+        Api.LogoutSuccess += OnLogoutSuccess;
+        Api.PaySuccess += OnPaySuccess;
+        Api.PayCancel += OnPayCancel;
+        Api.Init("44I1ucBEaIRvm4Re", true, Api.PublishRegion.Overseas);
     }
 
     private void OnInitializeSuccess()
     {
-        Sdk.Login();
+        Api.Login();
     }
 
     private void OnLoginSuccess(string token)
@@ -34,7 +34,7 @@ public class FbSdkDemo : MonoBehaviour
 
     private void OnLogoutSuccess()
     {
-        Sdk.Login();
+        Api.Login();
     }
 
     private void OnPaySuccess()
@@ -49,12 +49,12 @@ public class FbSdkDemo : MonoBehaviour
 
     public void Pay()
     {
-        Sdk.Pay("android.test.purchased");
+        Api.Pay("android.test.purchased");
     }
 
     public void ShowProducts()
     {
-        var products = Sdk.GetProducts();
+        var products = Api.GetProducts();
         if (products != null)
         {
             foreach (var product in products)
