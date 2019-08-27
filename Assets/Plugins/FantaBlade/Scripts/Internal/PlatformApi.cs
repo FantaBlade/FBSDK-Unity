@@ -8,33 +8,59 @@ namespace FantaBlade.Internal
 {
     internal class PlatformApi
     {
-        public static readonly string UserCenterHost = "https://test.fantablade.com/";
+        public static readonly Dictionary<PublishRegion, Dictionary<string, string>> UrlConfigs =
+            new Dictionary<PublishRegion, Dictionary<string, string>>
+            {
+                {
+                    PublishRegion.China, new Dictionary<string, string>
+                    {
+                        {"UserCenterHost", "https://test.fantablade.com/"},
+                        {"ApiHost", "https://api.test.fantablade.com/"},
+                        {"ApiVersion", "v0.1"}
+                    }
+                },
+                {
+                    PublishRegion.SoutheastAsia, new Dictionary<string, string>
+                    {
+                        {"UserCenterHost", "https://sea.fantablade.com/"},
+                        {"ApiHost", "https://api.sea.fantablade.com/"},
+                        {"ApiVersion", "v1"}
+                    }
+                }
+            };
 
-        private static readonly string _apiHost = "https://api.test.fantablade.com/";
-        private static readonly string _version = "v0.1";
-        private static readonly string _apiUrl = _apiHost + _version;
+        public static void SetRegion(PublishRegion region)
+        {
+            var config = UrlConfigs[region];
+            UserCenterHost = config["UserCenterHost"];
+            _apiHost = config["ApiHost"];
+            _version = config["ApiVersion"];
+            _apiUrl = _apiHost + _version;
+        }
+
+
+        public static string UserCenterHost;
+
+        private static string _apiHost;
+        private static string _version;
+        private static string _apiUrl;
+
 
         public class WebRequest<TResponse> where TResponse : Response
         {
             public delegate void WebResponseEventHandler(string err, ResponseMetaInfo metaInfo, TResponse response);
 
-            private readonly Uri _uri;
+            private readonly string _path;
+            private Uri _uri;
 
             private WebRequest()
             {
+                // 直接使用 string 隐式转换实例化
             }
 
             private WebRequest(string path)
             {
-                try
-                {
-                    _uri = new Uri(string.Join("/", new[] {_apiUrl, path}));
-                }
-                catch (UriFormatException e)
-                {
-                    Log.Error(e);
-                    throw;
-                }
+                _path = path;
             }
 
             public static implicit operator WebRequest<TResponse>(string path)
@@ -54,14 +80,16 @@ namespace FantaBlade.Internal
 
             private IEnumerator GetCoroutine(WebResponseEventHandler callback)
             {
-                var request = UnityWebRequest.Get(_uri.AbsoluteUri);
+                var uri = GetUri(_path);
+                var request = UnityWebRequest.Get(uri.AbsoluteUri);
                 yield return SendRequest(request, callback);
             }
 
 
             private IEnumerator PostCoroutine(Dictionary<string, string> form, WebResponseEventHandler callback)
             {
-                var request = UnityWebRequest.Post(_uri.AbsoluteUri, form);
+                var uri = GetUri(_path);
+                var request = UnityWebRequest.Post(uri.AbsoluteUri, form);
                 yield return SendRequest(request, callback);
             }
 
@@ -76,12 +104,12 @@ namespace FantaBlade.Internal
                 TResponse response = null;
                 if (request.isNetworkError)
                 {
-                    Log.Error(request.error);
+                    Log.Error(string.Format("url: {0} {1}", request.url, request.error));
                     err = request.error;
                 }
                 else if (request.isHttpError)
                 {
-                    Log.Error(string.Format("{0} {1}\n{2}", request.responseCode, request.error,
+                    Log.Error(string.Format("url: {0} {1} {2}\n{3}", request.url, request.responseCode, request.error,
                         request.downloadHandler.text));
                     err = request.error;
                 }
@@ -96,6 +124,16 @@ namespace FantaBlade.Internal
                 }
 
                 if (callback != null) callback(err, metaInfo, response);
+            }
+
+            private Uri GetUri(string path)
+            {
+                if (_uri == null)
+                {
+                    _uri = new Uri(string.Join("/", new[] {_apiUrl, path}));
+                }
+
+                return _uri;
             }
         }
 
@@ -126,7 +164,7 @@ namespace FantaBlade.Internal
         {
             private const string Server = "account";
             private const string Prefix = Server + "/util/";
-            
+
             public static readonly WebRequest<IpInfoResponse> GetIpInfo = Prefix + "getIpInfo";
         }
 

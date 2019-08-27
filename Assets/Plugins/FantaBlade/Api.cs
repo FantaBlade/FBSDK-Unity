@@ -10,26 +10,6 @@ namespace FantaBlade
     /// </summary>
     public static class Api
     {
-        #region Enum
-
-        /// <summary>
-        ///     发行区域
-        /// </summary>
-        public enum PublishRegion
-        {
-            /// <summary>
-            /// 中国
-            /// </summary>
-            China,
-
-            /// <summary>
-            /// 海外
-            /// </summary>
-            Overseas
-        }
-
-        #endregion
-
         #region API
 
         private static bool _isInitialized;

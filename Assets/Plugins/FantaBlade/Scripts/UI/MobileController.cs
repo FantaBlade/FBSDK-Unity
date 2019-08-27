@@ -1,4 +1,5 @@
-﻿using FantaBlade.Internal;
+﻿using System;
+using FantaBlade.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,11 +9,9 @@ namespace FantaBlade.UI
     {
         private const int DefaultCountyIndex = 8; // China
 
-        private static string _countryInfoByIp;
-
         public string CountryCode
         {
-            get { return _countryInfos[_callingCodes.value].CountryCodeIso2; }
+            get { return CountryInfos[_callingCodes.value].CountryCodeIso2; }
         }
 
         public string MobileNumber
@@ -26,38 +25,47 @@ namespace FantaBlade.UI
 
         public void Init()
         {
-            foreach (var countryInfo in _countryInfos)
+            foreach (var countryInfo in CountryInfos)
             {
                 _callingCodes.options.Add(
                     new Dropdown.OptionData(countryInfo.NameInChinese + " +" + countryInfo.Telephone));
             }
 
-            if (_countryInfoByIp != null)
+
+            int index = SdkManager.Location != null ? CountryCodeToCountryInfoIndex(SdkManager.Location) : -1;
+            if (index == -1)
             {
-                _callingCodes.captionText.text = _countryInfoByIp;
+                index = DefaultCountyIndex;
             }
-            else
+            _callingCodes.value = index;
+            _callingCodes.captionText.text = _callingCodes.options[index].text;
+
+            SdkManager.LocationSuccess += OnLocationSuccess;
+        }
+
+        private void OnDestroy()
+        {
+            SdkManager.LocationSuccess -= OnLocationSuccess;
+        }
+
+        private void OnLocationSuccess(string countryCode)
+        {
+            var i = CountryCodeToCountryInfoIndex(countryCode);
+            _callingCodes.value = i;
+            _callingCodes.captionText.text = _callingCodes.options[i].text;
+        }
+
+        private int CountryCodeToCountryInfoIndex(string countryCode)
+        {
+            for (var i = 0; i < CountryInfos.Length; i++)
             {
-                // 设为默认值
-                _callingCodes.value = DefaultCountyIndex;
-                _callingCodes.captionText.text = _callingCodes.options[DefaultCountyIndex].text;
-                PlatformApi.Util.GetIpInfo.Get((err, info, response) =>
+                if (countryCode == CountryInfos[i].CountryCodeIso2)
                 {
-                    if (err == null)
-                    {
-                        var countryCode = response.countryCode;
-                        for (var i = 0; i < _countryInfos.Length; i++)
-                        {
-                            if (countryCode == _countryInfos[i].CountryCodeIso2)
-                            {
-                                _countryInfoByIp = _callingCodes.options[i].text;
-                                _callingCodes.value = i;
-                                _callingCodes.captionText.text = _countryInfoByIp;
-                            }
-                        }
-                    }
-                });
+                    return i;
+                }
             }
+
+            return DefaultCountyIndex;
         }
 
         public class CountryInfo
@@ -80,7 +88,7 @@ namespace FantaBlade.UI
             }
         }
 
-        private readonly CountryInfo[] _countryInfos =
+        private static readonly CountryInfo[] CountryInfos =
         {
             new CountryInfo("Afghanistan", "阿富汗", "AF", "AFG", "93"),
             new CountryInfo("Armenia", "亚美尼亚", "AM", "ARM", "374"),

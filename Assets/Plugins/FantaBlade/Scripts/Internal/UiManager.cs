@@ -44,7 +44,7 @@ namespace FantaBlade.Internal
         {
             if (_login == null)
             {
-                var login = Resources.Load<GameObject>("fbsdk/prefab/login");
+                var login = Resources.Load<GameObject>("fantablade_sdk/prefab/login");
                 _login = Object.Instantiate(login);
                 SetLayer(_defaultLayer, _login.transform);
                 ControllerInit(_login);
@@ -62,7 +62,7 @@ namespace FantaBlade.Internal
         {
             if (_userCenter == null)
             {
-                var userCenter = Resources.Load<GameObject>("fbsdk/prefab/user_center");
+                var userCenter = Resources.Load<GameObject>("fantablade_sdk/prefab/user_center");
                 _userCenter = Object.Instantiate(userCenter);
                 SetLayer(_defaultLayer, _userCenter.transform);
                 ControllerInit(_userCenter);
