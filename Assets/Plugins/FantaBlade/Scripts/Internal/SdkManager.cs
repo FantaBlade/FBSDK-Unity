@@ -21,7 +21,7 @@ namespace FantaBlade.Internal
         ///     语言
         /// </summary>
         public static SystemLanguage Language;
-        
+
         /// <summary>
         ///     玩家定位
         /// </summary>
@@ -60,68 +60,82 @@ namespace FantaBlade.Internal
         public static void Init(string accessKeyId, bool showFloatingWindow, PublishRegion publishRegion,
             string productCatalogJson)
         {
-            Log.CurrentLevel = DebugMode ? Log.LogLevel.Debug : Log.LogLevel.Info;
+            try
+            {
+                Log.CurrentLevel = DebugMode ? Log.LogLevel.Debug : Log.LogLevel.Warning;
 
-            PublishRegion = publishRegion;
-            PlatformApi.SetRegion(publishRegion);
+                PublishRegion = publishRegion;
+                CountryInfo.SetDefaultCounty(publishRegion);
+                PlatformApi.SetRegion(publishRegion);
 
-            Language = Application.systemLanguage;
+                Language = Application.systemLanguage;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-            UseAndroidNativeApi = PublishRegion == PublishRegion.China;
-            if (UseAndroidNativeApi)
-            {
-                var androidNativeApi = new AndroidNativeApi();
-                NativeApi = androidNativeApi;
-                PaymentApi = androidNativeApi;
-            }
-            else
-            {
-                PaymentApi = new UnityIapPaymentApi();
-            }
+                UseAndroidNativeApi = PublishRegion == PublishRegion.China;
+                if (UseAndroidNativeApi)
+                {
+                    var androidNativeApi = new AndroidNativeApi();
+                    NativeApi = androidNativeApi;
+                    PaymentApi = androidNativeApi;
+                }
+                else
+                {
+                    PaymentApi = new UnityIapPaymentApi();
+                }
 #elif UNITY_IOS && !UNITY_EDITOR
-            PaymentApi = new UnityIapPaymentApi();
+                PaymentApi = new UnityIapPaymentApi();
 #else
-            PaymentApi = new StubPaymentApi();
+                PaymentApi = new StubPaymentApi();
 #endif
 
-            if (Instance != null) return;
-            Instance = FindObjectOfType<SdkManager>();
-            if (Instance != null) return;
-            AccessKeyId = accessKeyId;
+                #region UI
 
-            var ui = Resources.Load<GameObject>("fantablade_sdk/prefab/fantablade_sdk");
-            ui = Instantiate(ui);
-            DontDestroyOnLoad(ui);
-            ui.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-            Instance = ui.AddComponent<SdkManager>();
-            Ui.Init();
-            Ui.FloatingWindow.IsActive = showFloatingWindow;
+                if (Instance != null) return;
+                Instance = FindObjectOfType<SdkManager>();
+                if (Instance != null) return;
+                AccessKeyId = accessKeyId;
 
-            Order.SetProductCatalog(productCatalogJson);
-            PaymentApi.Init();
+                var ui = Resources.Load<GameObject>("fantablade_sdk/prefab/fantablade_sdk");
+                ui = Instantiate(ui);
+                DontDestroyOnLoad(ui);
+                ui.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+                Instance = ui.AddComponent<SdkManager>();
+                Ui.Init();
+                Ui.FloatingWindow.IsActive = showFloatingWindow;
 
-            // 查询玩家位置
-            const string locationKey = "FbSdk_Location";
-            if (PlayerPrefs.HasKey(locationKey))
-            {
-                Location = PlayerPrefs.GetString(locationKey);
-                if (LocationSuccess != null) LocationSuccess(Location);
-            }
+                Order.SetProductCatalog(productCatalogJson);
+                PaymentApi.Init();
 
-            PlatformApi.Util.GetIpInfo.Get((err, info, response) =>
-            {
-                if (err == null)
+                // 查询玩家位置
+                const string locationKey = "FantaBladeSDK_User_Location";
+                if (PlayerPrefs.HasKey(locationKey))
                 {
-                    if (Location != response.countryCode)
-                    {
-                        Location = response.countryCode;
-                        PlayerPrefs.SetString(locationKey, Location);
-                        PlayerPrefs.Save();
-                        if (LocationSuccess != null) LocationSuccess(Location);
-                    }
+                    Location = PlayerPrefs.GetString(locationKey);
+                    if (LocationSuccess != null) LocationSuccess(Location);
                 }
-            });
+
+                PlatformApi.Util.GetIpInfo.Get((err, info, response) =>
+                {
+                    if (err == null)
+                    {
+                        if (Location != response.countryCode)
+                        {
+                            Location = response.countryCode;
+                            PlayerPrefs.SetString(locationKey, Location);
+                            PlayerPrefs.Save();
+                            if (LocationSuccess != null) LocationSuccess(Location);
+                        }
+                    }
+                });
+
+                #endregion
+
+                Api.OnInitializeSuccess();
+            }
+            catch (Exception e)
+            {
+                Api.OnInitializeFailure(e.Message);
+            }
         }
 
         public new static Coroutine StartCoroutine(IEnumerator coroutine)

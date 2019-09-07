@@ -88,7 +88,7 @@ namespace FantaBlade.Internal.Native
                 }
             }
 
-            Api.OnInitializeSuccess();
+            Api.OnPaymentInitializeSuccess();
         }
 
         public void OnInitializeFailed(InitializationFailureReason error)
@@ -114,7 +114,7 @@ namespace FantaBlade.Internal.Native
 
             _purchaseInProgress = false;
 
-            Api.OnInitializeFailure(errorStr);
+            Api.OnPaymentInitializeFailure(errorStr);
         }
 
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs e)

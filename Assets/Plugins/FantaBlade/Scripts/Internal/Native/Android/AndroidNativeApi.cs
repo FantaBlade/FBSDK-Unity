@@ -1,4 +1,5 @@
 #if UNITY_ANDROID
+using System;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -11,14 +12,21 @@ namespace FantaBlade.Internal.Native
 
         public void Init()
         {
-            var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            var currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-            _nativeApi = new AndroidJavaObject("com.fantablade.fbsdk.Api", currentActivity, SdkManager.AccessKeyId);
-            _nativeApi.Call("setListener", new AndroidSdkCallback());
+            try
+            {
+                var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                var currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+                _nativeApi = new AndroidJavaObject("com.fantablade.fbsdk.Api", currentActivity, SdkManager.AccessKeyId);
+                _nativeApi.Call("setListener", new AndroidSdkCallback());
 
-            _products = SdkManager.Order.GetCustomProducts();
+                _products = SdkManager.Order.GetCustomProducts();
 
-            Api.OnInitializeSuccess();
+                Api.OnPaymentInitializeSuccess();
+            }
+            catch (Exception e)
+            {
+                Api.OnPaymentInitializeFailure(e.Message);
+            }
         }
 
         public Product GetProductById(string id)

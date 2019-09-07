@@ -13,6 +13,7 @@ namespace FantaBlade
         #region API
 
         private static bool _isInitialized;
+        private static bool _isPaymentInitialized;
 
         /// <summary>
         ///     是否初始化完成
@@ -23,12 +24,29 @@ namespace FantaBlade
             {
                 if (!_isInitialized)
                 {
-                    Log.Warning("FBSDK not initialized");
+                    Log.Warning("FantaBlade SDK is not initialized");
                 }
 
                 return _isInitialized;
             }
             private set { _isInitialized = value; }
+        }
+
+        /// <summary>
+        ///     支付模块是否初始化完成
+        /// </summary>
+        public static bool IsPaymentInitialized
+        {
+            get
+            {
+                if (!_isPaymentInitialized)
+                {
+                    Log.Warning("Payment module of FantaBlade SDK is not initialized");
+                }
+
+                return _isPaymentInitialized;
+            }
+            private set { _isPaymentInitialized = value; }
         }
 
         /// <summary>
@@ -87,21 +105,30 @@ namespace FantaBlade
         /// </summary>
         public static void Pay(string productId)
         {
-            if (!IsInitialized) return;
+            if (!_isPaymentInitialized) return;
 
             SdkManager.Order.Pay(productId);
         }
 
+        /// <summary>
+        ///     根据 ID 获取商品信息
+        /// </summary>
+        /// <param name="id">Product ID</param>
+        /// <returns>Product</returns>
         public static Product GetProductById(string id)
         {
-            if (!IsInitialized) return null;
+            if (!_isPaymentInitialized) return null;
 
             return SdkManager.PaymentApi.GetProductById(id);
         }
 
+        /// <summary>
+        /// 获取全部商品信息
+        /// </summary>
+        /// <returns></returns>
         public static Product[] GetProducts()
         {
-            if (!IsInitialized) return null;
+            if (!_isPaymentInitialized) return null;
 
             return SdkManager.PaymentApi.GetProducts();
         }
@@ -133,6 +160,21 @@ namespace FantaBlade
         {
             Log.Info("OnInitializeFailure: " + err);
             var handler = InitializeFailure;
+            if (handler != null) handler(err);
+        }
+
+        internal static void OnPaymentInitializeSuccess()
+        {
+            Log.Info("OnPaymentInitializeSuccess");
+            IsPaymentInitialized = true;
+            var handler = PaymentInitializeSuccess;
+            if (handler != null) handler();
+        }
+        
+        internal static void OnPaymentInitializeFailure(string err)
+        {
+            Log.Info("OnPaymentInitializeFailure: " + err);
+            var handler = PaymentInitializeFailure;
             if (handler != null) handler(err);
         }
 
@@ -185,6 +227,16 @@ namespace FantaBlade
         /// </summary>
         public static event Action<string> InitializeFailure;
 
+        /// <summary>
+        ///     支付模块初始化完成
+        /// </summary>
+        public static event Action PaymentInitializeSuccess;
+
+        /// <summary>
+        ///     支付模块初始化失败
+        /// </summary>
+        public static event Action<string> PaymentInitializeFailure;
+        
         /// <summary>
         ///     登陆成功
         /// </summary>

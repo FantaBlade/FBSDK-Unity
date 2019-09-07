@@ -295,7 +295,7 @@ GameObject:
   - component: {fileID: 114677435718073526}
   - component: {fileID: 114518581466929410}
   m_Layer: 5
-  m_Name: fbsdk
+  m_Name: fantablade_sdk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

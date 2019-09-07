@@ -6,12 +6,16 @@ namespace FantaBlade
     public enum PublishRegion
     {
         /// <summary>
-        /// 中国
+        ///     本地开发
+        /// </summary>
+        LocalDev,
+        /// <summary>
+        ///     中国
         /// </summary>
         China,
 
         /// <summary>
-        /// 东南亚
+        ///     东南亚
         /// </summary>
         SoutheastAsia
     }

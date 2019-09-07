@@ -8,9 +8,17 @@ namespace FantaBlade.Internal
 {
     internal class PlatformApi
     {
-        public static readonly Dictionary<PublishRegion, Dictionary<string, string>> UrlConfigs =
+        private static readonly Dictionary<PublishRegion, Dictionary<string, string>> UrlConfigs =
             new Dictionary<PublishRegion, Dictionary<string, string>>
             {
+                {
+                    PublishRegion.LocalDev, new Dictionary<string, string>
+                    {
+                        {"UserCenterHost", "http://www.fantablade.cn"},
+                        {"ApiHost", "http://api.fantablade.cn/"},
+                        {"ApiVersion", "v0.1"}
+                    }
+                },
                 {
                     PublishRegion.China, new Dictionary<string, string>
                     {

@@ -9,7 +9,7 @@ namespace FantaBlade.Internal.Native
         public void Init()
         {
             _products = SdkManager.Order.GetCustomProducts();
-            Api.OnInitializeSuccess();
+            Api.OnPaymentInitializeSuccess();
         }
 
         public Product GetProductById(string id)
