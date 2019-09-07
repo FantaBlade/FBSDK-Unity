@@ -28,7 +28,7 @@ namespace FantaBlade.Internal
                     return _jwt.RawData;
                 }
 
-                var token = PlayerPrefs.GetString("FbSdk_token_" + SdkManager.AccessKeyId);
+                var token = PlayerPrefs.GetString("FantaBladeSDK_Platform_Token_" + SdkManager.AccessKeyId);
                 if (!string.IsNullOrEmpty(token))
                 {
                     _jwt = new SecurityToken(token);
@@ -41,12 +41,13 @@ namespace FantaBlade.Internal
                 if (value == null)
                 {
                     _jwt = null;
-                    PlayerPrefs.DeleteKey("FbSdk_token_" + SdkManager.AccessKeyId);
+                    PlayerPrefs.DeleteKey("FantaBladeSDK_Platform_Token_" + SdkManager.AccessKeyId);
                 }
                 else
                 {
                     _jwt = new SecurityToken(value);
-                    PlayerPrefs.SetString("FbSdk_token_" + SdkManager.AccessKeyId, value);
+                    PlayerPrefs.SetString("FantaBladeSDK_Platform_Token_" + SdkManager.AccessKeyId, value);
+                    PlayerPrefs.Save();
                 }
             }
         }
