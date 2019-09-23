@@ -50,8 +50,8 @@ namespace FantaBlade.UI
         /// <summary>
         ///     缓存国别码，确保获取国别码与之前请求验证码的国别码一致
         /// </summary>
-        private string _countryCodeCache; 
-        
+        private string _countryCodeCache;
+
         /// <summary>
         ///     缓存手机号码，确保获取手机号与之前请求验证码的号码一致
         /// </summary>
@@ -75,7 +75,7 @@ namespace FantaBlade.UI
 
             _countryCodeCache = _mobileController.CountryCode;
             _mobileNumberCache = _mobileController.MobileNumber;
-            if (_mobileNumberCache.Length == 11)
+            if (_mobileNumberCache.Length > 0)
             {
                 _isRequestingMobileValidate = true;
                 SdkManager.Auth.RequestValidateCode(_countryCodeCache, _mobileNumberCache, err =>
@@ -104,6 +104,10 @@ namespace FantaBlade.UI
                     }, _validateMode == ValidateMode.None
                         ? null
                         : (bool?) (_validateMode == ValidateMode.Member));
+            }
+            else
+            {
+                SdkManager.Ui.Dialog.Show("请先输入手机号码", "好的");
             }
         }
 

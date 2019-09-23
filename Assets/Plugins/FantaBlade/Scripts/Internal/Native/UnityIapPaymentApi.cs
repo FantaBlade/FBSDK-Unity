@@ -112,8 +112,6 @@ namespace FantaBlade.Internal.Native
                     break;
             }
 
-            _purchaseInProgress = false;
-
             Api.OnPaymentInitializeFailure(errorStr);
         }
 
@@ -125,7 +123,7 @@ namespace FantaBlade.Internal.Native
             _purchaseInProgress = false;
             _purchaseQueue.Enqueue(product);
             HandlePurchaseQueue();
-            
+
             return PurchaseProcessingResult.Pending;
         }
 
@@ -134,12 +132,14 @@ namespace FantaBlade.Internal.Native
             Log.Info("Purchase failed: " + item.definition.id);
             // Detailed debugging information
             Log.Info("Store specific error code: " +
-                      _transactionHistoryExtensions.GetLastStoreSpecificPurchaseErrorCode());
+                     _transactionHistoryExtensions.GetLastStoreSpecificPurchaseErrorCode());
             if (_transactionHistoryExtensions.GetLastPurchaseFailureDescription() != null)
             {
                 Log.Info("Purchase failure description message: " +
-                          _transactionHistoryExtensions.GetLastPurchaseFailureDescription().message);
+                         _transactionHistoryExtensions.GetLastPurchaseFailureDescription().message);
             }
+
+            _purchaseInProgress = false;
 
             switch (p)
             {
