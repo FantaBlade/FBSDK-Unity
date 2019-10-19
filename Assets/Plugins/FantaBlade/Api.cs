@@ -170,7 +170,7 @@ namespace FantaBlade
             var handler = PaymentInitializeSuccess;
             if (handler != null) handler();
         }
-        
+
         internal static void OnPaymentInitializeFailure(string err)
         {
             Log.Info("OnPaymentInitializeFailure: " + err);

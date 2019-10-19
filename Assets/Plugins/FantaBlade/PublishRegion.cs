@@ -9,6 +9,7 @@ namespace FantaBlade
         ///     本地开发
         /// </summary>
         LocalDev,
+        
         /// <summary>
         ///     中国
         /// </summary>

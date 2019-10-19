@@ -69,7 +69,7 @@ namespace FantaBlade.Internal.Native
                 return;
             }
 
-            var product = SdkManager.PaymentApi.GetProductById(productId);
+            var product = GetProductById(productId);
             var name = product.metadata.localizedTitle;
             var price = ((int) product.metadata.localizedPrice) * 100;
             _nativeApi.Call("pay", productId, name, price);
