@@ -45,6 +45,7 @@ namespace FantaBlade.Internal
         public static readonly UiManager Ui = new UiManager();
         public static readonly AuthManager Auth = new AuthManager();
         public static readonly OrderManager Order = new OrderManager();
+        public static readonly LocalizeManager Localize = new LocalizeManager();
 
         /// <summary>
         ///     原生层 API
@@ -67,9 +68,9 @@ namespace FantaBlade.Internal
                 PublishRegion = publishRegion;
                 CountryInfo.SetDefaultCounty(publishRegion);
                 PlatformApi.SetRegion(publishRegion);
-
                 Language = Application.systemLanguage;
-
+                Localize.Init(Language);
+                
 #if UNITY_ANDROID && !UNITY_EDITOR
                 UseAndroidNativeApi = PublishRegion == PublishRegion.China;
                 if (UseAndroidNativeApi)
@@ -98,7 +99,7 @@ namespace FantaBlade.Internal
                 var ui = Resources.Load<GameObject>("fantablade_sdk/prefab/fantablade_sdk");
                 ui = Instantiate(ui);
                 DontDestroyOnLoad(ui);
-                ui.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+                //ui.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
                 Instance = ui.AddComponent<SdkManager>();
                 Ui.Init();
                 Ui.FloatingWindow.IsActive = showFloatingWindow;

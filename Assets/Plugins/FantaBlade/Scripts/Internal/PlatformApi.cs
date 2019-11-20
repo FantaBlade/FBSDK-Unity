@@ -158,6 +158,7 @@ namespace FantaBlade.Internal
             public static readonly WebRequest<Response> RequestValidateCode = Prefix + "vacode";
             public static readonly WebRequest<Response> RequestValidateCodeForRigister = Prefix + "vacode/register";
             public static readonly WebRequest<Response> RequestValidateCodeForLogin = Prefix + "vacode/login";
+            public static readonly WebRequest<Response> RequestResetPassword = Prefix + "reset/password";
         }
 
         public static class Feedback

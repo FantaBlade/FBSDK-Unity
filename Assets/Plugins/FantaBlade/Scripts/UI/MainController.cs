@@ -35,5 +35,6 @@ namespace FantaBlade.UI
 
 			SdkManager.Auth.QuickLogin();
 		}
+
 	}
 }

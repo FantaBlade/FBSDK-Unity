@@ -28,7 +28,7 @@ namespace FantaBlade.UI
             foreach (var countryInfo in CountryInfos)
             {
                 _callingCodes.options.Add(
-                    new Dropdown.OptionData(countryInfo.NameInChinese + " +" + countryInfo.Telephone));
+                    new Dropdown.OptionData(countryInfo.NameInChinese + "[Space]+" + countryInfo.Telephone));
             }
 
 
@@ -38,7 +38,11 @@ namespace FantaBlade.UI
                 index = CountryInfo.DefaultCountyIndex;
             }
             _callingCodes.value = index;
-            _callingCodes.captionText.text = _callingCodes.options[index].text;
+            _callingCodes.captionText.text = "+" + CountryInfos[index].Telephone; //_callingCodes.options[index].text;
+            _callingCodes.onValueChanged.AddListener((idx) =>
+            {
+                _callingCodes.captionText.text = "+" + CountryInfos[idx].Telephone; //_callingCodes.options[index].text;
+            });
 
             SdkManager.LocationSuccess += OnLocationSuccess;
         }
@@ -52,7 +56,7 @@ namespace FantaBlade.UI
         {
             var i = CountryCodeToCountryInfoIndex(countryCode);
             _callingCodes.value = i;
-            _callingCodes.captionText.text = _callingCodes.options[i].text;
+            _callingCodes.captionText.text = "+" + CountryInfos[i].Telephone;//_callingCodes.options[i].text;
         }
 
         private int CountryCodeToCountryInfoIndex(string countryCode)

@@ -2,6 +2,7 @@
 
 namespace FantaBlade.UI
 {
+
     /// <summary>
     ///     UI View 的内容
     /// </summary>
