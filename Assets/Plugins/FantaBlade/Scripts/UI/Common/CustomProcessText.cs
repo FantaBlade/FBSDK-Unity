@@ -11,7 +11,7 @@ namespace FantaBlade.UI.Common
     {
 
         public Text extText;
-        private string realText;
+        private string _realText;
 
         public override string text
         {
@@ -19,8 +19,8 @@ namespace FantaBlade.UI.Common
 
             set
             {
-                realText = value;
-                string[] strArrs = Regex.Split(realText, "\\[Space\\]");
+                _realText = value;
+                string[] strArrs = Regex.Split(_realText, "\\[Space\\]");
                 base.text = strArrs[0];
                 extText.text = 2 <= strArrs.Length ? strArrs[1] : "";
             }
