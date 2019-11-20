@@ -1,3 +1,47 @@
 ﻿key,zh_tw
 confirm,確認
-welcome_back_tip,歡迎進入游戲
+welcome_back_tip,歡迎進入遊戲
+quick_login_tip,為保證您的資料安全，請儘快綁定帳號，以免刷機等原因導致資料丟失
+cancel,取消
+quick_login,快速遊戲
+x_second_to_retry,秒後重試
+accept,接 受
+reject,拒 絕
+pay,支 付
+please_input_mobile_number,請輸入手機號碼
+please_input_password,請輸入密碼
+login,登 錄
+account_login,帳號登錄
+register,註冊
+other_login_methods,其他登錄方式
+please_input_username/email,請輸入用戶名/Email
+other_login_methods_line,———————————    其他登陸方式    ———————————
+no_account?,沒有帳戶?
+register_account,註冊帳號
+forget_password,忘記密碼
+please_input_username,請輸入用戶名
+please_intpu_validate_code,請輸入驗證碼
+get_verify_code,獲取驗證碼
+next,下一步
+please_confirm_password,請確認密碼
+reset_password,重置密碼
+error_mobile_number_empty,請輸入手機號碼，並獲取驗證碼
+error_validate_code_empty,請正確輸入驗證碼
+error_password_not_equal,兩次密碼不相同
+msg_reset_success,密碼重置成功
+ok,好的
+Congratulations! You Has been successfully upgraded to an official account!,恭喜你！已經成功升級為正式帳號!
+"Sorry, the device is temporarily unable to use the quick login feature, please log in after register.",抱歉，該設備暫時無法使用快速遊戲功能，請註冊後登陸。
+Please Input Message,請輸入內容。
+Confirm Submit,確認提交。
+Submit Success!,發送成功！
+Submit Failed. Please Retry.,發送失敗，請重試
+Upgrade,升級
+User Center,用戶中心
+User Setting,用戶設置
+Feedback,客服回饋
+Tourist Upgrade,遊客升級
+Quit Game,退出遊戲
+Platform ID,平臺 ID
+Please input your question or suggestion…,請輸入您遇到的問題或建議…...
+Switch Account,切換帳號

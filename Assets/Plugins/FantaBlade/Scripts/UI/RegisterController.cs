@@ -8,7 +8,8 @@ namespace FantaBlade.UI
     internal class RegisterController : MonoBehaviour, IController
     {
         private static string _defaultCountryCode;
-        
+
+        [SerializeField] private Window _userLisense;
         [SerializeField] private InputField _username;
         [SerializeField] private InputField _password;
 
@@ -34,28 +35,52 @@ namespace FantaBlade.UI
 
             if (string.IsNullOrEmpty(username))
             {
-                SdkManager.Ui.Dialog.Show("请输入用户名", "好的");
+                SdkManager.Ui.Dialog.Show("please_input_username", "ok");
                 return;
             }
 
             if (string.IsNullOrEmpty(password))
             {
-                SdkManager.Ui.Dialog.Show("请输入密码", "好的");
+                SdkManager.Ui.Dialog.Show("please_input_password", "ok");
                 return;
             }
 
             if (string.IsNullOrEmpty(mobileNumber))
             {
-                SdkManager.Ui.Dialog.Show("请输入手机号码，并获取验证码", "好的");
+                SdkManager.Ui.Dialog.Show("error_mobile_number_empty", "ok");
                 return;
             }
 
             if (validateCode.Length != 4)
             {
-                SdkManager.Ui.Dialog.Show("请正确输入验证码", "好的");
+                SdkManager.Ui.Dialog.Show("error_validate_code_empty", "ok");
                 return;
             }
+            
+            if(SdkManager.Instance.IsUserAcceptLisense())
+            {
+                SdkManager.Auth.Register(username, password, countryCode, mobileNumber, validateCode);
+            }
+            else
+            {
+                _userLisense.Appear();
+            }
+        }
 
+        public void OnClickLisenseReject()
+        {
+            _userLisense.Disappear();
+        }
+
+        public void OnClickLisenseAccept()
+        {
+            SdkManager.Instance.UserAcceptLisense();
+            _userLisense.Disappear();
+            var username = _username.text;
+            var password = _password.text;
+            var countryCode = _mobileValidate.CountryCode;
+            var mobileNumber = _mobileValidate.MobileNumber;
+            var validateCode = _mobileValidate.ValidateCode;
             SdkManager.Auth.Register(username, password, countryCode, mobileNumber, validateCode);
         }
     }

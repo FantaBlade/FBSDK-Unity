@@ -94,8 +94,8 @@ namespace FantaBlade.Internal
 
             go = mActiveUIs[uiId];
             SetLayer(_defaultLayer, go.transform);
-            ControllerInit(go);
             go.SetActive(true);
+            ControllerInit(go);
 
             mActiveUIStack.Push(uiId);
         }

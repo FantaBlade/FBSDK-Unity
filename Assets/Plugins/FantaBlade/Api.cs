@@ -185,6 +185,13 @@ namespace FantaBlade
             if (handler != null) handler(token);
         }
 
+        internal static void OnLoginCancel()
+        {
+            Log.Info("OnLoginCancel!");
+            var handler = LoginCancel;
+            if (handler != null) handler();
+        }
+
         internal static void OnLogoutSuccess()
         {
             Log.Info("OnLogoutSuccess");
@@ -241,7 +248,7 @@ namespace FantaBlade
         ///     登陆成功
         /// </summary>
         public static event Action<string> LoginSuccess;
-
+        
         /// <summary>
         ///     登陆失败
         /// </summary>

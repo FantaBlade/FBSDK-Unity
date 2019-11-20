@@ -4,25 +4,27 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CustomProcessText : Text {
+namespace FantaBlade.UI.Common
+{
 
-    public Text extText;
-    private string realText;
-
-    public override string text
+    public class CustomProcessText : Text
     {
-        get
+
+        public Text extText;
+        private string realText;
+
+        public override string text
         {
-            return base.text;
+            get { return base.text; }
+
+            set
+            {
+                realText = value;
+                string[] strArrs = Regex.Split(realText, "\\[Space\\]");
+                base.text = strArrs[0];
+                extText.text = 2 <= strArrs.Length ? strArrs[1] : "";
+            }
         }
 
-        set
-        {
-            realText = value;
-            string[] strArrs = Regex.Split(realText, "\\[Space\\]");
-            base.text = strArrs[0];
-            extText.text = 2 <= strArrs.Length ? strArrs[1] : "";
-        }
     }
-
 }

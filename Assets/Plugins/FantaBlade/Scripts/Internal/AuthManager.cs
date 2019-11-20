@@ -60,7 +60,7 @@ namespace FantaBlade.Internal
 
             if (err != null)
             {
-                SdkManager.Ui.Dialog.Show(err, "好的");
+                SdkManager.Ui.Dialog.Show(err, "ok");
             }
             else
             {
@@ -74,7 +74,7 @@ namespace FantaBlade.Internal
             var deviceUniqueIdentifier = SystemInfo.deviceUniqueIdentifier;
             if (deviceUniqueIdentifier == SystemInfo.unsupportedIdentifier)
             {
-                SdkManager.Ui.Dialog.Show("抱歉，该设备暂时无法使用快速游戏功能，请注册后登陆。", "好的");
+                SdkManager.Ui.Dialog.Show("Sorry, the device is temporarily unable to use the quick login feature, please log in after register.", "ok");
             }
 
             IsLoggingIn = true;
@@ -190,6 +190,54 @@ namespace FantaBlade.Internal
             PlatformApi.User.Register.Post(form, OnLoginCallback);
         }
 
+        public void CheckValidateCode(string countryCode, string mobileNumber, string vacode, Action<string> callback)
+        {
+            IsLoggingIn = true;
+            var form = new Dictionary<string, string>
+            {
+                {"countryCode", countryCode},
+                {"mobile", mobileNumber},
+                {"usage", "reset_password"},
+                {"vacode", vacode}
+            };
+            PlatformApi.User.RequestVacodeValidate.Post(form, (err, metaInfo, resp)=>
+            {
+                IsLoggingIn = false;
+                if (! string.IsNullOrEmpty(err))
+                {
+                    SdkManager.Ui.Dialog.Show(err, "ok");
+                }
+                else
+                {
+                    callback(resp.tempTicket);
+                }
+            });
+        }
+
+        public void ResetPassword(string countryCode, string mobileNumber, string newPassword, string tempTicket, Action successCalback)
+        {
+            IsLoggingIn = true;
+            var form = new Dictionary<string, string>
+            {
+                {"countryCode", countryCode},
+                {"mobile", mobileNumber},
+                {"newPassword", newPassword},
+                {"tempTicket", tempTicket},
+            };
+            PlatformApi.User.RequestResetPassword.Post(form, (err, metaInfo, resp)=>
+            {
+                IsLoggingIn = false;
+                if (! string.IsNullOrEmpty(err))
+                {
+                    SdkManager.Ui.Dialog.Show(err, "ok");
+                }
+                else
+                {
+                    successCalback();
+                }
+            });
+        }
+        
         public void TouristUpgrade(string username, string password, string countryCode, string mobileNumber,
             string vacode)
         {
@@ -208,12 +256,12 @@ namespace FantaBlade.Internal
 
                 if (err != null)
                 {
-                    SdkManager.Ui.Dialog.Show(err, "好的");
+                    SdkManager.Ui.Dialog.Show(err, "ok");
                 }
                 else
                 {
                     Token = resp.token;
-                    SdkManager.Ui.Dialog.Show("恭喜你！已经成功升级为正式账号!", "好的");
+                    SdkManager.Ui.Dialog.Show("Congratulations! You Has been successfully upgraded to an official account!", "ok");
                     SdkManager.Ui.HideGameCenter();
                 }
             });

@@ -159,6 +159,7 @@ namespace FantaBlade.Internal
             public static readonly WebRequest<Response> RequestValidateCodeForRigister = Prefix + "vacode/register";
             public static readonly WebRequest<Response> RequestValidateCodeForLogin = Prefix + "vacode/login";
             public static readonly WebRequest<Response> RequestResetPassword = Prefix + "reset/password";
+            public static readonly WebRequest<TempTicketResponse> RequestVacodeValidate = Prefix + "vacode/validate";
         }
 
         public static class Feedback
@@ -229,6 +230,11 @@ namespace FantaBlade.Internal
         public class IpInfoResponse : Response
         {
             public string countryCode;
+        }
+
+        public class TempTicketResponse : Response
+        {
+            public string tempTicket;
         }
     }
 }

@@ -1,3 +1,47 @@
 ﻿key,en
 confirm,Confirm
 welcome_back_tip,Welcome !
+quick_login_tip,"In order to ensure the security of your data, please bind your account as soon as possible to avoid data loss."
+cancel,Cancel
+quick_login,Quick Login
+x_second_to_retry,s to Retry
+accept,Accept
+reject,Reject
+pay,Pay
+please_input_mobile_number,Please Input Mobile Number
+please_input_password,Please Input Password
+login,Login
+account_login,Account Login
+register,Register
+other_login_methods,Other Login Methods
+please_input_username/email,Please Input Username/Email
+other_login_methods_line,—————————    Other Login Methods    —————————
+no_account?,No Account?
+register_account,Register Account?
+forget_password,Forget Password?
+please_input_username,Please Input Username
+please_intpu_validate_code,Please Intpu Validate Code
+get_verify_code,Get Verify Code
+next,Next
+please_confirm_password,Please Confirm Password
+reset_password,Reset Password?
+error_mobile_number_empty,Please input mobile number and get validate code.
+error_validate_code_empty,Please input the correct validate code.
+error_password_not_equal,Please confirm password is same.
+msg_reset_success,Reset password success.
+ok,OK
+Congratulations! You Has been successfully upgraded to an official account!,
+"Sorry, the device is temporarily unable to use the quick login feature, please log in after register.",
+Please Input Message,
+Confirm Submit,
+Submit Success!,
+Submit Failed. Please Retry.,
+Upgrade,
+User Center,
+User Setting,
+Feedback,
+Tourist Upgrade,
+Quit Game,
+Platform ID,
+Please input your question or suggestion…,
+Switch Account,

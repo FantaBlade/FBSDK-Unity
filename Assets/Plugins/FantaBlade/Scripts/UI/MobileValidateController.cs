@@ -97,7 +97,7 @@ namespace FantaBlade.UI
                                 }
                                 else
                                 {
-                                    _requestValidateCodeText.text = s.ToString();
+                                    _requestValidateCodeText.text = s.ToString() + SdkManager.Localize.GetText("x_second_to_retry");
                                 }
                             });
                         }

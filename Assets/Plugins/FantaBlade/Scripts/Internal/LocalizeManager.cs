@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using UnityEngine.Rendering;
 
 namespace FantaBlade.Internal
 {
@@ -28,6 +29,10 @@ namespace FantaBlade.Internal
 
         public string GetText(string key)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                return key;
+            }
             return _setting[_currentLanguage].GetText(key);
         }
 
@@ -60,12 +65,16 @@ namespace FantaBlade.Internal
 
             public string GetText(string key)
             {
-                if (!_localizeDict.ContainsKey(key))
+                if (_localizeDict.ContainsKey(key))
                 {
-                    return key;
+                    return _localizeDict[key];
+                }
+                if (_localizeDict.ContainsKey(key.ToLower()))
+                {
+                    return _localizeDict[key.ToLower()];
                 }
 
-                return _localizeDict[key];
+                return key;
             }
 
             private void ParseConfig(string configStr)

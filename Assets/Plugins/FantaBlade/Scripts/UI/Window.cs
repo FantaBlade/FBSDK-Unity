@@ -3,12 +3,26 @@
 namespace FantaBlade.UI
 {
 
+    public enum WindowType
+    {
+        None = 0,
+        PhoneLogin = 1,
+        AccountLogin = 2,
+        Register = 3,
+        ResetPassword = 4,
+        UserLicense = 5,
+        CommonBg = 6,
+        GuestTip = 7,
+    }
+    
     /// <summary>
     ///     UI View 的内容
     /// </summary>
     [RequireComponent(typeof(CanvasGroup))]
     internal class Window : MonoBehaviour
     {
+        public WindowType WindowType;
+
         private CanvasGroup _canvasGroup;
 
         private CanvasGroup CanvasGroup

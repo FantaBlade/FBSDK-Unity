@@ -143,5 +143,16 @@ namespace FantaBlade.Internal
         {
             return ((MonoBehaviour) Instance).StartCoroutine(coroutine);
         }
+
+        public void UserAcceptLisense()
+        {
+            PlayerPrefs.SetInt("user_accept_lisense", 1);
+        }
+
+        public bool IsUserAcceptLisense()
+        {
+            return 1 == PlayerPrefs.GetInt("user_accept_lisense", 0);
+        }
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using FantaBlade.Internal;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -42,6 +43,10 @@ namespace FantaBlade.UI
             string buttonName1 = null, UnityAction callback1 = null,
             string buttonName2 = null, UnityAction callback2 = null)
         {
+            content = SdkManager.Localize.GetText(content);
+            buttonName0 = SdkManager.Localize.GetText(buttonName0);
+            buttonName1 = SdkManager.Localize.GetText(buttonName1);
+            buttonName2 = SdkManager.Localize.GetText(buttonName2);
             var buttonNames = new[]
             {
                 buttonName0,

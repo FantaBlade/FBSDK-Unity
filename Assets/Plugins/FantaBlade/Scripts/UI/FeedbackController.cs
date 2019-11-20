@@ -21,7 +21,7 @@ public class FeedbackController : MonoBehaviour, IController
     {
         if (string.IsNullOrEmpty(_content.text))
         {
-            SdkManager.Ui.Dialog.Show("请输入内容", "好的");
+            SdkManager.Ui.Dialog.Show("Please Input Message", "ok");
             return;
         }
 
@@ -30,7 +30,7 @@ public class FeedbackController : MonoBehaviour, IController
         {
             {"content", _content.text},
         };
-        SdkManager.Ui.Dialog.Show("确认提交", "好的",
+        SdkManager.Ui.Dialog.Show("Confirm Submit", "ok",
             () =>
             {
                 PlatformApi.Feedback.Submit.Post(form, (err, info, response) =>
@@ -38,15 +38,15 @@ public class FeedbackController : MonoBehaviour, IController
                     _submitButton.interactable = true;
                     if (err == null && response.code == 0)
                     {
-                        SdkManager.Ui.Dialog.Show("发送成功！", "好的");
+                        SdkManager.Ui.Dialog.Show("Submit Success!", "ok");
                         _content.text = String.Empty;
                         _window.Disappear();
                     }
                     else
                     {
-                        SdkManager.Ui.Dialog.Show("发送失败，请重试", "好的");
+                        SdkManager.Ui.Dialog.Show("Submit Failed. Please Retry.", "ok");
                     }
                 });
-            }, "取消");
+            }, "cancel");
     }
 }
