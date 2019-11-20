@@ -5,32 +5,32 @@ using UnityEngine.EventSystems;
 
 namespace FantaBlade.Internal
 {
-
-    public enum ENormalUIID
+    public enum NormalUIID
     {
-        eNone = 0,
-        eLogin,
-        eUserCenter,
-        eWelcomeBack,
+        None = 0,
+        Login,
+        UserCenter,
+        WelcomeBack,
     }
 
     public class NormalUIPath
     {
-        public static string GetPath(ENormalUIID uiId)
+        public static string GetPath(NormalUIID uiId)
         {
             switch (uiId)
             {
-                case ENormalUIID.eNone:
+                case NormalUIID.None:
                     break;
-                case ENormalUIID.eLogin:
+                case NormalUIID.Login:
                     return "fantablade_sdk/prefab/login";
-                case ENormalUIID.eUserCenter:
+                case NormalUIID.UserCenter:
                     return "fantablade_sdk/prefab/user_center";
-                case ENormalUIID.eWelcomeBack:
+                case NormalUIID.WelcomeBack:
                     return "fantablade_sdk/prefab/welcome_back";
                 default:
                     break;
             }
+
             return string.Empty;
         }
     }
@@ -73,20 +73,20 @@ namespace FantaBlade.Internal
             }
         }
 
-        public void ShowNormalUI(ENormalUIID uiId)
+        public void ShowNormalUI(NormalUIID uiId)
         {
-            ShowNormalUI((int)uiId, NormalUIPath.GetPath(uiId));
+            ShowNormalUI((int) uiId, NormalUIPath.GetPath(uiId));
         }
 
         /// <summary>
         /// 按照id加载并显示对应界面
         /// </summary>
-        /// <param name="uiId">对应  ENormalUIID</param>
+        /// <param name="uiId">对应  NormalUIID</param>
         public void ShowNormalUI(int uiId, string resPath)
         {
             //TODO use mActiveUIStack find opened ui with uiId
             GameObject go = null;
-            if (! mActiveUIs.ContainsKey(uiId))
+            if (!mActiveUIs.ContainsKey(uiId))
             {
                 go = GetResource(resPath);
                 mActiveUIs.Add(uiId, go);
@@ -102,7 +102,7 @@ namespace FantaBlade.Internal
 
         public void Pop()
         {
-            while(0 < mActiveUIStack.Count)
+            while (0 < mActiveUIStack.Count)
             {
                 int id = mActiveUIStack.Pop();
                 if (HideNormalUI(id))
@@ -114,22 +114,24 @@ namespace FantaBlade.Internal
 
         public bool HideNormalUI(int uiId)
         {
-            if(! mActiveUIs.ContainsKey(uiId))
+            if (!mActiveUIs.ContainsKey(uiId))
             {
                 return false;
             }
+
             GameObject go = mActiveUIs[uiId];
-            if(null != go)
+            if (null != go)
             {
                 go.SetActive(false);
             }
+
             return true;
             //not remove from stack
         }
 
         public void HideAll()
         {
-            Dictionary<int,GameObject>.KeyCollection keys =  mActiveUIs.Keys;
+            Dictionary<int, GameObject>.KeyCollection keys = mActiveUIs.Keys;
             Dictionary<int, GameObject>.KeyCollection.Enumerator enumerator = keys.GetEnumerator();
             while (enumerator.MoveNext())
             {
@@ -142,13 +144,11 @@ namespace FantaBlade.Internal
             HideAll();
             mActiveUIs = new Dictionary<int, GameObject>();
             mActiveUIStack = new Stack<int>();
-
         }
 
         public void ShowLogin()
         {
-
-            SdkManager.Ui.ShowNormalUI(ENormalUIID.eLogin);
+            SdkManager.Ui.ShowNormalUI(NormalUIID.Login);
 
 
             //if (_login == null)
@@ -164,13 +164,13 @@ namespace FantaBlade.Internal
 
         public void HideLogin()
         {
-            SdkManager.Ui.HideNormalUI((int)ENormalUIID.eLogin);
+            SdkManager.Ui.HideNormalUI((int) NormalUIID.Login);
             //_login.SetActive(false);
         }
 
         public void ShowGameCenter()
         {
-            SdkManager.Ui.ShowNormalUI(ENormalUIID.eUserCenter);
+            SdkManager.Ui.ShowNormalUI(NormalUIID.UserCenter);
             //if (_userCenter == null)
             //{
             //    var userCenter = Resources.Load<GameObject>("fantablade_sdk/prefab/user_center");
@@ -184,7 +184,7 @@ namespace FantaBlade.Internal
 
         public void HideGameCenter()
         {
-            SdkManager.Ui.HideNormalUI((int)ENormalUIID.eUserCenter);
+            SdkManager.Ui.HideNormalUI((int) NormalUIID.UserCenter);
             //_userCenter.SetActive(false);
         }
 
@@ -211,26 +211,27 @@ namespace FantaBlade.Internal
 
         private GameObject GetResource(string path)
         {
-            if(! mCachedUIs.ContainsKey(path))
+            if (!mCachedUIs.ContainsKey(path))
             {
                 GameObject obj = Resources.Load<GameObject>(path);
                 GameObject go = Object.Instantiate(obj);
                 mCachedUIs.Add(path, go);
             }
+
             return mCachedUIs[path];
         }
 
         private void ClearCache()
         {
-            if(null != mCachedUIs && 0 < mCachedUIs.Count)
+            if (null != mCachedUIs && 0 < mCachedUIs.Count)
             {
-                foreach(KeyValuePair<string,GameObject> kvp in mCachedUIs)
+                foreach (KeyValuePair<string, GameObject> kvp in mCachedUIs)
                 {
                     GameObject.Destroy(kvp.Value);
                 }
             }
+
             mCachedUIs.Clear();
         }
-
     }
 }

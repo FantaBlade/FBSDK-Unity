@@ -130,7 +130,7 @@ namespace FantaBlade.Internal
                 ((Native.AndroidNativeApi)SdkManager.NativeApi).SetToken(token);
             }
 #endif
-            SdkManager.Ui.ShowNormalUI(ENormalUIID.eWelcomeBack);
+            SdkManager.Ui.ShowNormalUI(NormalUIID.WelcomeBack);
             SdkManager.Ui.FloatingWindow.Show();
         }
 

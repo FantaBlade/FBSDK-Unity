@@ -34,7 +34,7 @@ public class WelcomeBackController : MonoBehaviour, IController
     /// </summary>
     public void Finish()
     {
-        SdkManager.Ui.HideNormalUI((int)ENormalUIID.eWelcomeBack);
+        SdkManager.Ui.HideNormalUI((int)NormalUIID.WelcomeBack);
     }
 
     // Use this for initialization
