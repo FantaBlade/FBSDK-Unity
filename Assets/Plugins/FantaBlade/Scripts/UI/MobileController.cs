@@ -23,6 +23,8 @@ namespace FantaBlade.UI
         [SerializeField] private Dropdown _callingCodes;
         [SerializeField] private InputField _mobileNumber;
 
+        private Text _dropDownCaptionText;
+
         public void Init()
         {
             foreach (var countryInfo in CountryInfos)
@@ -31,17 +33,23 @@ namespace FantaBlade.UI
                     new Dropdown.OptionData(countryInfo.NameInChinese + "[Space]+" + countryInfo.Telephone));
             }
 
+            if (!_dropDownCaptionText)
+            {
+                _dropDownCaptionText = _callingCodes.captionText;
+                _callingCodes.captionText = null;
+            }
 
             int index = SdkManager.Location != null ? CountryCodeToCountryInfoIndex(SdkManager.Location) : -1;
             if (index == -1)
             {
                 index = CountryInfo.DefaultCountyIndex;
             }
+
             _callingCodes.value = index;
-            _callingCodes.captionText.text = "+" + CountryInfos[index].Telephone; //_callingCodes.options[index].text;
+            _dropDownCaptionText.text = "+" + CountryInfos[index].Telephone; //_callingCodes.options[index].text;
             _callingCodes.onValueChanged.AddListener((idx) =>
             {
-                _callingCodes.captionText.text = "+" + CountryInfos[idx].Telephone; //_callingCodes.options[index].text;
+                _dropDownCaptionText.text = "+" + CountryInfos[idx].Telephone; //_callingCodes.options[index].text;
             });
 
             SdkManager.LocationSuccess += OnLocationSuccess;
@@ -56,7 +64,7 @@ namespace FantaBlade.UI
         {
             var i = CountryCodeToCountryInfoIndex(countryCode);
             _callingCodes.value = i;
-            _callingCodes.captionText.text = "+" + CountryInfos[i].Telephone;//_callingCodes.options[i].text;
+//            _callingCodes.captionText.text = "+" + CountryInfos[i].Telephone;//_callingCodes.options[i].text;
         }
 
         private int CountryCodeToCountryInfoIndex(string countryCode)
