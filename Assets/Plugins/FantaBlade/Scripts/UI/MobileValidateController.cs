@@ -119,7 +119,7 @@ namespace FantaBlade.UI
         private void ResetValidateCodeButton()
         {
             _requestValidateCodeButton.interactable = true;
-            _requestValidateCodeText.text = "get_verify_code";
+            _requestValidateCodeText.text = SdkManager.Localize.GetText("get_verify_code");
         }
 
         private void OnEnable()

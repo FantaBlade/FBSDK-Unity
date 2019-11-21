@@ -20,7 +20,7 @@ namespace FantaBlade.UI
             var password = _password.text;
             if (string.IsNullOrEmpty(identifier) || string.IsNullOrEmpty(password))
             {
-                SdkManager.Ui.Dialog.Show("Please input username and password", "ok");
+                SdkManager.Ui.Dialog.Show("Please input username and password！", "ok");
                 return;
             }
 
