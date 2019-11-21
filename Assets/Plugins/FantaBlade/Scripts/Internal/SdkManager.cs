@@ -69,7 +69,7 @@ namespace FantaBlade.Internal
                 CountryInfo.SetDefaultCounty(publishRegion);
                 PlatformApi.SetRegion(publishRegion);
                 Language = Application.systemLanguage;
-                Localize.Init(SystemLanguage.English);
+                Localize.Init(Language);
                 
 #if UNITY_ANDROID // && !UNITY_EDITOR
                 UseAndroidNativeApi = PublishRegion == PublishRegion.China;
