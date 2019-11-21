@@ -65,16 +65,17 @@ namespace FantaBlade.Internal
 
             public string GetText(string key)
             {
+                string result = string.Empty;
                 if (_localizeDict.ContainsKey(key))
                 {
-                    return _localizeDict[key];
+                    result =  _localizeDict[key];
                 }
                 if (_localizeDict.ContainsKey(key.ToLower()))
                 {
-                    return _localizeDict[key.ToLower()];
+                    result = _localizeDict[key.ToLower()];
                 }
 
-                return key;
+                return string.IsNullOrEmpty(result) ? key : result;
             }
 
             private void ParseConfig(string configStr)

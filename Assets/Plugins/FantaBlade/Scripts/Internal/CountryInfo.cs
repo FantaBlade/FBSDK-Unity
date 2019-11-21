@@ -82,7 +82,7 @@ namespace FantaBlade.Internal
             new CountryInfo("Singapore", "新加坡", "SG", "SGP", "65"),
             new CountryInfo("Sri Lanka", "斯里兰卡", "LK", "LKA", "94"),
             new CountryInfo("Syrian Arab Republic", "叙利亚", "SY", "SYR", "963"),
-            new CountryInfo("Taiwan, Province of China", "中国台湾", "TW", "TWN", "886"),
+            new CountryInfo("Taiwan， Province of China", "中国台湾", "TW", "TWN", "886"),
             new CountryInfo("Tajikistan", "塔吉克斯坦", "TJ", "TJK", "992"),
             new CountryInfo("Thailand", "泰国", "TH", "THA", "66"),
             new CountryInfo("Timor-Leste", "东帝汶", "TL", "TLS", "670"),

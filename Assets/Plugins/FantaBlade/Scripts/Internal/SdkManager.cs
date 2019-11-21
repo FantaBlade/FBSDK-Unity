@@ -29,7 +29,7 @@ namespace FantaBlade.Internal
 
         public static event Action<string> LocationSuccess;
 
-#if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID //&& !UNITY_EDITOR
         /// <summary>
         ///     是否使用 Android 原生接口
         /// </summary>
@@ -69,9 +69,9 @@ namespace FantaBlade.Internal
                 CountryInfo.SetDefaultCounty(publishRegion);
                 PlatformApi.SetRegion(publishRegion);
                 Language = Application.systemLanguage;
-                Localize.Init(Language);
+                Localize.Init(SystemLanguage.English);
                 
-#if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID // && !UNITY_EDITOR
                 UseAndroidNativeApi = PublishRegion == PublishRegion.China;
                 if (UseAndroidNativeApi)
                 {
