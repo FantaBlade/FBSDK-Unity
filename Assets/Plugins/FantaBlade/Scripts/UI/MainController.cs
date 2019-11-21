@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FantaBlade.Internal;
+using FantaBlade.UI.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -70,6 +71,14 @@ namespace FantaBlade.UI
 
 		public void WindowBack()
 		{
+			if (Utils.IsClickTooOften())
+			{
+				return;
+			}
+			if (1 >= _windowStack.Count)
+			{
+				return;
+			}
 			_windowsDict[_windowStack.Pop()].Disappear();
 			if (0 < _windowStack.Count)
 			{

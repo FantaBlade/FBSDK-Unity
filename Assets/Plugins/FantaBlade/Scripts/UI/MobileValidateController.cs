@@ -1,4 +1,5 @@
 using FantaBlade.Internal;
+using FantaBlade.UI.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -77,6 +78,10 @@ namespace FantaBlade.UI
             _mobileNumberCache = _mobileController.MobileNumber;
             if (_mobileNumberCache.Length > 0)
             {
+                if (Utils.IsClickTooOften(3f))
+                {
+                    return;
+                }
                 _isRequestingMobileValidate = true;
                 SdkManager.Auth.RequestValidateCode(_countryCodeCache, _mobileNumberCache, err =>
                     {

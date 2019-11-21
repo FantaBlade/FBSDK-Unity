@@ -21,10 +21,13 @@ namespace FantaBlade.UI.Common
         private void Awake()
         {
             _isPwDisplaying = false;
-            
+
             if (null == _inputField) _inputField = GetComponent<InputField>();
 
-            if (_isPassword) UpdatePasswordType(_isPwDisplaying);
+            if (_isPassword)
+            {
+                UpdatePasswordType(_isPwDisplaying);
+            }
 
             if (_btnClear) _btnClear.onClick.AddListener(OnClickClear);
 
@@ -39,6 +42,12 @@ namespace FantaBlade.UI.Common
                     btnDisplayPassword.onClick.AddListener(OnClickDisplayPassword);
                 }
             }
+        }
+
+        private void OnEnable()
+        {
+            //由于能够看到密码,所以每次显示时会主动清空密码框
+            if (_isPassword && _inputField) _inputField.text = string.Empty;
         }
 
         private void OnClickDisplayPassword()

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using FantaBlade.Internal;
@@ -20,6 +21,13 @@ namespace FantaBlade.UI
         private string _tempTicket;
 
         public void Init()
+        {
+        }
+
+        /// <summary>
+        /// Reset Password 界面只要显示就肯定是从step1开始
+        /// </summary>
+        private void OnEnable()
         {
             _step1.SetActive(true);
             _step2.SetActive(false);

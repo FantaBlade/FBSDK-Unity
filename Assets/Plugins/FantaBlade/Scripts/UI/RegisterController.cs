@@ -1,5 +1,6 @@
 ﻿using FantaBlade.Internal;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace FantaBlade.UI
@@ -9,7 +10,7 @@ namespace FantaBlade.UI
     {
         private static string _defaultCountryCode;
 
-        [SerializeField] private Window _userLisense;
+        [FormerlySerializedAs("_userLisense")] [SerializeField] private Window _userLicense;
         [SerializeField] private InputField _username;
         [SerializeField] private InputField _password;
 
@@ -63,19 +64,19 @@ namespace FantaBlade.UI
             }
             else
             {
-                _userLisense.Appear();
+                _userLicense.Appear();
             }
         }
 
         public void OnClickLisenseReject()
         {
-            _userLisense.Disappear();
+            _userLicense.Disappear();
         }
 
         public void OnClickLisenseAccept()
         {
             SdkManager.Instance.UserAcceptLisense();
-            _userLisense.Disappear();
+            _userLicense.Disappear();
             var username = _username.text;
             var password = _password.text;
             var countryCode = _mobileValidate.CountryCode;
