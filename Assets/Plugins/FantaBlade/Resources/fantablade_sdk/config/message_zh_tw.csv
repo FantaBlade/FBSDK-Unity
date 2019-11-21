@@ -29,9 +29,11 @@ error_mobile_number_empty,請輸入手機號碼，並獲取驗證碼
 error_validate_code_empty,請正確輸入驗證碼
 error_password_not_equal,兩次密碼不相同
 msg_reset_success,密碼重置成功
+Please input username and password！,請輸入用戶名和密碼！
+Currently for the Tourist account，switching accounts may result in account loss，still have to switch?,當前為遊客帳號，切換帳號可能導致帳號丟失，依然要切換嗎？
 ok,好的
 Congratulations! You Has been successfully upgraded to an official account!,恭喜你！已經成功升級為正式帳號!
-"Sorry, the device is temporarily unable to use the quick login feature, please log in after register.",抱歉，該設備暫時無法使用快速遊戲功能，請註冊後登陸。
+Sorry，the device is temporarily unable to use the quick login feature，please log in after register.,抱歉，該設備暫時無法使用快速遊戲功能，請註冊後登陸。
 Please Input Message,請輸入內容。
 Confirm Submit,確認提交。
 Submit Success!,發送成功！
@@ -45,3 +47,62 @@ Quit Game,退出遊戲
 Platform ID,平臺 ID
 Please input your question or suggestion…,請輸入您遇到的問題或建議…...
 Switch Account,切換帳號
+Country,國家
+Afghanistan,阿富汗
+Armenia,亞美尼亞
+Azerbaijan,亞塞拜然
+Bahrain,巴林
+Bangladesh,孟加拉
+Bhutan,不丹
+Brunei Darussalam,汶萊
+Cambodia,柬埔寨
+China,中國
+Christmas Island,澳大利亞聖誕島
+Cocos (Keeling) Islands,科科斯（基林）群島
+Cyprus,賽普勒斯
+Georgia,格魯吉亞
+Hong Kong,中國香港特別行政區
+India,印度
+Indonesia,印尼
+Iran,伊朗
+Iraq,伊拉克
+Israel,以色列
+Japan,日本
+Jordan,約旦
+Kazakhstan,哈薩克
+North Korea,朝鮮
+South Korea,韓國
+Kuwait,科威特
+Kyrgyzstan,吉爾吉斯斯坦
+Lao People's Democratic Republic,老撾
+Lebanon,黎巴嫩
+Macao,中國澳門特別行政區
+Malaysia,馬來西亞
+Maldives,馬爾地夫
+Mongolia,蒙古
+Myanmar,緬甸
+Nepal,尼泊爾
+Oman,阿曼
+Pakistan,巴基斯坦
+Palestinian Territory,巴勒斯坦
+Philippines,菲律賓
+Qatar,卡達
+Saudi Arabia,沙烏地阿拉伯
+Singapore,新加坡
+Sri Lanka,斯裡蘭卡
+Syrian Arab Republic,敘利亞
+Taiwan,中國臺灣
+Tajikistan,塔吉克斯坦
+Thailand,泰國
+Timor-Leste,東帝汶
+Turkmenistan,土庫曼斯坦
+United Arab Emirates,阿拉伯聯合大公國
+Uzbekistan,烏茲別克斯坦
+Vietnam,越南
+Yemen,葉門
+I want to,我偏要
+No!No!,不了不了
+Confirm switching account?,確認切換帳號嗎？
+Are you sure to quit the game?,確定退出遊戲嘛？
+Yes,確定
+Not now.,再玩一會兒

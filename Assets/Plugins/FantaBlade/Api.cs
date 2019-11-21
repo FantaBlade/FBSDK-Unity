@@ -141,7 +141,7 @@ namespace FantaBlade
             if (!IsInitialized) return;
 
             var dialog = SdkManager.Ui.Dialog;
-            dialog.Show("确定退出游戏嘛？", "就此别过", Application.Quit, "再玩一会儿", dialog.Hide);
+            dialog.Show("Are you sure to quit the game? ", "Yes", Application.Quit, "Not now.", dialog.Hide);
         }
 
         #endregion

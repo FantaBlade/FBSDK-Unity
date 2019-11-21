@@ -34,19 +34,19 @@ namespace FantaBlade.UI
             var dialog = SdkManager.Ui.Dialog;
             if (SdkManager.Auth.IsTourist)
             {
-                dialog.Show("当前为游客账号，切换账号可能导致账号丢失，依然要切换吗？", "我偏要", () =>
+                dialog.Show("Currently for the Tourist account，switching accounts may result in account loss，still have to switch?", "I want to", () =>
                 {
                     SwitchUser();
                     dialog.Hide();
-                }, "不了不了");
+                }, "No!No!");
             }
             else
             {
-                dialog.Show("确认切换账号吗？", "确认", () =>
+                dialog.Show("Confirm switching account?", "confirm", () =>
                 {
                     SwitchUser();
                     dialog.Hide();
-                }, "取消");
+                }, "cancel");
             }
         }
 

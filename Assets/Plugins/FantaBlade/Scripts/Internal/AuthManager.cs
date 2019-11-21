@@ -74,7 +74,7 @@ namespace FantaBlade.Internal
             var deviceUniqueIdentifier = SystemInfo.deviceUniqueIdentifier;
             if (deviceUniqueIdentifier == SystemInfo.unsupportedIdentifier)
             {
-                SdkManager.Ui.Dialog.Show("Sorry, the device is temporarily unable to use the quick login feature, please log in after register.", "ok");
+                SdkManager.Ui.Dialog.Show("Sorry，the device is temporarily unable to use the quick login feature，please log in after register.", "ok");
             }
 
             IsLoggingIn = true;

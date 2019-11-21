@@ -88,7 +88,7 @@ namespace FantaBlade.UI
                         _isRequestingMobileValidate = false;
                         if (err != null)
                         {
-                            SdkManager.Ui.Dialog.Show(err, "好的");
+                            SdkManager.Ui.Dialog.Show(err, "ok");
                         }
                         else
                         {
@@ -112,14 +112,14 @@ namespace FantaBlade.UI
             }
             else
             {
-                SdkManager.Ui.Dialog.Show("请先输入手机号码", "好的");
+                SdkManager.Ui.Dialog.Show("please_input_mobile_number", "ok");
             }
         }
 
         private void ResetValidateCodeButton()
         {
             _requestValidateCodeButton.interactable = true;
-            _requestValidateCodeText.text = "获取验证码";
+            _requestValidateCodeText.text = "get_verify_code";
         }
 
         private void OnEnable()

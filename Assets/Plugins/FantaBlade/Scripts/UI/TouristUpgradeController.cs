@@ -35,25 +35,25 @@ namespace FantaBlade.UI
 
             if (string.IsNullOrEmpty(username))
             {
-                SdkManager.Ui.Dialog.Show("请输入用户名", "好的");
+                SdkManager.Ui.Dialog.Show("please_input_username", "ok");
                 return;
             }
 
             if (string.IsNullOrEmpty(password))
             {
-                SdkManager.Ui.Dialog.Show("请输入密码", "好的");
+                SdkManager.Ui.Dialog.Show("please_input_password", "ok");
                 return;
             }
 
             if (string.IsNullOrEmpty(mobileNumber))
             {
-                SdkManager.Ui.Dialog.Show("请输入手机号码，并获取验证码", "好的");
+                SdkManager.Ui.Dialog.Show("error_mobile_number_empty", "ok");
                 return;
             }
 
             if (validateCode.Length != 4)
             {
-                SdkManager.Ui.Dialog.Show("请正确输入验证码", "好的");
+                SdkManager.Ui.Dialog.Show("error_validate_code_empty", "ok");
                 return;
             }
 

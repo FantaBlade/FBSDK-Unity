@@ -30,7 +30,7 @@ namespace FantaBlade.UI
             foreach (var countryInfo in CountryInfos)
             {
                 _callingCodes.options.Add(
-                    new Dropdown.OptionData(countryInfo.NameInChinese + "[Space]+" + countryInfo.Telephone));
+                    new Dropdown.OptionData(countryInfo.Name + "[Space]+" + countryInfo.Telephone));
             }
 
             if (!_dropDownCaptionText)
