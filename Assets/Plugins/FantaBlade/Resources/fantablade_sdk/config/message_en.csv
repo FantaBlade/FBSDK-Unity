@@ -20,8 +20,8 @@ no_account?,No Account?
 register_account,Register Account
 forget_password,Forget Password?
 please_input_username,Please Input Username
-please_intpu_validate_code,Please Intpu Validate Code
-get_verify_code,Get Verify Code
+please_input_validate_code,Please Input Validate Code
+get_verify_code,Get Code
 next,Next
 please_confirm_password,Please Confirm Password
 reset_password,Reset Password

@@ -20,7 +20,7 @@ no_account?,沒有帳戶?
 register_account,註冊帳號
 forget_password,忘記密碼
 please_input_username,請輸入用戶名
-please_intpu_validate_code,請輸入驗證碼
+please_input_validate_code,請輸入驗證碼
 get_verify_code,獲取驗證碼
 next,下一步
 please_confirm_password,請確認密碼

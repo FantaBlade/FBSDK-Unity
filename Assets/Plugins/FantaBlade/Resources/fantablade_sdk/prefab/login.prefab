@@ -9756,7 +9756,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: please_intpu_validate_code
+  m_Text: please_input_validate_code
 --- !u!114 &114648795252247558
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11476,7 +11476,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: please_intpu_validate_code
+  m_Text: please_input_validate_code
 --- !u!114 &114884322628271874
 MonoBehaviour:
   m_ObjectHideFlags: 1
