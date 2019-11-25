@@ -49,6 +49,7 @@ namespace FantaBlade.UI
             _dropDownCaptionText.text = "+" + CountryInfos[index].Telephone; //_callingCodes.options[index].text;
             _callingCodes.onValueChanged.AddListener((idx) =>
             {
+                SdkManager.Location = CountryInfos[idx].CountryCodeIso2;
                 _dropDownCaptionText.text = "+" + CountryInfos[idx].Telephone; //_callingCodes.options[index].text;
             });
 
@@ -66,7 +67,7 @@ namespace FantaBlade.UI
             _callingCodes.value = i;
 //            _callingCodes.captionText.text = "+" + CountryInfos[i].Telephone;//_callingCodes.options[i].text;
         }
-
+        
         private int CountryCodeToCountryInfoIndex(string countryCode)
         {
             for (var i = 0; i < CountryInfos.Length; i++)

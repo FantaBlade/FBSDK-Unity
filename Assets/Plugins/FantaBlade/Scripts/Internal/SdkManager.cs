@@ -12,6 +12,7 @@ namespace FantaBlade.Internal
         /// </summary>
         public static readonly bool DebugMode = false;
 
+
         /// <summary>
         ///     发行区域
         /// </summary>
@@ -25,7 +26,21 @@ namespace FantaBlade.Internal
         /// <summary>
         ///     玩家定位
         /// </summary>
-        public static string Location;
+        public static string Location
+        {
+            get
+            {
+                const string locationKey = "FantaBladeSDK_User_Location";
+                return PlayerPrefs.GetString(locationKey);
+            }
+            set
+            {
+                const string locationKey = "FantaBladeSDK_User_Location";
+                PlayerPrefs.SetString(locationKey, value);
+                PlayerPrefs.Save();
+                if (LocationSuccess != null) LocationSuccess(value);
+            }
+        }
 
         public static event Action<string> LocationSuccess;
 
@@ -42,6 +57,7 @@ namespace FantaBlade.Internal
         public static string AccessKeyId { get; private set; }
 
         public static SdkManager Instance { get; private set; }
+
         public static readonly UiManager Ui = new UiManager();
         public static readonly AuthManager Auth = new AuthManager();
         public static readonly OrderManager Order = new OrderManager();
@@ -70,8 +86,8 @@ namespace FantaBlade.Internal
                 PlatformApi.SetRegion(publishRegion);
                 Language = Application.systemLanguage;
                 Localize.Init(Language);
-                
-#if UNITY_ANDROID // && !UNITY_EDITOR
+
+#if UNITY_ANDROID && !UNITY_EDITOR
                 UseAndroidNativeApi = PublishRegion == PublishRegion.China;
                 if (UseAndroidNativeApi)
                 {
@@ -99,7 +115,7 @@ namespace FantaBlade.Internal
                 var ui = Resources.Load<GameObject>("fantablade_sdk/prefab/fantablade_sdk");
                 ui = Instantiate(ui);
                 DontDestroyOnLoad(ui);
-                //ui.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+                ui.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
                 Instance = ui.AddComponent<SdkManager>();
                 Ui.Init();
                 Ui.FloatingWindow.IsActive = showFloatingWindow;
@@ -108,26 +124,23 @@ namespace FantaBlade.Internal
                 PaymentApi.Init();
 
                 // 查询玩家位置
-                const string locationKey = "FantaBladeSDK_User_Location";
-                if (PlayerPrefs.HasKey(locationKey))
+                if (!string.IsNullOrEmpty(Location))
                 {
-                    Location = PlayerPrefs.GetString(locationKey);
                     if (LocationSuccess != null) LocationSuccess(Location);
                 }
-
-                PlatformApi.Util.GetIpInfo.Get((err, info, response) =>
+                else
                 {
-                    if (err == null)
+                    PlatformApi.Util.GetIpJson.Get((err, info, response) =>
                     {
-                        if (Location != response.countryCode)
+                        if (err == null)
                         {
-                            Location = response.countryCode;
-                            PlayerPrefs.SetString(locationKey, Location);
-                            PlayerPrefs.Save();
-                            if (LocationSuccess != null) LocationSuccess(Location);
+                            if (Location != response.countryCode)
+                            {
+                                Location = response.countryCode;
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
                 #endregion
 
@@ -153,6 +166,5 @@ namespace FantaBlade.Internal
         {
             return 1 == PlayerPrefs.GetInt("user_accept_lisense", 0);
         }
-        
     }
 }

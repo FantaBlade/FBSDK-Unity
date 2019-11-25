@@ -138,7 +138,14 @@ namespace FantaBlade.Internal
             {
                 if (_uri == null)
                 {
-                    _uri = new Uri(string.Join("/", new[] {_apiUrl, path}));
+                    if (path.StartsWith("http://"))
+                    {
+                        _uri = new Uri(path);
+                    }
+                    else
+                    {
+                        _uri = new Uri(string.Join("/", new[] {_apiUrl, path}));
+                    }
                 }
 
                 return _uri;
@@ -176,6 +183,7 @@ namespace FantaBlade.Internal
             private const string Prefix = Server + "/util/";
 
             public static readonly WebRequest<IpInfoResponse> GetIpInfo = Prefix + "getIpInfo";
+            public static readonly WebRequest<IpJsonResponse> GetIpJson = "http://ip-api.com/json";
         }
 
         public static class Iap
@@ -235,6 +243,16 @@ namespace FantaBlade.Internal
         public class TempTicketResponse : Response
         {
             public string tempTicket;
+        }
+
+        public class IpJsonResponse : Response
+        {
+            public string countryCode;
+
+            public IpJsonResponse()
+            {
+                code = 0;
+            }
         }
     }
 }
