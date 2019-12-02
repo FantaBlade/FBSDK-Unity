@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using UnityEngine.Purchasing;
 
 namespace FantaBlade.Internal.Native
@@ -145,6 +144,32 @@ namespace FantaBlade.Internal.Native
             {
                 case PurchaseFailureReason.UserCancelled:
                     Api.OnPayCancel();
+                    break;
+                case PurchaseFailureReason.DuplicateTransaction:
+                    // 消耗型商品 如果出现重复交易错误 则按照 IAP 1.23.1 release note:
+                    // Changes 1.22.0 "Fixed GooglePlay store consumable products
+                    // already owned error due to network issues." - developers may
+                    // choose to handle the `PurchaseFailureReason.DuplicateTransaction`
+                    // for a ProductType.Consumable by rewarding the user with the
+                    // product, and presuming that Unity IAP will automatically complete the transaction
+                    // 修复离线购买不一致产生OnPurchaseFailed回调的情况。
+                    // 更改1.22.0“由于网络问题，已修复的GooglePlay商店消耗品已经拥有错误”。
+                    // -开发人员可以选择为 ProductType.Consumable 处理
+                    // “ PurchaseFailureReason.DuplicateTransaction”，
+                    // 通过奖励用户产品并假定Unity IAP将自动完成交易来进行消耗。
+                    // 参考链接:
+                    // https://forum.unity.com/threads/unity-iap-store-package-1-23-1-is-now-available.415517/page-2#post-5215856
+                    // https://forum.unity.com/threads/unity-iap-1-23-1-duplicatetransaction-for-consumables.784508/
+                    if (ProductType.Consumable == item.definition.type)
+                    {
+                        // 按照 IAP release note,不判定为失败
+                        _purchaseQueue.Enqueue(item);
+                        HandlePurchaseQueue();
+                    }
+                    else
+                    {
+                        Api.OnPayFailure(p.ToString());
+                    }
                     break;
                 default:
                     Api.OnPayFailure(p.ToString());
