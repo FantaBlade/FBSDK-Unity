@@ -14,7 +14,7 @@ namespace FantaBlade.Internal
                 {
                     PublishRegion.LocalDev, new Dictionary<string, string>
                     {
-                        {"UserCenterHost", "http://www.fantablade.cn"},
+                        {"UserCenterHost", "http://www.fantablade.cn/"},
                         {"ApiHost", "http://api.fantablade.cn/"},
                         {"ApiVersion", "v0.1"}
                     }

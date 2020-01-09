@@ -21,7 +21,7 @@ namespace FantaBlade.Internal
         /// <summary>
         ///     语言
         /// </summary>
-        public static SystemLanguage Language;
+        public static SystemLanguage Language = SystemLanguage.Unknown;
 
         /// <summary>
         ///     玩家定位
@@ -84,8 +84,7 @@ namespace FantaBlade.Internal
                 PublishRegion = publishRegion;
                 CountryInfo.SetDefaultCounty(publishRegion);
                 PlatformApi.SetRegion(publishRegion);
-                Language = Application.systemLanguage;
-                Localize.Init(Language);
+                UpdateLanguage(Language);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
                 UseAndroidNativeApi = PublishRegion == PublishRegion.China;
@@ -150,6 +149,27 @@ namespace FantaBlade.Internal
             {
                 Api.OnInitializeFailure(e.Message);
             }
+        }
+
+        public static void UpdateLanguage(SystemLanguage language = SystemLanguage.Unknown)
+        {
+            if (language == SystemLanguage.Unknown)
+            {
+                SystemLanguage cachedLang = (SystemLanguage)PlayerPrefs.GetInt("fantablade_sdk_language", (int)SystemLanguage.Unknown);
+                if (cachedLang == SystemLanguage.Unknown)
+                {
+                    cachedLang = Application.systemLanguage;
+                }
+                language = cachedLang;
+            }
+
+            if (Language != language)
+            {
+                Language = language;
+                PlayerPrefs.SetInt("fantablade_sdk_language", (int)Language);
+                PlayerPrefs.Save();
+            }
+            Localize.Init(Language);
         }
 
         public new static Coroutine StartCoroutine(IEnumerator coroutine)

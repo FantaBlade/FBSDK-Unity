@@ -14,6 +14,7 @@ namespace FantaBlade.UI.Common
 #if USE_TMPro
     public TextMeshProUGUI TextMPro;
 #endif
+        private string _originalText;
 
         private void Awake()
         {
@@ -27,7 +28,13 @@ namespace FantaBlade.UI.Common
             TextMPro = GetComponent<TextMeshProUGUI>();
         }
 #endif
-            SetText(GetText());
+            _originalText = GetText();
+            SetText(_originalText);
+        }
+
+        private void OnEnable()
+        {
+            SetText(_originalText);
         }
 
         public void SetText(string text)

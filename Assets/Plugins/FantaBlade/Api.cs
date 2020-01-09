@@ -101,6 +101,16 @@ namespace FantaBlade
         }
 
         /// <summary>
+        ///     设置sdk语言,非立即刷新,界面在打开(OnEnable)时进行刷新
+        ///     sdk内有缓存, 默认 缓存/初始 语言为 Application.systemLanguage
+        /// </summary>
+        /// <param name="language"></param>
+        public static void SetLanguage(SystemLanguage language)
+        {
+            SdkManager.UpdateLanguage(language);
+        }
+
+        /// <summary>
         ///     支付
         /// </summary>
         public static void Pay(string productId)
