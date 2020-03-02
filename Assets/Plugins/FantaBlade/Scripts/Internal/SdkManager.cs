@@ -23,6 +23,18 @@ namespace FantaBlade.Internal
         /// </summary>
         public static SystemLanguage Language = SystemLanguage.Unknown;
 
+        public static string LanguageString
+        {
+            get
+            {
+                return Language == SystemLanguage.Chinese
+                    || Language == SystemLanguage.ChineseSimplified
+                    || Language == SystemLanguage.ChineseTraditional
+                    ? "Chinese"
+                    : "English";
+            }
+        }
+        
         /// <summary>
         ///     玩家定位
         /// </summary>
@@ -85,7 +97,7 @@ namespace FantaBlade.Internal
                 CountryInfo.SetDefaultCounty(publishRegion);
                 PlatformApi.SetRegion(publishRegion);
                 UpdateLanguage(Language);
-
+                
 #if UNITY_ANDROID && !UNITY_EDITOR
                 UseAndroidNativeApi = PublishRegion == PublishRegion.China;
                 if (UseAndroidNativeApi)

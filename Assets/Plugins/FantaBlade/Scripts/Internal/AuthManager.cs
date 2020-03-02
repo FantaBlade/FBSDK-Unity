@@ -153,7 +153,8 @@ namespace FantaBlade.Internal
             var form = new Dictionary<string, string>
             {
                 {"countryCode", countryCode},
-                {"mobile", mobileNumber}
+                {"mobile", mobileNumber},
+                {"lang", SdkManager.LanguageString}
             };
             PlatformApi.WebRequest<PlatformApi.Response> request;
             if (!registered.HasValue)
