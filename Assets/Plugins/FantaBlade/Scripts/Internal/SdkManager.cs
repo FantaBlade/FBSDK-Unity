@@ -99,7 +99,7 @@ namespace FantaBlade.Internal
                 UpdateLanguage(Language);
                 
 #if UNITY_ANDROID && !UNITY_EDITOR
-                UseAndroidNativeApi = PublishRegion == PublishRegion.China;
+                UseAndroidNativeApi = PublishRegion != PublishRegion.SoutheastAsia;
                 if (UseAndroidNativeApi)
                 {
                     var androidNativeApi = new AndroidNativeApi();
