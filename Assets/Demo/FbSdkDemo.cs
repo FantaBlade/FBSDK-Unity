@@ -14,9 +14,6 @@ public class FbSdkDemo : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        new SRDebugger.Services.Implementation.StandardConsoleService();
-        SRDebug.Init();
-        
         Api.InitializeSuccess += OnInitializeSuccess;
         Api.LoginSuccess += OnLoginSuccess;
         Api.LogoutSuccess += OnLogoutSuccess;
@@ -24,11 +21,6 @@ public class FbSdkDemo : MonoBehaviour
         Api.PayCancel += OnPayCancel;
 //        Api.Init("44I1ucBEaIRvm4Re", true, PublishRegion.China);
         Api.Init("zsN9eQcEqcmWnBCT", true, PublishRegion.SoutheastAsia);
-        if (Api.IsGooglePlayServiceNecessary)
-        {
-            Debug.Log("Need GooglePlay");
-            Debug.Log("GooglePlay is " + Api.IsGooglePlayServiceValid);
-        }
     }
 
     private void OnInitializeSuccess()
@@ -58,8 +50,7 @@ public class FbSdkDemo : MonoBehaviour
 
     public void Pay()
     {
-//        Api.Pay("android.test.purchased");
-        Api.Pay("com.fantablade.watergun.currency_charge_1001");
+        Api.Pay("android.test.purchased");
     }
 
     public void ShowProducts()
