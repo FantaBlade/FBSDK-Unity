@@ -49,6 +49,16 @@ namespace FantaBlade
             private set { _isPaymentInitialized = value; }
         }
 
+        public static bool IsGooglePlayServiceNecessary
+        {
+            get { return SdkManager.IsGooglePlayServiceNecessary();  }
+        }
+        
+        public static bool IsGooglePlayServiceValid
+        {
+            get { return SdkManager.IsGooglePlayServiceValid(); }
+        }
+        
         /// <summary>
         ///     初始化SDK
         /// </summary>
