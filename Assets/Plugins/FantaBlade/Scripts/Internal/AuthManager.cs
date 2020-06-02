@@ -53,6 +53,7 @@ namespace FantaBlade.Internal
         }
 
         public bool IsLoggingIn;
+        public bool IsInActivation;
 
         public void OnLoginCallback(string err, PlatformApi.ResponseMetaInfo meta, PlatformApi.TokenResponse resp)
         {
@@ -65,13 +66,12 @@ namespace FantaBlade.Internal
             else
             {
                 LoginSuccess(resp.token);
-                SdkManager.Ui.HideLogin();
             }
         }
 
         public void QuickLogin()
         {
-            var deviceUniqueIdentifier = SystemInfo.deviceUniqueIdentifier;
+            var deviceUniqueIdentifier = SystemInfo.deviceUniqueIdentifier + "local_test0001";
             if (deviceUniqueIdentifier == SystemInfo.unsupportedIdentifier)
             {
                 SdkManager.Ui.Dialog.Show("Sorry，the device is temporarily unable to use the quick login feature，please log in after register.", "ok");
@@ -81,7 +81,7 @@ namespace FantaBlade.Internal
 
             var form = new Dictionary<string, string>
             {
-                {"uniqueDeviceId", deviceUniqueIdentifier},
+                {"uniqueDeviceId", deviceUniqueIdentifier}
             };
             PlatformApi.User.QuickLogin.Post(form, OnLoginCallback);
         }
@@ -120,6 +120,63 @@ namespace FantaBlade.Internal
             PlatformApi.User.Login.Post(form, OnLoginCallback);
         }
 
+        public void CheckIsActication(string activationCode, Action<bool> activatedCallback)
+        {
+            if (SdkManager.NeedActivation)
+            {
+                PlatformApi.User.RequestActicationValidate.Get(((err, info, resp) =>
+                {
+                    if (resp.code != 0)
+                    {
+                        SdkManager.Ui.ShowActivation();
+                    }
+
+                    if (null != activatedCallback)
+                    {
+                        activatedCallback(resp.code == 0);
+                    }
+                }));
+            }
+            else
+            {
+                if (null != activatedCallback)
+                {
+                    activatedCallback(true);
+                }
+            }
+        }
+        
+        public void Activation(string activationCode, Action<bool> callback)
+        {
+            if (IsInActivation)
+            {
+                return;
+            }
+            IsInActivation = true;
+            var form = new Dictionary<string, string>
+            {
+                {"code", activationCode},
+            };
+            PlatformApi.User.RequestActivation.Post(form, (err, metaInfo, resp)=>
+            {
+                IsInActivation = false;
+                if (! string.IsNullOrEmpty(err))
+                {
+                    SdkManager.Ui.Dialog.Show(err, "ok");
+                }
+
+                if (resp.code == 0)
+                {
+                    SdkManager.Ui.HideAll();
+                    OnLoginSucceed();
+                }
+                if (null != callback)
+                {
+                    callback(resp.code == 0);
+                }
+            });
+        }
+        
         private void LoginSuccess(string token)
         {
             Token = token;
@@ -130,8 +187,20 @@ namespace FantaBlade.Internal
                 ((Native.AndroidNativeApi)SdkManager.NativeApi).SetToken(token);
             }
 #endif
+                CheckIsActication(Token, (ret) =>
+                {
+                    if (ret)
+                    {
+                        OnLoginSucceed();
+                    }
+                });
+        }
+
+        private void OnLoginSucceed()
+        {
             SdkManager.Ui.ShowNormalUI(NormalUIID.WelcomeBack);
             SdkManager.Ui.FloatingWindow.Show();
+            SdkManager.Ui.HideLogin();
         }
 
         public void Logout()
@@ -177,7 +246,8 @@ namespace FantaBlade.Internal
             });
         }
 
-        public void Register(string username, string password, string countryCode, string mobileNumber, string vacode)
+        public void Register(string username, string password, string countryCode, string mobileNumber,
+            string vacode)
         {
             IsLoggingIn = true;
             var form = new Dictionary<string, string>
@@ -188,7 +258,14 @@ namespace FantaBlade.Internal
                 {"username", username},
                 {"vacode", vacode}
             };
-            PlatformApi.User.Register.Post(form, OnLoginCallback);
+            PlatformApi.User.Register.Post(form, (err, meta, resp) =>
+            {
+                if (resp.code == 0)
+                {
+                    SdkManager.Ui.HideLogin();
+                }
+                OnLoginCallback(err, meta, resp);
+            });
         }
 
         public void CheckValidateCode(string countryCode, string mobileNumber, string vacode, Action<string> callback)

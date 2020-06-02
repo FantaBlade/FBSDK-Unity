@@ -13,6 +13,7 @@ namespace FantaBlade.UI
         UserLicense = 5,
         CommonBg = 6,
         GuestTip = 7,
+        Activation = 8,
     }
     
     /// <summary>

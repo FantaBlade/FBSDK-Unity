@@ -1,4 +1,4 @@
-﻿key,en
+key,en
 confirm,Confirm
 welcome_back_tip,Welcome !
 quick_login_tip,"In order to ensure the security of your data, please bind your account as soon as possible to avoid data loss."
@@ -107,3 +107,7 @@ Are you sure to quit the game? ,
 Yes,
 Not now.,
 Send,
+Please input activation code,
+Activation succeeded,
+Please enter the correct activation code,
+Activation code has been used,

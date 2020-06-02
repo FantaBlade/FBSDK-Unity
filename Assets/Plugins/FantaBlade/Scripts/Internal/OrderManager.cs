@@ -100,6 +100,47 @@ namespace FantaBlade.Internal
             });
         }
 
+        /// <summary>
+        /// 判断是否可以支付, 应该在 IPaymentApi 添加接口,当前只简单实现 android平台下 是否支持GooglePlay支付
+        /// </summary>
+        public bool IsPaymentSupport()
+        {
+#if UNITY_ANDROID
+            try
+            {
+                const string GoogleApiAvailability_Classname =
+                    "com.google.android.gms.common.GoogleApiAvailability";
+                AndroidJavaClass clazz =
+                    new AndroidJavaClass(GoogleApiAvailability_Classname);
+                AndroidJavaObject obj =
+                    clazz.CallStatic<AndroidJavaObject>("getInstance");
+
+                var androidJC = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                var activity = androidJC.GetStatic<AndroidJavaObject>("currentActivity");
+
+                int value = obj.Call<int>("isGooglePlayServicesAvailable", activity);
+
+                // result codes from https://developers.google.com/android/reference/com/google/android/gms/common/ConnectionResult
+
+                // 0 == success
+                // 1 == service_missing
+                // 2 == update service required
+                // 3 == service disabled
+                // 18 == service updating
+                // 9 == service invalid
+                return value != 1 && value != 9;
+            }
+            catch (AndroidJavaException javaException)
+            {
+                Debug.Log(javaException.Message);
+            }
+
+            return false;
+#else
+            return true;
+#endif
+        }
+
         private static readonly int[] XiaomiPriceTierPrices =
         {
             0,

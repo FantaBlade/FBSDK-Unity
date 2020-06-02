@@ -19,6 +19,11 @@ namespace FantaBlade.Internal
         public static PublishRegion PublishRegion;
 
         /// <summary>
+        /// 是否需要验证激活
+        /// </summary>
+        public static bool NeedActivation;
+        
+        /// <summary>
         ///     语言
         /// </summary>
         public static SystemLanguage Language = SystemLanguage.Unknown;
@@ -87,12 +92,13 @@ namespace FantaBlade.Internal
 
 
         public static void Init(string accessKeyId, bool showFloatingWindow, PublishRegion publishRegion,
-            string productCatalogJson)
+            string productCatalogJson, bool needActivation)
         {
             try
             {
                 Log.CurrentLevel = DebugMode ? Log.LogLevel.Debug : Log.LogLevel.Warning;
 
+                NeedActivation = needActivation;
                 PublishRegion = publishRegion;
                 CountryInfo.SetDefaultCounty(publishRegion);
                 PlatformApi.SetRegion(publishRegion);
@@ -126,7 +132,7 @@ namespace FantaBlade.Internal
                 var ui = Resources.Load<GameObject>("fantablade_sdk/prefab/fantablade_sdk");
                 ui = Instantiate(ui);
                 DontDestroyOnLoad(ui);
-                ui.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+                ui.hideFlags = DebugMode ? HideFlags.None : HideFlags.HideInHierarchy | HideFlags.HideInInspector;
                 Instance = ui.AddComponent<SdkManager>();
                 Ui.Init();
                 Ui.FloatingWindow.IsActive = showFloatingWindow;

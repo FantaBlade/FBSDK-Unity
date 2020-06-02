@@ -1,4 +1,4 @@
-﻿key,zh_tw
+key,zh_tw
 confirm,確認
 welcome_back_tip,歡迎進入遊戲
 quick_login_tip,為保證您的資料安全，請儘快綁定帳號，以免刷機等原因導致資料丟失
@@ -107,3 +107,7 @@ Are you sure to quit the game?,確定退出遊戲嘛？
 Yes,確定
 Not now.,再玩一會兒
 Send,發 送
+Please input activation code,請輸入啟動碼
+Activation succeeded,啟動成功
+Please enter the correct activation code,請輸入正確的啟動碼
+Activation code has been used,啟動碼已被使用

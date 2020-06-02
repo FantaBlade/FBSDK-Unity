@@ -57,9 +57,9 @@ namespace FantaBlade
         /// <param name="publishRegion">发行区域</param>
         /// <param name="productCatalogJson">IAP 商品目录</param>
         public static void Init(string accessKey, bool showFloatingWindow = true,
-            PublishRegion publishRegion = PublishRegion.China, string productCatalogJson = null)
+            PublishRegion publishRegion = PublishRegion.China, string productCatalogJson = null, bool needActivation = false)
         {
-            SdkManager.Init(accessKey, showFloatingWindow, publishRegion, productCatalogJson);
+            SdkManager.Init(accessKey, showFloatingWindow, publishRegion, productCatalogJson, needActivation);
         }
 
         /// <summary>

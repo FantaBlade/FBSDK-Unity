@@ -58,7 +58,7 @@ namespace FantaBlade.UI
             }
 
             _window.Disappear();
-            SdkManager.Auth.Register(username, password, countryCode, mobileNumber, validateCode);
+            SdkManager.Auth.TouristUpgrade(username, password, countryCode, mobileNumber, validateCode);
         }
     }
 }

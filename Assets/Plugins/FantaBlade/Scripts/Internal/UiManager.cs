@@ -11,6 +11,7 @@ namespace FantaBlade.Internal
         Login,
         UserCenter,
         WelcomeBack,
+        Activation,
     }
 
     public class NormalUIPath
@@ -27,6 +28,8 @@ namespace FantaBlade.Internal
                     return "fantablade_sdk/prefab/user_center";
                 case NormalUIID.WelcomeBack:
                     return "fantablade_sdk/prefab/welcome_back";
+                case NormalUIID.Activation:
+                    return "fantablade_sdk/prefab/activation_code";
                 default:
                     break;
             }
@@ -98,6 +101,7 @@ namespace FantaBlade.Internal
             ControllerInit(go);
 
             mActiveUIStack.Push(uiId);
+            go.transform.SetAsLastSibling();
         }
 
         public void Pop()
@@ -166,6 +170,16 @@ namespace FantaBlade.Internal
         {
             SdkManager.Ui.HideNormalUI((int) NormalUIID.Login);
             //_login.SetActive(false);
+        }
+
+        public void ShowActivation()
+        {
+            SdkManager.Ui.ShowNormalUI(NormalUIID.Activation);
+        }
+        
+        public void HideActivation()
+        {
+            SdkManager.Ui.HideNormalUI((int)NormalUIID.Activation);
         }
 
         public void ShowGameCenter()

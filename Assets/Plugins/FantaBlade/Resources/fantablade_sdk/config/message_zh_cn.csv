@@ -1,4 +1,4 @@
-﻿key,zh_cn
+key,zh_cn
 confirm,确认
 welcome_back_tip,欢迎进入游戏
 quick_login_tip,为保证您的数据安全，请尽快绑定账号，以免刷机等原因导致数据丢失
@@ -107,3 +107,7 @@ Are you sure to quit the game? ,确定退出游戏嘛？
 Yes,确定
 Not now.,再玩一会儿
 Send,发 送
+Please input activation code,请输入激活码
+Activation succeeded,激活成功
+Please enter the correct activation code,请输入正确的激活码
+Activation code has been used,激活码已被使用
