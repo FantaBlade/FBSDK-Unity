@@ -180,7 +180,6 @@ namespace FantaBlade.Internal
         private void LoginSuccess(string token)
         {
             Token = token;
-            Api.OnLoginSuccess(token);
 #if UNITY_ANDROID && !UNITY_EDITOR
             if (SdkManager.UseAndroidNativeApi)
             {
@@ -198,6 +197,7 @@ namespace FantaBlade.Internal
 
         private void OnLoginSucceed()
         {
+            Api.OnLoginSuccess(Token);
             SdkManager.Ui.ShowNormalUI(NormalUIID.WelcomeBack);
             SdkManager.Ui.FloatingWindow.Show();
             SdkManager.Ui.HideLogin();
