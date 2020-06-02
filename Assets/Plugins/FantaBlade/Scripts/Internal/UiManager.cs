@@ -60,6 +60,7 @@ namespace FantaBlade.Internal
         public void Init()
         {
             if (_uiRoot != null) return;
+            DestroyAll();
             _uiRoot = SdkManager.Instance.transform;
             _defaultLayer = _uiRoot.Find("default_layer");
             _dialogLayer = _uiRoot.Find("dialog_layer");
@@ -148,6 +149,7 @@ namespace FantaBlade.Internal
             HideAll();
             mActiveUIs = new Dictionary<int, GameObject>();
             mActiveUIStack = new Stack<int>();
+            mCachedUIs.Clear();
         }
 
         public void ShowLogin()

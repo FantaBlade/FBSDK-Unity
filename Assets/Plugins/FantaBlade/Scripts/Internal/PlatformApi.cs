@@ -22,9 +22,9 @@ namespace FantaBlade.Internal
                 {
                     PublishRegion.China, new Dictionary<string, string>
                     {
-                        {"UserCenterHost", "https://test.fantablade.com/"},
-                        {"ApiHost", "https://api.test.fantablade.com/"},
-                        {"ApiVersion", "v0.1"}
+                        {"UserCenterHost", "https://cn.fantablade.com/"},
+                        {"ApiHost", "https://api.cn.fantablade.com/"},
+                        {"ApiVersion", "v1"}
                     }
                 },
                 {
