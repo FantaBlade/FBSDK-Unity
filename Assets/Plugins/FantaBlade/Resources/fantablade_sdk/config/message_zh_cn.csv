@@ -13,6 +13,7 @@ please_input_password,请输入密码
 login,登 录
 account_login,账号登录
 register,注册
+Unknown Error,请求服务器失败
 other_login_methods,其他登录方式
 please_input_username/email,请输入用户名/Email
 other_login_methods_line,———————————    其他登陆方式    ———————————

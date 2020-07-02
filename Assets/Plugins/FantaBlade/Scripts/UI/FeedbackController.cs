@@ -33,8 +33,10 @@ public class FeedbackController : MonoBehaviour, IController
         SdkManager.Ui.Dialog.Show("Confirm Submit", "ok",
             () =>
             {
+                SdkManager.Ui.Dialog.ShowLoading();
                 PlatformApi.Feedback.Submit.Post(form, (err, info, response) =>
                 {
+                    SdkManager.Ui.Dialog.HideLoading();
                     _submitButton.interactable = true;
                     if (err == null && response.code == 0)
                     {

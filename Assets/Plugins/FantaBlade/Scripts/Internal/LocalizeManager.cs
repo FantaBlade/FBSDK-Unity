@@ -51,6 +51,23 @@ namespace FantaBlade.Internal
             }
         }
 
+        public string GetLanguageName()
+        {
+            return GetLanguageName(_currentLanguage);
+        }
+        public string GetLanguageName(SystemLanguage language)
+        {
+            switch (language)
+            {
+                case SystemLanguage.Chinese:
+                case SystemLanguage.ChineseSimplified:
+                case SystemLanguage.ChineseTraditional:
+                    return "zh_CN";
+                default:
+                    return "en_US";
+            }
+        }
+
         class LanguageSet
         {
             private readonly Dictionary<string, string> _localizeDict = new Dictionary<string, string>();

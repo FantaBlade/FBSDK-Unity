@@ -13,6 +13,7 @@ please_input_password,請輸入密碼
 login,登 錄
 account_login,帳號登錄
 register,註冊
+Unknown Error,請求服務器失敗
 other_login_methods,其他登錄方式
 please_input_username/email,請輸入用戶名/Email
 other_login_methods_line,———————————    其他登陸方式    ———————————

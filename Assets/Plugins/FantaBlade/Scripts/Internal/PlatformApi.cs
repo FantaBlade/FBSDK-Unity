@@ -144,10 +144,9 @@ namespace FantaBlade.Internal
                     }
                     else
                     {
-                        _uri = new Uri(string.Join("/", new[] {_apiUrl, path}));
+                        _uri = new Uri(string.Join("/", new[] {_apiUrl, path})+"?lang="+SdkManager.Localize.GetLanguageName());
                     }
                 }
-
                 return _uri;
             }
         }

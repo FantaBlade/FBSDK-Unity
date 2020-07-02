@@ -1,4 +1,5 @@
-﻿using FantaBlade.Internal;
+﻿using System.Collections;
+using FantaBlade.Internal;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ namespace FantaBlade.UI
     internal class DialogController : MonoBehaviour, IController
     {
         [SerializeField] private Text _content;
+        [SerializeField] private GameObject _loading;
         [SerializeField] private Button[] _buttons;
         private Window _dialogWindow;
         private Text[] _buttonTexts;
@@ -22,6 +24,22 @@ namespace FantaBlade.UI
             }
 
             gameObject.SetActive(false);
+        }
+        
+        private IEnumerator CoroutineShowLoading()
+        {
+            yield return new WaitForSeconds(0.5f);
+            _loading.GetComponent<CanvasGroup>().alpha = 1;
+        }
+        public void ShowLoading()
+        {
+            _loading.SetActive(true);
+            _loading.GetComponent<CanvasGroup>().alpha = 0;
+            SdkManager.StartCoroutine(CoroutineShowLoading());
+        }
+        public void HideLoading()
+        {
+            _loading.SetActive(false);
         }
 
         private void DialogReset()

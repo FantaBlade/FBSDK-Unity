@@ -14,20 +14,5 @@ namespace FantaBlade.UI
             _floatingWindow = GetComponentInChildren<FloatingWindow>(true);
             _floatingWindow.Click += () => Api.OpenUserCenter();
         }
-
-        public void Show()
-        {
-            if (!IsActive)
-            {
-                return;
-            }
-
-            gameObject.SetActive(true);
-        }
-
-        public void Hide()
-        {
-            gameObject.SetActive(false);
-        }
     }
 }

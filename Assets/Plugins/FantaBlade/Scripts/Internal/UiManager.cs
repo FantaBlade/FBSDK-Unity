@@ -76,6 +76,23 @@ namespace FantaBlade.Internal
                 SetLayer(eventSystem.transform, _uiRoot);
             }
         }
+        
+
+        public void ShowFloatingWindow()
+        {
+            if (!FloatingWindow.IsActive)
+            {
+                return;
+            }
+
+            _uiRoot.gameObject.SetActive(true);
+            FloatingWindow.gameObject.SetActive(true);
+        }
+
+        public void HideFloatingWindow()
+        {
+            FloatingWindow.gameObject.SetActive(false);
+        }
 
         public void ShowNormalUI(NormalUIID uiId)
         {
@@ -88,7 +105,8 @@ namespace FantaBlade.Internal
         /// <param name="uiId">对应  NormalUIID</param>
         public void ShowNormalUI(int uiId, string resPath)
         {
-            //TODO use mActiveUIStack find opened ui with uiId
+            _uiRoot.gameObject.SetActive(true);
+            // use mActiveUIStack find opened ui with uiId
             GameObject go = null;
             if (!mActiveUIs.ContainsKey(uiId))
             {
@@ -130,6 +148,14 @@ namespace FantaBlade.Internal
                 go.SetActive(false);
             }
 
+            if (FloatingWindow.gameObject.activeSelf)
+                return true;
+            foreach (var gameObject in mActiveUIs.Values)
+            {
+                if (gameObject.activeSelf)
+                    return true;
+            }
+            _uiRoot.gameObject.SetActive(false);
             return true;
             //not remove from stack
         }

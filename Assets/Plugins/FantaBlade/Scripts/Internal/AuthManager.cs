@@ -57,6 +57,7 @@ namespace FantaBlade.Internal
 
         public void OnLoginCallback(string err, PlatformApi.ResponseMetaInfo meta, PlatformApi.TokenResponse resp)
         {
+            SdkManager.Ui.Dialog.HideLoading();
             IsLoggingIn = false;
 
             if (err != null)
@@ -83,6 +84,7 @@ namespace FantaBlade.Internal
             {
                 {"uniqueDeviceId", deviceUniqueIdentifier}
             };
+            SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.QuickLogin.Post(form, OnLoginCallback);
         }
 
@@ -103,6 +105,7 @@ namespace FantaBlade.Internal
                     else
                     {
                         LoginSuccess(resp.token);
+                        SdkManager.Ui.HideLogin();
                     }
                 });
             }
@@ -117,6 +120,7 @@ namespace FantaBlade.Internal
                 {"identifier", identifier},
                 {"password", password}
             };
+            SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.Login.Post(form, OnLoginCallback);
         }
 
@@ -198,8 +202,9 @@ namespace FantaBlade.Internal
         private void OnLoginSucceed()
         {
             Api.OnLoginSuccess(Token);
-            SdkManager.Ui.ShowNormalUI(NormalUIID.WelcomeBack);
-            SdkManager.Ui.FloatingWindow.Show();
+            //效果不好，先屏蔽
+            // SdkManager.Ui.ShowNormalUI(NormalUIID.WelcomeBack);
+            SdkManager.Ui.ShowFloatingWindow();
             SdkManager.Ui.HideLogin();
         }
 
@@ -213,7 +218,22 @@ namespace FantaBlade.Internal
                 ((Native.AndroidNativeApi)SdkManager.NativeApi).Logout();
             }
 #endif
-            SdkManager.Ui.FloatingWindow.Hide();
+            SdkManager.Ui.HideFloatingWindow();
+        }
+
+        public void ShowFloatingWindow()
+        {
+            if (!SdkManager.Ui.FloatingWindow.IsActive)
+            {
+                return;
+            }
+
+            SdkManager.Ui.FloatingWindow.gameObject.SetActive(true);
+        }
+
+        public void HideFloatingWindow()
+        {
+            SdkManager.Ui.FloatingWindow.gameObject.SetActive(false);
         }
 
         public void RequestValidateCode(string countryCode, string mobileNumber, Action<string> callback,
@@ -239,9 +259,10 @@ namespace FantaBlade.Internal
                 request = PlatformApi.User.RequestValidateCodeForRigister;
             }
 
-
+            SdkManager.Ui.Dialog.ShowLoading();
             request.Post(form, (err, meta, resp) =>
             {
+                SdkManager.Ui.Dialog.HideLoading();
                 if (callback != null) callback(err);
             });
         }
@@ -258,6 +279,7 @@ namespace FantaBlade.Internal
                 {"username", username},
                 {"vacode", vacode}
             };
+            SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.Register.Post(form, (err, meta, resp) =>
             {
                 if (resp.code == 0)
@@ -278,8 +300,10 @@ namespace FantaBlade.Internal
                 {"usage", "reset_password"},
                 {"vacode", vacode}
             };
+            SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.RequestVacodeValidate.Post(form, (err, metaInfo, resp)=>
             {
+                SdkManager.Ui.Dialog.HideLoading();
                 IsLoggingIn = false;
                 if (! string.IsNullOrEmpty(err))
                 {
@@ -302,8 +326,10 @@ namespace FantaBlade.Internal
                 {"newPassword", newPassword},
                 {"tempTicket", tempTicket},
             };
+            SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.RequestResetPassword.Post(form, (err, metaInfo, resp)=>
             {
+                SdkManager.Ui.Dialog.HideLoading();
                 IsLoggingIn = false;
                 if (! string.IsNullOrEmpty(err))
                 {
@@ -328,8 +354,10 @@ namespace FantaBlade.Internal
                 {"username", username},
                 {"vacode", vacode}
             };
+            SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.TouristUpgrade.Post(form, (err, meta, resp) =>
             {
+                SdkManager.Ui.Dialog.HideLoading();
                 IsLoggingIn = false;
 
                 if (err != null)

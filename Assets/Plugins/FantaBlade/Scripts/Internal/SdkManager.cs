@@ -139,7 +139,6 @@ namespace FantaBlade.Internal
 
                 Order.SetProductCatalog(productCatalogJson);
                 PaymentApi.Init();
-
                 // 查询玩家位置
                 if (!string.IsNullOrEmpty(Location))
                 {

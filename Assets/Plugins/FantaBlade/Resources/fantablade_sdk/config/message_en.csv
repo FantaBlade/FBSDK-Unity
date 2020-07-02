@@ -13,6 +13,7 @@ please_input_password,Please Input Password
 login,Login
 account_login,Account Login
 register,Register
+Unknown Error,Request Error
 other_login_methods,Other Login Methods
 please_input_username/email,Please Input Username/Email
 other_login_methods_line,—————————    Other Login Methods    —————————

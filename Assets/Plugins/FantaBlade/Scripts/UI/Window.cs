@@ -75,16 +75,16 @@ namespace FantaBlade.UI
             _isAppear = true;
             gameObject.SetActive(true);
             KillTweenerIfPlaying();
-            if (withAnim)
-            {
-                _tweener = CanvasGroup.DOFade(this, 1, 0.2f);
-                return _tweener.WaitForCompletion();
-            }
-            else
-            {
+            // if (withAnim)
+            // {
+            //     _tweener = CanvasGroup.DOFade(this, 1, 0.2f);
+            //     return _tweener.WaitForCompletion();
+            // }
+            // else
+            // {
                 CanvasGroup.alpha = 1;
                 return null;
-            }
+            // }
         }
 
         private YieldInstruction Disappear(bool withAnim)

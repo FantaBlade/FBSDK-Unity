@@ -3,10 +3,12 @@
 --- !u!687078895 &4343727234628468602
 SpriteAtlas:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: common_v3
   m_EditorData:
+    serializedVersion: 2
     textureSettings:
       serializedVersion: 2
       anisoLevel: 1
@@ -18,55 +20,66 @@ SpriteAtlas:
       readable: 0
       crunchedCompression: 0
       sRGB: 1
-    platformSettings: []
-    packingParameters:
+    platformSettings:
+    - serializedVersion: 2
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 1024
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 1
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+    packingSettings:
       serializedVersion: 2
       padding: 4
       blockOffset: 1
       allowAlphaSplitting: 0
-      enableRotation: 1
-      enableTightPacking: 1
+      enableRotation: 0
+      enableTightPacking: 0
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 349a763bc0fc44e46bc5f938ed6edaac, type: 3}
-    totalSpriteSurfaceArea: 158528
+    totalSpriteSurfaceArea: 114574
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
-  - {fileID: 21300000, guid: 59443b3f4d0669945aca70a790396aaa, type: 3}
+  - {fileID: 21300000, guid: af5981c02a79c9242b0911f449ed50d8, type: 3}
   - {fileID: 21300000, guid: 2d8d46a22fb15894aad140c8e39da206, type: 3}
-  - {fileID: 21300000, guid: 2184ecdb3bd7dd74299b191935b2b45e, type: 3}
-  - {fileID: 21300000, guid: 274d9329ed8b31646990a437617ed6f9, type: 3}
   - {fileID: 21300000, guid: 4277e3f3346d85941bc59a692176ab2f, type: 3}
-  - {fileID: 21300000, guid: c8333487a8da26649811652323ea6582, type: 3}
-  - {fileID: 21300000, guid: d41157d6ba970274e8948ceafa90550a, type: 3}
+  - {fileID: 21300000, guid: cb985b04fb125af498351455459ca0a0, type: 3}
+  - {fileID: 21300000, guid: a291f2c487ca3f54cbcadd8fefbee7e6, type: 3}
   - {fileID: 21300000, guid: 4c540c75e1ccafc4a88b5f3db1134a7b, type: 3}
+  - {fileID: 21300000, guid: 854e66e5da14cdf4ba62fb118718073e, type: 3}
+  - {fileID: 21300000, guid: d41157d6ba970274e8948ceafa90550a, type: 3}
+  - {fileID: 21300000, guid: c8333487a8da26649811652323ea6582, type: 3}
   - {fileID: 21300000, guid: 2471d4973aca0cc46aa85c3004a39670, type: 3}
   - {fileID: 21300000, guid: 7ae92bf8e81c8c942978a2204f36b4b2, type: 3}
-  - {fileID: 21300000, guid: 4136229e50eccc247a2f1f3e6d6a3256, type: 3}
-  - {fileID: 21300000, guid: bc60f61d926ea7c4380367d27e0923f7, type: 3}
-  - {fileID: 21300000, guid: cb985b04fb125af498351455459ca0a0, type: 3}
-  - {fileID: 21300000, guid: 854e66e5da14cdf4ba62fb118718073e, type: 3}
+  - {fileID: 21300000, guid: 274d9329ed8b31646990a437617ed6f9, type: 3}
   - {fileID: 21300000, guid: 153cdd4a3cfef1a44ad522effbdc843a, type: 3}
   - {fileID: 21300000, guid: 4907b4ea627aa8d45bc6a22ccd0e01f3, type: 3}
-  - {fileID: 21300000, guid: a291f2c487ca3f54cbcadd8fefbee7e6, type: 3}
+  - {fileID: 21300000, guid: 2184ecdb3bd7dd74299b191935b2b45e, type: 3}
+  - {fileID: 21300000, guid: bc60f61d926ea7c4380367d27e0923f7, type: 3}
+  - {fileID: 21300000, guid: 4136229e50eccc247a2f1f3e6d6a3256, type: 3}
   m_PackedSpriteNamesToIndex:
-  - ui_sdk_bg
+  - ui_sdk_loading
   - ui_sdk_logo
-  - ui_sdk_type_password_hide
-  - ui_sdk_type_password_show
   - ui_sdk_close
-  - ui_sdk_phone_dorp
-  - ui_sdk_return
+  - ui_sdk_btn_3
+  - ui_sdk_type
   - ui_sdk_speedlogin_dialog_bg
+  - ui_sdk_btn_1
+  - ui_sdk_return
+  - ui_sdk_phone_dorp
   - ui_sdk_speedlogin
   - ui_sdk_accountregistration
-  - ui_sdk_accountlogin
-  - ui_sdk_type_clear
-  - ui_sdk_btn_3
-  - ui_sdk_btn_1
+  - ui_sdk_type_password_show
   - ui_sdk_btn_0
   - ui_sdk_btn_2
-  - ui_sdk_type
+  - ui_sdk_type_password_hide
+  - ui_sdk_type_clear
+  - ui_sdk_accountlogin
   m_Tag: common_v3
   m_IsVariant: 0
