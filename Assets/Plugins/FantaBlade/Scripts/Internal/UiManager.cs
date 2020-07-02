@@ -129,6 +129,20 @@ namespace FantaBlade.Internal
                 }
             }
         }
+        
+        public void HideRoot()
+        {
+            // if (FloatingWindow.gameObject.activeSelf)
+            //     return;
+            // if (Dialog.gameObject.activeSelf)
+            //     return;
+            // foreach (var gameObject in mActiveUIs.Values)
+            // {
+            //     if (gameObject.activeSelf)
+            //         return;
+            // }
+            // _uiRoot.gameObject.SetActive(false);
+        }
 
         public bool HideNormalUI(int uiId)
         {
@@ -143,14 +157,6 @@ namespace FantaBlade.Internal
                 go.SetActive(false);
             }
 
-            if (FloatingWindow.gameObject.activeSelf)
-                return true;
-            foreach (var gameObject in mActiveUIs.Values)
-            {
-                if (gameObject.activeSelf)
-                    return true;
-            }
-            _uiRoot.gameObject.SetActive(false);
             return true;
             //not remove from stack
         }
@@ -192,6 +198,7 @@ namespace FantaBlade.Internal
         public void HideLogin()
         {
             SdkManager.Ui.HideNormalUI((int) NormalUIID.Login);
+            HideRoot();
             //_login.SetActive(false);
         }
 

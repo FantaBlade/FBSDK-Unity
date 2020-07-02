@@ -105,7 +105,6 @@ namespace FantaBlade.Internal
                     else
                     {
                         LoginSuccess(resp.token);
-                        SdkManager.Ui.HideLogin();
                     }
                 });
             }
