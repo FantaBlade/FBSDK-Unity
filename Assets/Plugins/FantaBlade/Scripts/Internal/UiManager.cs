@@ -80,13 +80,8 @@ namespace FantaBlade.Internal
 
         public void ShowFloatingWindow()
         {
-            if (!FloatingWindow.IsActive)
-            {
-                return;
-            }
-
-            _uiRoot.gameObject.SetActive(true);
-            FloatingWindow.gameObject.SetActive(true);
+            if(FloatingWindow.IsActive){_uiRoot.gameObject.SetActive(true);}
+            FloatingWindow.gameObject.SetActive(FloatingWindow.IsActive);
         }
 
         public void HideFloatingWindow()

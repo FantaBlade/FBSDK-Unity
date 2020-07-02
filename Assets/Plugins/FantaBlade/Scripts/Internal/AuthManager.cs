@@ -221,21 +221,6 @@ namespace FantaBlade.Internal
             SdkManager.Ui.HideFloatingWindow();
         }
 
-        public void ShowFloatingWindow()
-        {
-            if (!SdkManager.Ui.FloatingWindow.IsActive)
-            {
-                return;
-            }
-
-            SdkManager.Ui.FloatingWindow.gameObject.SetActive(true);
-        }
-
-        public void HideFloatingWindow()
-        {
-            SdkManager.Ui.FloatingWindow.gameObject.SetActive(false);
-        }
-
         public void RequestValidateCode(string countryCode, string mobileNumber, Action<string> callback,
             bool? registered = null)
         {
