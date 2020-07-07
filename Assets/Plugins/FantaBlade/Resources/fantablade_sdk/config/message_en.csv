@@ -31,6 +31,7 @@ error_validate_code_empty,Please input the correct validate code.
 error_password_not_equal,Please confirm password is same.
 msg_reset_success,Reset password success.
 Please input username and password！,
+Cannot connect to destination host,Cannot connect to destination host
 Currently for the Tourist account，switching accounts may result in account loss，still have to switch?,
 ok,OK
 Congratulations! You Has been successfully upgraded to an official account!,

@@ -327,7 +327,7 @@ namespace FantaBlade.Internal
         }
         
         public void TouristUpgrade(string username, string password, string countryCode, string mobileNumber,
-            string vacode)
+            string vacode, Action successCallback)
         {
             IsLoggingIn = true;
             var form = new Dictionary<string, string>
@@ -352,7 +352,7 @@ namespace FantaBlade.Internal
                 {
                     Token = resp.token;
                     SdkManager.Ui.Dialog.Show("Congratulations! You Has been successfully upgraded to an official account!", "ok");
-                    SdkManager.Ui.HideGameCenter();
+                    successCallback();
                 }
             });
         }

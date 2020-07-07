@@ -31,6 +31,7 @@ error_validate_code_empty,請正確輸入驗證碼
 error_password_not_equal,兩次密碼不相同
 msg_reset_success,密碼重置成功
 Please input username and password！,請輸入用戶名和密碼！
+Cannot connect to destination host,請求服務器失敗
 Currently for the Tourist account，switching accounts may result in account loss，still have to switch?,當前為遊客帳號，切換帳號可能導致帳號丟失，依然要切換嗎？
 ok,好的
 Congratulations! You Has been successfully upgraded to an official account!,恭喜你！已經成功升級為正式帳號!

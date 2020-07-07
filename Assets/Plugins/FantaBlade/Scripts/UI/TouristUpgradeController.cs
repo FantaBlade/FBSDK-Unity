@@ -20,6 +20,12 @@ namespace FantaBlade.UI
             _mobileValidate = GetComponent<MobileValidateController>();
         }
 
+        public void Hide()
+        {
+            _window.gameObject.SetActive(false);
+            SdkManager.Ui.HideGameCenter();
+        }
+
         public void OnRequestUpgrade()
         {
             if (SdkManager.Auth.IsLoggingIn)
@@ -56,9 +62,7 @@ namespace FantaBlade.UI
                 SdkManager.Ui.Dialog.Show("error_validate_code_empty", "ok");
                 return;
             }
-
-            _window.Disappear();
-            SdkManager.Auth.TouristUpgrade(username, password, countryCode, mobileNumber, validateCode);
+            SdkManager.Auth.TouristUpgrade(username, password, countryCode, mobileNumber, validateCode, this.Hide);
         }
     }
 }
