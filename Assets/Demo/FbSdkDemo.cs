@@ -19,7 +19,7 @@ public class FbSdkDemo : MonoBehaviour
         Api.LogoutSuccess += OnLogoutSuccess;
         Api.PaySuccess += OnPaySuccess;
         Api.PayCancel += OnPayCancel;
-        Api.Init("44I1ucBEaIRvm4Re", true, PublishRegion.LocalDev, null, true);
+        Api.Init("44I1ucBEaIRvm4Re", true, PublishRegion.LocalDev, null, false);
 //        Api.Init("zsN9eQcEqcmWnBCT", true, PublishRegion.SoutheastAsia, null, true);
     }
 

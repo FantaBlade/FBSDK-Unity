@@ -78,7 +78,7 @@ namespace FantaBlade.UI
             _mobileNumberCache = _mobileController.MobileNumber;
             if (_mobileNumberCache.Length > 0)
             {
-                if (Utils.IsClickTooOften(3f))
+                if (Utils.IsClickTooOften())
                 {
                     return;
                 }
