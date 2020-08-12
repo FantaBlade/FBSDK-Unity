@@ -23,6 +23,11 @@ forget_password,Forget Password?
 please_input_username,Please Input Username
 please_input_validate_code,Please Input Validate Code
 get_verify_code,Get Code
+please_input_your_name,Please Input Your Name
+please_input_id_card,Please Input Your Id Card
+game_verify_name,Game Verify Name
+real_name_verify,Real Name Verify
+game_verify_content,The registration information can only be submitted once and cannot be modified. Be careful!
 next,Next
 please_confirm_password,Please Confirm Password
 reset_password,Reset Password
@@ -36,6 +41,7 @@ Currently for the Tourist account，switching accounts may result in account los
 ok,OK
 Congratulations! You Has been successfully upgraded to an official account!,
 Sorry，the device is temporarily unable to use the quick login feature，please log in after register.,
+verify_name_success,
 Please Input Message,
 Confirm Submit,
 Submit Success!,

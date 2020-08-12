@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using FantaBlade.Internal.Jwt;
 using UnityEngine;
 
@@ -52,6 +53,7 @@ namespace FantaBlade.Internal
             }
         }
 
+        public bool IsVerify;
         public bool IsLoggingIn;
         public bool IsInActivation;
 
@@ -205,11 +207,16 @@ namespace FantaBlade.Internal
             // SdkManager.Ui.ShowNormalUI(NormalUIID.WelcomeBack);
             SdkManager.Ui.ShowFloatingWindow();
             SdkManager.Ui.HideLogin();
+            PlatformApi.User.GetCertification.Get((err, meta, resp) =>
+            {
+                IsVerify = err == null;
+            });
         }
 
         public void Logout()
         {
             Token = null;
+            IsVerify = false;
             Api.OnLogoutSuccess();
 #if UNITY_ANDROID && !UNITY_EDITOR
             if (SdkManager.UseAndroidNativeApi)
@@ -352,6 +359,31 @@ namespace FantaBlade.Internal
                 {
                     Token = resp.token;
                     SdkManager.Ui.Dialog.Show("Congratulations! You Has been successfully upgraded to an official account!", "ok");
+                    successCallback();
+                }
+            });
+        }
+        
+        public void VerifyAge(string name, string idcard, Action successCallback)
+        {
+            var form = new Dictionary<string, string>
+            {
+                {"realName", name},
+                {"identificationCard", idcard}
+            };
+            SdkManager.Ui.Dialog.ShowLoading();
+            PlatformApi.User.VerifyAge.Post(form, (err, meta, resp) =>
+            {
+                SdkManager.Ui.Dialog.HideLoading();
+
+                if (err != null)
+                {
+                    SdkManager.Ui.Dialog.Show(err, "ok");
+                }
+                else
+                {
+                    IsVerify = true;
+                    SdkManager.Ui.Dialog.Show("verify_name_success", "ok");
                     successCallback();
                 }
             });

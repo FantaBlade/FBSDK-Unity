@@ -8,10 +8,12 @@ namespace FantaBlade.UI
     {
         [SerializeField] private Text _username;
         [SerializeField] private GameObject _touristUpgradeBtn;
+        [SerializeField] private GameObject _verifyBtn;
 
         private void OnEnable()
         {
             _touristUpgradeBtn.SetActive(SdkManager.Auth.IsTourist);
+            _verifyBtn.SetActive(!SdkManager.Auth.IsTourist && !SdkManager.Auth.IsVerify);
             _username.text = SdkManager.Auth.Username;
         }
 

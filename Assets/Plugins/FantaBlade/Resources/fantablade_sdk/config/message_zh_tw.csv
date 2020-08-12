@@ -23,6 +23,11 @@ forget_password,忘記密碼
 please_input_username,請輸入用戶名
 please_input_validate_code,請輸入驗證碼
 get_verify_code,獲取驗證碼
+please_input_your_name,請輸入姓名
+please_input_id_card,請輸入有效身份證號
+game_verify_name,遊戲實名註冊
+real_name_verify,實名認證
+game_verify_content,註冊信息只能提交一次，不可修改，請慎重填寫！
 next,下一步
 please_confirm_password,請確認密碼
 reset_password,重置密碼
@@ -35,6 +40,7 @@ Cannot connect to destination host,請求服務器失敗
 Currently for the Tourist account，switching accounts may result in account loss，still have to switch?,當前為遊客帳號，切換帳號可能導致帳號丟失，依然要切換嗎？
 ok,好的
 Congratulations! You Has been successfully upgraded to an official account!,恭喜你！已經成功升級為正式帳號!
+verify_name_success,實名認證成功！
 Sorry，the device is temporarily unable to use the quick login feature，please log in after register.,抱歉，該設備暫時無法使用快速遊戲功能，請註冊後登陸。
 Please Input Message,請輸入內容。
 Confirm Submit,確認提交。

@@ -48,6 +48,11 @@ namespace FantaBlade
             }
             private set { _isPaymentInitialized = value; }
         }
+        
+        public static bool IsVerify()
+        {
+            return SdkManager.Auth.IsVerify;
+        }
 
         /// <summary>
         ///     初始化SDK

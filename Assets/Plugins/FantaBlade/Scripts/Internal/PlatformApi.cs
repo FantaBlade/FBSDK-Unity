@@ -158,6 +158,9 @@ namespace FantaBlade.Internal
 
             public static readonly WebRequest<TokenResponse> Register = Prefix + "register";
             public static readonly WebRequest<TokenResponse> TouristUpgrade = Prefix + "bind/tourist";
+            public static readonly WebRequest<CertificationInfoResponse> GetCertification = Prefix + "certification/fetch";
+            public static readonly WebRequest<Response> VerifyAge = Prefix + "certification/update";
+            public static readonly WebRequest<AntiIndulgenceInfoResponse> GetAntiIndulgence = Prefix + "anti_indulgence";
             public static readonly WebRequest<TokenResponse> Login = Prefix + "login";
             public static readonly WebRequest<TokenResponse> QuickLogin = Prefix + "quicklogin";
             public static readonly WebRequest<TokenResponse> RefreshToken = Prefix + "refresh/token";
@@ -233,6 +236,29 @@ namespace FantaBlade.Internal
         public class TokenResponse : Response
         {
             public string token;
+        }
+        
+        [Serializable]
+        public class AntiIndulgenceInfoResponse : Response
+        {
+            public bool antiIndulgence;
+        }
+
+        [Serializable]
+        public class Certification
+        {
+            public long id;
+            public string createTime;
+            public string updateTime;
+            public long userId;
+            public string realName;
+            public string identificationCard;
+        }
+        
+        [Serializable]
+        public class CertificationInfoResponse : Response
+        {
+            public Certification certification;
         }
 
         [Serializable]
