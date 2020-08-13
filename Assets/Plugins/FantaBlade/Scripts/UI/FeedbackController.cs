@@ -30,7 +30,7 @@ public class FeedbackController : MonoBehaviour, IController
         {
             {"content", _content.text},
         };
-        SdkManager.Ui.Dialog.Show("Confirm Submit", "ok",
+        SdkManager.Ui.Dialog.Show("Confirm Submit.", "ok",
             () =>
             {
                 SdkManager.Ui.Dialog.ShowLoading();
