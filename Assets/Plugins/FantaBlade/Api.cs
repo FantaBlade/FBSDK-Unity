@@ -102,7 +102,14 @@ namespace FantaBlade
         {
             if (!IsInitialized) return;
 
-            SdkManager.Ui.ShowGameCenter();
+            if (SdkManager.Auth.Token == null)
+            {
+                Login(true);
+            }
+            else
+            {
+                SdkManager.Ui.ShowGameCenter();
+            }
         }
 
         /// <summary>

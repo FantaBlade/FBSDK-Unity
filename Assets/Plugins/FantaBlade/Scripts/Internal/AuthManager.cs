@@ -10,7 +10,7 @@ namespace FantaBlade.Internal
     {
         public bool IsTourist
         {
-            get { return _jwt.Payload.type == 1; }
+            get { return _jwt == null || _jwt.Payload.type == 1; }
         }
 
         public string Username

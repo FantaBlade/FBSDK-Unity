@@ -103,6 +103,8 @@ namespace FantaBlade.Internal
 
             private static IEnumerator SendRequest(UnityWebRequest request, WebResponseEventHandler callback)
             {
+                // Debug.Log("AccessKeyId:"+SdkManager.AccessKeyId);
+                // Debug.Log("Authorization:"+SdkManager.Auth.Token);
                 request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
                 if (SdkManager.Auth.Token != null) request.SetRequestHeader("Authorization", SdkManager.Auth.Token);
 
