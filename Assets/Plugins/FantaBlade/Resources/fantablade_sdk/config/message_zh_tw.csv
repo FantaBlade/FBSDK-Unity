@@ -25,8 +25,7 @@ please_input_validate_code,請輸入驗證碼
 get_verify_code,獲取驗證碼
 please_input_your_name,請輸入姓名
 please_input_id_card,請輸入有效身份證號
-game_verify_name,遊戲實名註冊
-real_name_verify,實名認證
+game_verify_name,實名登記
 game_verify_content,註冊信息只能提交一次，不可修改，請慎重填寫！
 next,下一步
 please_confirm_password,請確認密碼

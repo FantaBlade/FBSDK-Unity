@@ -1,6 +1,7 @@
 ﻿using System;
 using FantaBlade.Internal;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Purchasing;
 
 namespace FantaBlade
@@ -109,6 +110,19 @@ namespace FantaBlade
             else
             {
                 SdkManager.Ui.ShowGameCenter();
+            }
+        }
+        public static void OpenVerifyAge()
+        {
+            if (!IsInitialized) return;
+
+            if (SdkManager.Auth.Token == null)
+            {
+                Login(true);
+            }
+            else
+            {
+                SdkManager.Ui.ShowNormalUI(NormalUIID.VerifyAge);
             }
         }
 
@@ -237,9 +251,9 @@ namespace FantaBlade
 
         internal static void OnPayCancel()
         {
-            Log.Info("OnPayCancel");
-            var handler = PayCancel;
-            if (handler != null) handler();
+            Debug.Log("OnPayCancel");
+            // var handler = PayCancel;
+            // if (handler != null) handler();
         }
 
         #endregion

@@ -12,6 +12,7 @@ namespace FantaBlade.Internal
         UserCenter,
         WelcomeBack,
         Activation,
+        VerifyAge,
     }
 
     public class NormalUIPath
@@ -30,6 +31,8 @@ namespace FantaBlade.Internal
                     return "fantablade_sdk/prefab/welcome_back";
                 case NormalUIID.Activation:
                     return "fantablade_sdk/prefab/activation_code";
+                case NormalUIID.VerifyAge:
+                    return "fantablade_sdk/prefab/verify_age";
                 default:
                     break;
             }
@@ -50,8 +53,8 @@ namespace FantaBlade.Internal
         private Transform _dialogLayer;
         private Transform _floatingLayer;
 
-        private GameObject _login;
-        private GameObject _userCenter;
+        // private GameObject _login;
+        // private GameObject _userCenter;
 
         private Dictionary<int, GameObject> mActiveUIs = new Dictionary<int, GameObject>();
         private Stack<int> mActiveUIStack = new Stack<int>();
@@ -111,7 +114,15 @@ namespace FantaBlade.Internal
 
             go = mActiveUIs[uiId];
             SetLayer(_defaultLayer, go.transform);
-            go.SetActive(true);
+            if (go.GetComponent<Window>() != null)
+            {
+                go.GetComponent<Window>().Appear();
+            }
+            else
+            {
+                go.SetActive(true);
+            }
+
             ControllerInit(go);
 
             mActiveUIStack.Push(uiId);
@@ -212,7 +223,7 @@ namespace FantaBlade.Internal
             SdkManager.Ui.HideNormalUI((int)NormalUIID.Activation);
         }
 
-        public void ShowGameCenter()
+        public void ShowGameCenter(NormalUIID ui = NormalUIID.None)
         {
             SdkManager.Ui.ShowNormalUI(NormalUIID.UserCenter);
             //if (_userCenter == null)

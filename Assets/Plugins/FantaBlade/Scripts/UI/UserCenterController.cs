@@ -26,6 +26,11 @@ namespace FantaBlade.UI
         {
             Application.OpenURL(PlatformApi.UserCenterHost + "auth?authToken=" + SdkManager.Auth.Token);
         }
+        
+        public void OnOpenVerifyAge()
+        {
+            SdkManager.Ui.ShowNormalUI(NormalUIID.VerifyAge);
+        }
 
         public void OnTouristUpgrade()
         {

@@ -25,8 +25,7 @@ please_input_validate_code,Please Input Validate Code
 get_verify_code,Get Code
 please_input_your_name,Please Input Your Name
 please_input_id_card,Please Input Your Id Card
-game_verify_name,Game Verify Name
-real_name_verify,Real Name Verify
+game_verify_name,Real Name Verify
 game_verify_content,The registration information can only be submitted once and cannot be modified. Be careful!
 next,Next
 please_confirm_password,Please Confirm Password
