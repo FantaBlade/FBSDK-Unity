@@ -26,7 +26,7 @@ get_verify_code,获取验证码
 please_input_your_name,请输入姓名
 please_input_id_card,请输入有效身份证号
 game_verify_name,实名登记
-game_verify_content,根据国家规定，未实名账号<color=red>游戏体验时长不能超过1小时</color>，并且<color=red>不可在游戏内充值</color>。请尽快完成实名登记，拥有完整游戏体验。
+game_verify_content,根据国家规定，未实名账号<color=red>游戏体验时长不能超过1小时</color>。请尽快完成实名登记，拥有完整游戏体验。
 next,下一步
 please_confirm_password,请确认密码
 reset_password,重置密码
