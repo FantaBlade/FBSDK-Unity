@@ -17,11 +17,6 @@ namespace FantaBlade.Internal
         ///     发行区域
         /// </summary>
         public static PublishRegion PublishRegion;
-
-        /// <summary>
-        /// 是否需要验证激活
-        /// </summary>
-        public static bool NeedActivation;
         
         /// <summary>
         ///     语言
@@ -91,14 +86,12 @@ namespace FantaBlade.Internal
         internal static IPaymentApi PaymentApi;
 
 
-        public static void Init(string accessKeyId, bool showFloatingWindow, PublishRegion publishRegion,
-            string productCatalogJson, bool needActivation)
+        public static void Init(string accessKeyId, bool showFloatingWindow, PublishRegion publishRegion)
         {
             try
             {
                 Log.CurrentLevel = DebugMode ? Log.LogLevel.Debug : Log.LogLevel.Warning;
 
-                NeedActivation = needActivation;
                 PublishRegion = publishRegion;
                 CountryInfo.SetDefaultCounty(publishRegion);
                 PlatformApi.SetRegion(publishRegion);
@@ -136,9 +129,9 @@ namespace FantaBlade.Internal
                 Instance = ui.AddComponent<SdkManager>();
                 Ui.Init();
                 Ui.FloatingWindow.IsActive = showFloatingWindow;
+                if(PaymentApi != null)
+                    PaymentApi.Init();
 
-                Order.SetProductCatalog(productCatalogJson);
-                PaymentApi.Init();
                 // 查询玩家位置
                 if (!string.IsNullOrEmpty(Location))
                 {
@@ -199,7 +192,7 @@ namespace FantaBlade.Internal
             PlayerPrefs.SetInt("user_accept_lisense", 1);
         }
 
-        public bool IsUserAcceptLisense()
+        public static bool IsUserAcceptLisense()
         {
             return 1 == PlayerPrefs.GetInt("user_accept_lisense", 0);
         }

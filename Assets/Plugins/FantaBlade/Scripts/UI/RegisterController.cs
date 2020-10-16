@@ -58,11 +58,11 @@ namespace FantaBlade.UI
                 return;
             }
             
-            if(SdkManager.Instance.IsUserAcceptLisense())
-            {
-                SdkManager.Auth.Register(username, password, countryCode, mobileNumber, validateCode);
-            }
-            else
+            // if(SdkManager.Instance.IsUserAcceptLisense())
+            // {
+            //     SdkManager.Auth.Register(username, password, countryCode, mobileNumber, validateCode);
+            // }
+            // else
             {
                 _userLicense.Appear();
             }

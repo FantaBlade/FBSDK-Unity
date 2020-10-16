@@ -132,7 +132,7 @@ namespace FantaBlade.Internal
 
         public void CheckIsActication(string activationCode, Action<bool> activatedCallback)
         {
-            if (SdkManager.NeedActivation)
+            if (Api.NeedActivation)
             {
                 SdkManager.Ui.Dialog.ShowLoading();
                 PlatformApi.User.RequestActicationValidate.Get(((err, info, resp) =>

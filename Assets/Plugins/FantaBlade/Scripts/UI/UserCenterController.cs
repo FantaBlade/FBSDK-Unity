@@ -31,7 +31,11 @@ namespace FantaBlade.UI
         {
             SdkManager.Ui.ShowNormalUI(NormalUIID.VerifyAge);
         }
-
+        
+        public void FeedbaCK()
+        {
+            SdkManager.Ui.ShowNormalUI(NormalUIID.Feedback);
+        }
         public void OnTouristUpgrade()
         {
         }

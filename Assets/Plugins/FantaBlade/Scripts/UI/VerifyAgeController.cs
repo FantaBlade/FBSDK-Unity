@@ -20,6 +20,12 @@ namespace FantaBlade.UI
         public void Hide()
         {
             _window.gameObject.SetActive(false);
+            SdkManager.Ui.ShowGameCenter();
+        }
+        
+        public void HideGameCenter()
+        {
+            _window.gameObject.SetActive(false);
             SdkManager.Ui.HideGameCenter();
         }
 
@@ -44,7 +50,7 @@ namespace FantaBlade.UI
                 SdkManager.Ui.Dialog.Show("please_input_id_card", "ok");
                 return;
             }
-            SdkManager.Auth.VerifyAge(name, idcard, this.Hide);
+            SdkManager.Auth.VerifyAge(name, idcard, HideGameCenter);
         }
     }
 }

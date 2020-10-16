@@ -13,6 +13,8 @@ namespace FantaBlade.Internal
         WelcomeBack,
         Activation,
         VerifyAge,
+        Feedback,
+        UserLicense,
     }
 
     public class NormalUIPath
@@ -33,6 +35,10 @@ namespace FantaBlade.Internal
                     return "fantablade_sdk/prefab/activation_code";
                 case NormalUIID.VerifyAge:
                     return "fantablade_sdk/prefab/verify_age";
+                case NormalUIID.Feedback:
+                    return "fantablade_sdk/prefab/feedback";
+                case NormalUIID.UserLicense:
+                    return "fantablade_sdk/prefab/user_license";
                 default:
                     break;
             }
