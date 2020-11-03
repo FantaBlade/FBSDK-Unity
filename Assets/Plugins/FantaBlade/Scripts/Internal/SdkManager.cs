@@ -54,6 +54,36 @@ namespace FantaBlade.Internal
             }
         }
 
+        public static string CacheAccountId
+        {
+            get
+            {
+                const string locationKey = "FantaBladeSDK_User_AccountId";
+                return PlayerPrefs.GetString(locationKey);
+            }
+            set
+            {
+                const string locationKey = "FantaBladeSDK_User_AccountId";
+                PlayerPrefs.SetString(locationKey, value);
+                PlayerPrefs.Save();
+            }
+        }
+        
+        public static string CachePhoneNumber
+        {
+            get
+            {
+                const string locationKey = "FantaBladeSDK_User_PhoneNumber";
+                return PlayerPrefs.GetString(locationKey);
+            }
+            set
+            {
+                const string locationKey = "FantaBladeSDK_User_PhoneNumber";
+                PlayerPrefs.SetString(locationKey, value);
+                PlayerPrefs.Save();
+            }
+        }
+        
         public static event Action<string> LocationSuccess;
 
 #if UNITY_ANDROID //&& !UNITY_EDITOR
@@ -125,12 +155,11 @@ namespace FantaBlade.Internal
                 var ui = Resources.Load<GameObject>("fantablade_sdk/prefab/fantablade_sdk");
                 ui = Instantiate(ui);
                 DontDestroyOnLoad(ui);
-                ui.hideFlags = DebugMode ? HideFlags.None : HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+               ui.hideFlags = DebugMode ? HideFlags.None : HideFlags.HideInHierarchy | HideFlags.HideInInspector;
                 Instance = ui.AddComponent<SdkManager>();
                 Ui.Init();
                 Ui.FloatingWindow.IsActive = showFloatingWindow;
-                if(PaymentApi != null)
-                    PaymentApi.Init();
+                PaymentApi?.Init();
 
                 // 查询玩家位置
                 if (!string.IsNullOrEmpty(Location))
@@ -139,18 +168,25 @@ namespace FantaBlade.Internal
                 }
                 else
                 {
-                    PlatformApi.Util.GetIpJson.Get((err, info, response) =>
+                    bool needRequestIpJson = PublishRegion == PublishRegion.SoutheastAsia;
+                    if (needRequestIpJson)
                     {
-                        if (err == null)
+                        PlatformApi.Util.GetIpJson.Get((err, info, response) =>
                         {
-                            if (Location != response.countryCode)
+                            if (err == null)
                             {
-                                Location = response.countryCode;
+                                if (Location != response.countryCode)
+                                {
+                                    Location = response.countryCode;
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    else
+                    {
+                        Location = "CN";
+                    }
                 }
-
                 #endregion
 
                 Api.OnInitializeSuccess();

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace FantaBlade.UI
 {
-    internal class LoginController : MonoBehaviour
+    internal class LoginController : MonoBehaviour, IController
     {
         [SerializeField] private InputField _identifier;
         [SerializeField] private InputField _password;
@@ -24,7 +24,21 @@ namespace FantaBlade.UI
                 return;
             }
 
+            SaveCache();
             SdkManager.Auth.Login(identifier, password);
+        }
+
+        public void Init()
+        {
+            if (!string.IsNullOrEmpty(SdkManager.CacheAccountId))
+            {
+                _identifier.text = SdkManager.CacheAccountId;
+            }
+        }
+
+        public void SaveCache()
+        {
+            SdkManager.CacheAccountId = _identifier.text;
         }
     }
 }

@@ -120,10 +120,19 @@ namespace FantaBlade
             if (Channel.Equals("Quick"))
             {
                 var userInfo = EventHandle.Instance._UserInfo;
-                bool real = !userInfo.realName || (userInfo.age > 0 && userInfo.age < 18);
-                return !real;
+                return userInfo.realName;
             }
             return SdkManager.Auth.IsVerify;
+        }
+        
+        public static int Age()
+        {
+            if (Channel.Equals("Quick"))
+            {
+                var userInfo = EventHandle.Instance._UserInfo;
+                return userInfo.age;
+            }
+            return SdkManager.Auth.Age;
         }
         
         /// <param name="json">IAP 商品目录</param>
@@ -288,6 +297,7 @@ namespace FantaBlade
         
         public static void OpenUserLicense()
         {
+            SdkManager.Instance.UserAcceptLisense();
             SdkManager.Ui.ShowNormalUI(NormalUIID.UserLicense);
         }
 

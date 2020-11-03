@@ -44,7 +44,10 @@ namespace FantaBlade.UI
                 SdkManager.Ui.Dialog.Show("please_input_your_name", "ok");
                 return;
             }
-            string pattern = @"^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$";
+
+            idcard = string.IsNullOrEmpty(idcard) ? "" : idcard.ToUpper();
+//            string pattern = @"^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$";
+            string pattern = @"^[A-Za-z0-9]+$";
             if (string.IsNullOrEmpty(idcard) || !Regex.IsMatch(idcard,pattern))
             {
                 SdkManager.Ui.Dialog.Show("please_input_id_card", "ok");

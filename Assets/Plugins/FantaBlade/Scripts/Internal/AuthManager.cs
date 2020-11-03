@@ -30,13 +30,13 @@ namespace FantaBlade.Internal
                 }
 
                 var token = PlayerPrefs.GetString("FantaBladeSDK_Platform_Token_" + SdkManager.AccessKeyId);
-                Debug.Log("get?  "+PlayerPrefs.GetString("FantaBladeSDK_Platform_Token_" ,""));
+                // Debug.Log("get?  "+PlayerPrefs.GetString("FantaBladeSDK_Platform_Token_" ,""));
                 if (!string.IsNullOrEmpty(token))
                 {
                     _jwt = new SecurityToken(token);
                 }
 
-                Debug.Log("get "+token);
+                // Debug.Log("get "+token);
                 return string.IsNullOrEmpty(token) ? null : token;
             }
             private set
@@ -49,15 +49,16 @@ namespace FantaBlade.Internal
                 else
                 {
                     _jwt = new SecurityToken(value);
-                    PlayerPrefs.SetString("FantaBladeSDK_Platform_Token_" , PlayerPrefs.GetString("FantaBladeSDK_Platform_Token_" + SdkManager.AccessKeyId, ""));
+                    // PlayerPrefs.SetString("FantaBladeSDK_Platform_Token_" , PlayerPrefs.GetString("FantaBladeSDK_Platform_Token_" + SdkManager.AccessKeyId, ""));
                     PlayerPrefs.SetString("FantaBladeSDK_Platform_Token_" + SdkManager.AccessKeyId, value);
-                    Debug.Log("set "+value);
+                    // Debug.Log("set "+value);
                     PlayerPrefs.Save();
                 }
             }
         }
 
         public bool IsVerify;
+        public int Age = 0;
         public bool IsLoggingIn;
         public bool IsInActivation;
 
@@ -110,7 +111,7 @@ namespace FantaBlade.Internal
                     }
                     else
                     {
-                        Debug.Log("refresh token:"+resp.token);
+                        // Debug.Log("refresh token:"+resp.token);
                         LoginSuccess(resp.token);
                     }
                 });
@@ -214,14 +215,18 @@ namespace FantaBlade.Internal
             // SdkManager.Ui.ShowNormalUI(NormalUIID.WelcomeBack);
             SdkManager.Ui.ShowFloatingWindow();
             SdkManager.Ui.HideLogin();
+            Age = 0;
+            IsVerify = false;
             PlatformApi.User.GetCertification.Get((err, meta, resp) =>
             {
-                IsVerify = err == null;
-                var time = PlayerPrefs.GetInt("FantaBladeSDK_Platform_First_Verify",0);
-                if (!IsVerify && time == 0)
+                IsVerify = (err == null && resp.code == 0 && !resp.antiIndulgence);
+                if (!IsVerify)
                 {
-                    PlayerPrefs.SetInt("FantaBladeSDK_Platform_First_Verify",1);
                     SdkManager.Ui.ShowNormalUI(NormalUIID.VerifyAge);
+                }
+                else
+                {
+                    Age = resp.age;
                 }
             });
         }

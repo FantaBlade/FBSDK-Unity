@@ -17,6 +17,7 @@ namespace FantaBlade.UI
         public string MobileNumber
         {
             get { return _mobileNumber.text; }
+            set { _mobileNumber.text = value; }
         }
 
 
@@ -54,13 +55,23 @@ namespace FantaBlade.UI
             });
 
             SdkManager.LocationSuccess += OnLocationSuccess;
+            
+            if (!string.IsNullOrEmpty(SdkManager.CachePhoneNumber))
+            {
+                MobileNumber = SdkManager.CachePhoneNumber;
+            }
+        }
+
+        public void SaveCache()
+        {
+            SdkManager.CachePhoneNumber = MobileNumber;
         }
 
         private void OnDestroy()
         {
             SdkManager.LocationSuccess -= OnLocationSuccess;
         }
-
+        
         private void OnLocationSuccess(string countryCode)
         {
             var i = CountryCodeToCountryInfoIndex(countryCode);

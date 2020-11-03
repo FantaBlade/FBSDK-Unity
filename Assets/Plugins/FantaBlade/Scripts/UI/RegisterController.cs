@@ -63,9 +63,10 @@ namespace FantaBlade.UI
             //     SdkManager.Auth.Register(username, password, countryCode, mobileNumber, validateCode);
             // }
             // else
-            {
-                _userLicense.Appear();
-            }
+            // {
+            //     _userLicense.Appear();
+            // }
+            OnClickLisenseAccept();
         }
 
         public void OnClickLisenseReject()
@@ -76,7 +77,7 @@ namespace FantaBlade.UI
         public void OnClickLisenseAccept()
         {
             SdkManager.Instance.UserAcceptLisense();
-            _userLicense.Disappear();
+//            _userLicense.Disappear();
             var username = _username.text;
             var password = _password.text;
             var countryCode = _mobileValidate.CountryCode;

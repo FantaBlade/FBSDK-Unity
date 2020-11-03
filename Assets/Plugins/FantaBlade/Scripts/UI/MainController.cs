@@ -40,7 +40,8 @@ namespace FantaBlade.UI
 			{
 				return;
 			}
-            
+
+			_mobileController.SaveCache();
 			SdkManager.Auth.Login(_mobileController.MobileNumber, _password.text, _mobileController.CountryCode);
 		}
 

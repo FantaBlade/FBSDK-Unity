@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -15,24 +19,30 @@ namespace FantaBlade.Internal
                     PublishRegion.LocalDev, new Dictionary<string, string>
                     {
                         {"UserCenterHost", "http://www.fantablade.cn/"},
-                        {"ApiHost", "http://api.fantablade.cn/"},
-                        {"ApiVersion", "v0.1"}
+                        {"ApiHost", "api.fantablade.cn"},
+                        {"ApiVersion", "v0.1"},
+                        {"Protocol", "http"},
+                        {"ApiIp", "172.26.194.121"}
                     }
                 },
                 {
                     PublishRegion.China, new Dictionary<string, string>
                     {
                         {"UserCenterHost", "https://cn.fantablade.com/"},
-                        {"ApiHost", "https://api.cn.fantablade.com/"},
-                        {"ApiVersion", "v1"}
+                        {"ApiHost", "api.cn.fantablade.com"},
+                        {"ApiVersion", "v1"},
+                        {"Protocol", "https"},
+                        {"ApiIp", "106.14.169.198"}
                     }
                 },
                 {
                     PublishRegion.SoutheastAsia, new Dictionary<string, string>
                     {
                         {"UserCenterHost", "https://sea.fantablade.com/"},
-                        {"ApiHost", "https://api.sea.fantablade.com/"},
-                        {"ApiVersion", "v1"}
+                        {"ApiHost", "api.sea.fantablade.com"},
+                        {"ApiVersion", "v1"},
+                        {"Protocol", "https"},
+                        {"ApiIp", "47.254.201.119"}
                     }
                 }
             };
@@ -41,15 +51,19 @@ namespace FantaBlade.Internal
         {
             var config = UrlConfigs[region];
             UserCenterHost = config["UserCenterHost"];
+            _protocol = config["Protocol"];
             _apiHost = config["ApiHost"];
+            _apiIp = config["ApiIp"];
             _version = config["ApiVersion"];
-            _apiUrl = _apiHost + _version;
+            _apiUrl = _protocol + "://" + _apiHost + "/" + _version;
         }
 
 
         public static string UserCenterHost;
 
+        private static string _protocol;
         private static string _apiHost;
+        private static string _apiIp;
         private static string _version;
         private static string _apiUrl;
 
@@ -59,6 +73,7 @@ namespace FantaBlade.Internal
             public delegate void WebResponseEventHandler(string err, ResponseMetaInfo metaInfo, TResponse response);
 
             private readonly string _path;
+            private bool _useIp;
             private Uri _uri;
 
             private WebRequest()
@@ -89,16 +104,84 @@ namespace FantaBlade.Internal
             private IEnumerator GetCoroutine(WebResponseEventHandler callback)
             {
                 var uri = GetUri(_path);
-                var request = UnityWebRequest.Get(uri.AbsoluteUri);
-                yield return SendRequest(request, callback);
+                //var request = UnityWebRequest.Get(uri.AbsoluteUri);
+                //yield return SendRequest(request, callback);
+                var request = (HttpWebRequest) WebRequest.Create(uri.AbsoluteUri);
+                request.Method = "GET";
+                SetRequest(request);
+                SendRequest(request, callback);
+                yield break;
             }
 
 
             private IEnumerator PostCoroutine(Dictionary<string, string> form, WebResponseEventHandler callback)
             {
                 var uri = GetUri(_path);
-                var request = UnityWebRequest.Post(uri.AbsoluteUri, form);
-                yield return SendRequest(request, callback);
+                //var request = UnityWebRequest.Post(uri.AbsoluteUri, form);
+                //yield return SendRequest(request, callback);
+                var request = (HttpWebRequest) WebRequest.Create(uri.AbsoluteUri);
+                request.Method = "POST";
+                SetRequest(request);
+                //set all Headers before GetRequestStream()
+                request.ContentType = "application/x-www-form-urlencoded";
+                byte[] postBytes = UnityWebRequest.SerializeSimpleForm(form);
+                request.ContentLength = postBytes.Length;
+                Stream postStream = null;
+                try
+                {
+                    postStream = request.GetRequestStream();
+                    postStream.Write(postBytes, 0, postBytes.Length);
+                    postStream.Close();
+                    SendRequest(request, callback);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning(e);
+                    if (postStream != null)
+                    {
+                        postStream.Close();
+                    }
+                    var err = e.Message;
+                    var metaInfo = new ResponseMetaInfo(0, err);
+                    if (callback != null) callback(err, metaInfo, null);
+                }
+                yield break;
+            }
+
+            private void SetRequest(HttpWebRequest request)
+            {
+                if (_useIp)
+                {
+                    request.Host = _apiHost;
+                }
+                request.Headers.Add("AccessKeyId", SdkManager.AccessKeyId);
+                if (SdkManager.Auth.Token != null) request.Headers.Add("Authorization", SdkManager.Auth.Token);
+            }
+
+            private static void SendRequest(HttpWebRequest request, WebResponseEventHandler callback)
+            {
+                string err = null;
+                var metaInfo = new ResponseMetaInfo(0, "");
+                TResponse tResponse = null;
+                try
+                {
+                    var response = (HttpWebResponse)request.GetResponse();
+                    TextReader reader = new StreamReader(response.GetResponseStream());
+                    var result = reader.ReadToEnd();
+                    tResponse = JsonUtility.FromJson<TResponse>(result);
+                    if (tResponse.code != 0)
+                    {
+                        err = tResponse.message;
+                    }
+                    metaInfo.Status = Convert.ToInt64(response.StatusCode);
+                    metaInfo.Error = err;
+                }
+                catch (Exception e)
+                {
+                    Log.Warning(e);
+                    err = e.Message;
+                }
+                if (callback != null) callback(err, metaInfo, tResponse);
             }
 
             private static IEnumerator SendRequest(UnityWebRequest request, WebResponseEventHandler callback)
@@ -136,6 +219,23 @@ namespace FantaBlade.Internal
                 if (callback != null) callback(err, metaInfo, response);
             }
 
+            private string GetApiUrl()
+            {
+                try
+                {
+                    Dns.GetHostAddresses(_apiHost);
+                }
+                catch (SocketException e)
+                {
+                    Log.Warning(e);
+                    _useIp = true;
+                    return _protocol + "://" + _apiIp + "/" + _version;
+                }
+
+                _useIp = false;
+                return _protocol + "://" + _apiHost + "/" + _version;
+            }
+
             private Uri GetUri(string path)
             {
                 if (_uri == null)
@@ -146,7 +246,7 @@ namespace FantaBlade.Internal
                     }
                     else
                     {
-                        _uri = new Uri(string.Join("/", new[] {_apiUrl, path})+"?lang="+SdkManager.Localize.GetLanguageName());
+                        _uri = new Uri(string.Join("/", new[] {GetApiUrl(), path})+"?lang="+SdkManager.Localize.GetLanguageName());
                     }
                 }
                 return _uri;
@@ -260,6 +360,9 @@ namespace FantaBlade.Internal
         [Serializable]
         public class CertificationInfoResponse : Response
         {
+            public int code;
+            public bool antiIndulgence;
+            public int age;
             public Certification certification;
         }
 
