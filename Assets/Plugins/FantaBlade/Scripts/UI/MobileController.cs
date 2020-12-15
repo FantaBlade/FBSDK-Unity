@@ -28,6 +28,7 @@ namespace FantaBlade.UI
 
         public void Init()
         {
+            _callingCodes.options.Clear();
             foreach (var countryInfo in CountryInfos)
             {
                 _callingCodes.options.Add(

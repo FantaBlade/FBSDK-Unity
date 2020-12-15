@@ -126,7 +126,10 @@ namespace FantaBlade.Internal
                 CountryInfo.SetDefaultCounty(publishRegion);
                 PlatformApi.SetRegion(publishRegion);
                 UpdateLanguage(Language);
-                
+
+                var isPaymentInitialized = PaymentApi != null && Api.IsPaymentInitialized;
+                if (!isPaymentInitialized)
+                {
 #if UNITY_ANDROID && !UNITY_EDITOR
                 UseAndroidNativeApi = PublishRegion != PublishRegion.SoutheastAsia;
                 if (UseAndroidNativeApi)
@@ -144,6 +147,7 @@ namespace FantaBlade.Internal
 #else
                 PaymentApi = new StubPaymentApi();
 #endif
+                }
 
                 #region UI
 
@@ -159,7 +163,10 @@ namespace FantaBlade.Internal
                 Instance = ui.AddComponent<SdkManager>();
                 Ui.Init();
                 Ui.FloatingWindow.IsActive = showFloatingWindow;
-                PaymentApi?.Init();
+                if (!isPaymentInitialized)
+                {
+                    PaymentApi?.Init();
+                }
 
                 // 查询玩家位置
                 if (!string.IsNullOrEmpty(Location))

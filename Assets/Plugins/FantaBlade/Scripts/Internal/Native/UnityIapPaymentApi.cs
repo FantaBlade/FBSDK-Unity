@@ -163,7 +163,8 @@ namespace FantaBlade.Internal.Native
 
         private void HandlePurchaseQueue()
         {
-            while (_purchaseQueue.Count != 0)
+            int failedCount = 0;
+            while (_purchaseQueue.Count != 0 && failedCount <= 5)
             {
                 var product = _purchaseQueue.Dequeue();
                 var form = new Dictionary<string, string>
@@ -185,6 +186,7 @@ namespace FantaBlade.Internal.Native
                     else
                     {
                         _purchaseQueue.Enqueue(product);
+                        failedCount++;
                     }
                 });
             }

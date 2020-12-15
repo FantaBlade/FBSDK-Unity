@@ -3,7 +3,6 @@ using System.Threading;
 using FantaBlade.Internal;
 using UnityEngine;
 using quicksdk;
-using UnityEngine.Analytics;
 
 namespace FantaBlade
 {

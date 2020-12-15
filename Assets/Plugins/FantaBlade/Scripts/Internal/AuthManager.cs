@@ -217,6 +217,11 @@ namespace FantaBlade.Internal
             SdkManager.Ui.HideLogin();
             Age = 0;
             IsVerify = false;
+            GetCertification();
+        }
+
+        private void GetCertification()
+        {
             PlatformApi.User.GetCertification.Get((err, meta, resp) =>
             {
                 IsVerify = (err == null && resp.code == 0 && !resp.antiIndulgence);
@@ -402,6 +407,7 @@ namespace FantaBlade.Internal
                 {
                     IsVerify = true;
                     SdkManager.Ui.Dialog.Show("verify_name_success", "ok");
+                    GetCertification();
                     successCallback();
                 }
             });

@@ -20,6 +20,7 @@ namespace FantaBlade.Internal
                     {
                         {"UserCenterHost", "http://www.fantablade.cn/"},
                         {"ApiHost", "api.fantablade.cn"},
+                        {"ApiHost2", "api.fantablade.cn"},
                         {"ApiVersion", "v0.1"},
                         {"Protocol", "http"},
                         {"ApiIp", "172.26.194.121"}
@@ -30,6 +31,7 @@ namespace FantaBlade.Internal
                     {
                         {"UserCenterHost", "https://cn.fantablade.com/"},
                         {"ApiHost", "api.cn.fantablade.com"},
+                        {"ApiHost2", "api.protect.fantablade.com"},
                         {"ApiVersion", "v1"},
                         {"Protocol", "https"},
                         {"ApiIp", "106.14.169.198"}
@@ -40,6 +42,7 @@ namespace FantaBlade.Internal
                     {
                         {"UserCenterHost", "https://sea.fantablade.com/"},
                         {"ApiHost", "api.sea.fantablade.com"},
+                        {"ApiHost2", "api.sea.fantablade.com"},
                         {"ApiVersion", "v1"},
                         {"Protocol", "https"},
                         {"ApiIp", "47.254.201.119"}
@@ -53,28 +56,37 @@ namespace FantaBlade.Internal
             UserCenterHost = config["UserCenterHost"];
             _protocol = config["Protocol"];
             _apiHost = config["ApiHost"];
+            _apiHost2 = config["ApiHost2"];
             _apiIp = config["ApiIp"];
             _version = config["ApiVersion"];
             _apiUrl = _protocol + "://" + _apiHost + "/" + _version;
+            _apiUrl2 = _protocol + "://" + _apiHost2 + "/" + _version;
+        }
+
+        public static void SwitchApiHost()
+        {
+            _useBackup = !_useBackup;
         }
 
 
-        public static string UserCenterHost;
-
         private static string _protocol;
         private static string _apiHost;
+        private static string _apiHost2;
         private static string _apiIp;
+        public static string UserCenterHost;
         private static string _version;
         private static string _apiUrl;
-
+        private static bool _useBackup;
+        private static string _apiUrl2;
 
         public class WebRequest<TResponse> where TResponse : Response
         {
             public delegate void WebResponseEventHandler(string err, ResponseMetaInfo metaInfo, TResponse response);
 
             private readonly string _path;
-            private bool _useIp;
+            //private bool _useIp;
             private Uri _uri;
+            private Uri _uri2;
 
             private WebRequest()
             {
@@ -100,25 +112,28 @@ namespace FantaBlade.Internal
             {
                 return SdkManager.StartCoroutine(PostCoroutine(form, callback));
             }
-
+            internal enum RequestMethod
+            {
+                Get,
+                Post
+            }
             private IEnumerator GetCoroutine(WebResponseEventHandler callback)
             {
-                var uri = GetUri(_path);
-                //var request = UnityWebRequest.Get(uri.AbsoluteUri);
-                //yield return SendRequest(request, callback);
+                yield return SendRequest(RequestMethod.Get, null, callback);
+                /*
                 var request = (HttpWebRequest) WebRequest.Create(uri.AbsoluteUri);
                 request.Method = "GET";
                 SetRequest(request);
                 SendRequest(request, callback);
                 yield break;
+                */
             }
 
 
             private IEnumerator PostCoroutine(Dictionary<string, string> form, WebResponseEventHandler callback)
             {
-                var uri = GetUri(_path);
-                //var request = UnityWebRequest.Post(uri.AbsoluteUri, form);
-                //yield return SendRequest(request, callback);
+                yield return SendRequest(RequestMethod.Post, form, callback);
+                /*
                 var request = (HttpWebRequest) WebRequest.Create(uri.AbsoluteUri);
                 request.Method = "POST";
                 SetRequest(request);
@@ -146,62 +161,97 @@ namespace FantaBlade.Internal
                     if (callback != null) callback(err, metaInfo, null);
                 }
                 yield break;
+                */
             }
 
-            private void SetRequest(HttpWebRequest request)
-            {
-                if (_useIp)
-                {
-                    request.Host = _apiHost;
-                }
-                request.Headers.Add("AccessKeyId", SdkManager.AccessKeyId);
-                if (SdkManager.Auth.Token != null) request.Headers.Add("Authorization", SdkManager.Auth.Token);
-            }
+            // private void SetRequest(HttpWebRequest request)
+            // {
+            //     //if (_useIp)
+            //     //{
+            //     //    request.Host = _apiHost;
+            //     //}
+            //     request.Headers.Add("AccessKeyId", SdkManager.AccessKeyId);
+            //     if (SdkManager.Auth.Token != null) request.Headers.Add("Authorization", SdkManager.Auth.Token);
+            // }
 
-            private static void SendRequest(HttpWebRequest request, WebResponseEventHandler callback)
-            {
-                string err = null;
-                var metaInfo = new ResponseMetaInfo(0, "");
-                TResponse tResponse = null;
-                try
-                {
-                    var response = (HttpWebResponse)request.GetResponse();
-                    TextReader reader = new StreamReader(response.GetResponseStream());
-                    var result = reader.ReadToEnd();
-                    tResponse = JsonUtility.FromJson<TResponse>(result);
-                    if (tResponse.code != 0)
-                    {
-                        err = tResponse.message;
-                    }
-                    metaInfo.Status = Convert.ToInt64(response.StatusCode);
-                    metaInfo.Error = err;
-                }
-                catch (Exception e)
-                {
-                    Log.Warning(e);
-                    err = e.Message;
-                }
-                if (callback != null) callback(err, metaInfo, tResponse);
-            }
+            // private static void SendRequest(HttpWebRequest request, WebResponseEventHandler callback)
+            // {
+            //     string err = null;
+            //     var metaInfo = new ResponseMetaInfo(0, "");
+            //     TResponse tResponse = null;
+            //     try
+            //     {
+            //         var response = (HttpWebResponse)request.GetResponse();
+            //         TextReader reader = new StreamReader(response.GetResponseStream());
+            //         var result = reader.ReadToEnd();
+            //         tResponse = JsonUtility.FromJson<TResponse>(result);
+            //         if (tResponse.code != 0)
+            //         {
+            //             err = tResponse.message;
+            //         }
+            //         metaInfo.Status = Convert.ToInt64(response.StatusCode);
+            //         metaInfo.Error = err;
+            //     }
+            //     catch (Exception e)
+            //     {
+            //         Log.Warning(e);
+            //         err = e.Message;
+            //     }
+            //     if (callback != null) callback(err, metaInfo, tResponse);
+            //     // var uri = GetUri(_path);
+            //     // var request = UnityWebRequest.Post(uri.AbsoluteUri, form);
+            //     // yield return SendRequest(RequestMethod.Post, form, callback);
+            // }
 
-            private static IEnumerator SendRequest(UnityWebRequest request, WebResponseEventHandler callback)
+            private IEnumerator SendRequest(RequestMethod method, Dictionary<string, string> form, WebResponseEventHandler callback)
             {
-                // Debug.Log("AccessKeyId:"+SdkManager.AccessKeyId);
-                // Debug.Log("Authorization:"+SdkManager.Auth.Token);
+                var uri = GetUri();
+                var request = method == RequestMethod.Post ? UnityWebRequest.Post(uri.AbsoluteUri, form):UnityWebRequest.Get(uri.AbsoluteUri);
+                // Log.Debug("AccessKeyId:"+SdkManager.AccessKeyId);
+                Log.Debug("Authorization:"+SdkManager.Auth.Token);
                 request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
                 if (SdkManager.Auth.Token != null) request.SetRequestHeader("Authorization", SdkManager.Auth.Token);
-
+                request.timeout = 5;
                 yield return request.SendWebRequest();
+                if (request.isNetworkError)
+                {
+                    SwitchApiHost();
+                    Log.Error(string.Format("url: {0} {1}", request.url, request.error));
+                    uri = GetUri();
+                    request = method == RequestMethod.Post ? UnityWebRequest.Post(uri.AbsoluteUri, form):UnityWebRequest.Get(uri.AbsoluteUri);
+                    request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
+                    if (SdkManager.Auth.Token != null) request.SetRequestHeader("Authorization", SdkManager.Auth.Token);
+                    request.timeout = 5;
+                    yield return request.SendWebRequest();
+                }
+                else if (request.isHttpError && request.responseCode == 404)
+                {
+                    SwitchApiHost();
+                    Log.Error(string.Format("url: {0} {1} {2}\n{3}", request.url, request.responseCode, request.error,
+                        request.downloadHandler.text));
+                    
+                    uri = GetUri();
+                    request = method == RequestMethod.Post ? UnityWebRequest.Post(uri.AbsoluteUri, form):UnityWebRequest.Get(uri.AbsoluteUri);
+                    request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
+                    if (SdkManager.Auth.Token != null) request.SetRequestHeader("Authorization", SdkManager.Auth.Token);
+                    request.timeout = 5;
+                    yield return request.SendWebRequest();
+                }
                 string err = null;
                 var metaInfo = new ResponseMetaInfo(request.responseCode, request.error);
                 TResponse response = null;
                 if (request.isNetworkError)
                 {
+                    SwitchApiHost();
                     Log.Error(string.Format("url: {0} {1}", request.url, request.error));
                     err = request.error;
                 }
                 else if (request.isHttpError)
                 {
+                    if (request.responseCode == 404)
+                    {
+                        SwitchApiHost();
+                    }
                     Log.Error(string.Format("url: {0} {1} {2}\n{3}", request.url, request.responseCode, request.error,
                         request.downloadHandler.text));
                     err = request.error;
@@ -221,6 +271,7 @@ namespace FantaBlade.Internal
 
             private string GetApiUrl()
             {
+                /*
                 try
                 {
                     Dns.GetHostAddresses(_apiHost);
@@ -233,23 +284,35 @@ namespace FantaBlade.Internal
                 }
 
                 _useIp = false;
+                */
                 return _protocol + "://" + _apiHost + "/" + _version;
             }
 
-            private Uri GetUri(string path)
+            private Uri GetUri()
             {
                 if (_uri == null)
                 {
-                    if (path.StartsWith("http://"))
+                    if (_path.StartsWith("http://"))
                     {
-                        _uri = new Uri(path);
+                        _uri = new Uri(_path);
                     }
                     else
                     {
-                        _uri = new Uri(string.Join("/", new[] {GetApiUrl(), path})+"?lang="+SdkManager.Localize.GetLanguageName());
+                        _uri = new Uri(string.Join("/", new[] {_apiUrl, _path})+"?lang="+SdkManager.Localize.GetLanguageName());
                     }
                 }
-                return _uri;
+                if (_uri2 == null)
+                {
+                    if (_path.StartsWith("http://"))
+                    {
+                        _uri2 = new Uri(_path);
+                    }
+                    else
+                    {
+                        _uri2 = new Uri(string.Join("/", new[] {_apiUrl2, _path})+"?lang="+SdkManager.Localize.GetLanguageName());
+                    }
+                }
+                return _useBackup?_uri2:_uri;
             }
         }
 
