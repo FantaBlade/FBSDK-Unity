@@ -87,6 +87,26 @@ namespace FantaBlade.UI
 			}
 		}
 
+		public void WechatLogin()
+		{
+			SdkManager.Auth.LoginThird(Api.LoginChannel.CHANNEL_WECHAT);
+		}
+		
+		public void QQLogin()
+		{
+			SdkManager.Auth.LoginThird(Api.LoginChannel.CHANNEL_QQ);
+		}
+		
+		public void SinaLogin()
+		{
+			SdkManager.Auth.LoginThird(Api.LoginChannel.CHANNEL_WEIBO);
+		}
+
+		public void DouYinLogin()
+		{
+			SdkManager.Auth.LoginThird(Api.LoginChannel.CHANNEL_DOUYIN);
+		}
+
 		private void CloseWindow(Window window)
 		{
 			if (window)

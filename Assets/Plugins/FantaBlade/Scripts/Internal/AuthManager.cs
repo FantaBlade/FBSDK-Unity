@@ -17,7 +17,7 @@ namespace FantaBlade.Internal
         {
             get { return _jwt.Audiences; }
         }
-
+        
         private SecurityToken _jwt;
 
         public string Token
@@ -61,6 +61,7 @@ namespace FantaBlade.Internal
         public int Age = 0;
         public bool IsLoggingIn;
         public bool IsInActivation;
+        public int curLoginChannel;
 
         public void OnLoginCallback(string err, PlatformApi.ResponseMetaInfo meta, PlatformApi.TokenResponse resp)
         {
@@ -129,6 +130,42 @@ namespace FantaBlade.Internal
             };
             SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.Login.Post(form, OnLoginCallback);
+        }
+
+        public void LoginByThird(string authCode, int loginChannel)
+        {
+            IsLoggingIn = true;
+            var form = new Dictionary<string, string>
+            {
+                {"code", authCode},
+                {"type", loginChannel + ""}
+            };
+            SdkManager.Ui.Dialog.ShowLoading();
+            PlatformApi.User.LoginThird.Post(form, OnThirdLoginCallback);
+        }
+
+        public void OnThirdLoginCallback(string err,
+            PlatformApi.ResponseMetaInfo meta,
+            PlatformApi.TokenResponse resp)
+        {
+            SdkManager.Ui.Dialog.HideLoading();
+            IsLoggingIn = false;
+
+            if (err != null)
+            {
+                SdkManager.Ui.Dialog.Show(err, "ok");
+            }
+            else
+            {
+                LoginSuccess(resp.token);
+            }
+        }
+        
+        public void LoginThird(int channel)
+        {
+            // 获取第三方access_token/auth_code
+            curLoginChannel = channel;
+            SdkManager.NativeApi.Login(curLoginChannel);
         }
 
         public void CheckIsActication(string activationCode, Action<bool> activatedCallback)
@@ -411,6 +448,32 @@ namespace FantaBlade.Internal
                     successCallback();
                 }
             });
+        }
+
+        public void OnSDKLoginFinish(bool success, string authCode)
+        {
+            Log.Error("OnSDKLoginFinish:" + authCode + " channel:" + curLoginChannel);
+            if (success)
+            {
+                // 使用authcode换取平台服token
+                LoginByThird(authCode, curLoginChannel);
+            }
+            else if (authCode == "UserCancel")
+            {
+                Api.OnLoginCancel();
+            }
+            else
+            {
+                Api.OnLoginFailure(authCode);
+            }
+        }
+
+        public void OnSDKLogoutFinish(bool success)
+        {
+            if (success)
+            {
+                Api.OnLogoutSuccess();
+            }
         }
 
         private static string Base64Encode(string str)

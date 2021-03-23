@@ -34,6 +34,31 @@ namespace FantaBlade
             public string extra;
         }
         
+                
+        // 第三方登陆
+        public static class LoginChannel {
+            public const int CHANNEL_WECHAT = 1;
+            public const int CHANNEL_QQ = 2;
+            public const int CHANNEL_WEIBO = 3;
+            public const int CHANNEL_DOUYIN = 4;
+            public const int CHANNEL_ALIPAY = 5;
+        }
+
+        // 第三方分享
+        public static class ShareChannel {
+            public const int WECHAT_SESSION = 1;
+            public const int WECHAT_TIMELINE = 2;
+            public const int WECHAT_FAVORITE = 3;
+            public const int QQ_SESSION = 4;
+            public const int WEIBO = 5;
+        }
+        
+        public const string WECHAT_APPID = "wxeacc4ec2f2d5f24e";
+        public const string WEIBO_APPID = "1858163759";
+        public const string WEIBO_REDIRECTURL = "https://www.fantablade.com/phantomoon/index";
+        public const string QQ_APPID = "";
+        public const string DOUYIN_CLIENTKEY = "awr89o05lcbk46n2";
+        
         #region API
 
 #if UNITY_IOS
@@ -148,7 +173,7 @@ namespace FantaBlade
         /// <param name="showFloatingWindow">显示悬浮窗</param>
         /// <param name="publishRegion">发行区域</param>
         public static void Init(string accessKey, bool showFloatingWindow = true,
-            PublishRegion publishRegion = PublishRegion.China)
+            PublishRegion publishRegion = PublishRegion.China, bool enableSSDK = true)
         {
             // if (Channel.Equals("Quick"))
             // {
@@ -156,8 +181,34 @@ namespace FantaBlade
             // }
             // else
             // {
-                SdkManager.Init(accessKey, showFloatingWindow, publishRegion);
+                SdkManager.Init(accessKey, showFloatingWindow, publishRegion, enableSSDK);
             // }
+        }
+
+        public static void EnableThirdChannel(int[] loginChannels)
+        {
+            foreach (var channel in loginChannels)
+            {
+                string appId = "";
+                string weiboUrl = "";
+                switch (channel)
+                {
+                    case LoginChannel.CHANNEL_WECHAT:
+                        appId = WECHAT_APPID;
+                        break;
+                    case LoginChannel.CHANNEL_QQ:
+                        appId = QQ_APPID;
+                        break;
+                    case LoginChannel.CHANNEL_WEIBO:
+                        appId = WEIBO_APPID;
+                        weiboUrl = WEIBO_REDIRECTURL;
+                        break;
+                    case LoginChannel.CHANNEL_DOUYIN:
+                        appId = DOUYIN_CLIENTKEY;
+                        break;
+                }
+                RegisterChannel(channel, appId, weiboUrl);
+            }
         }
 
         public static void OnStop()
@@ -175,7 +226,6 @@ namespace FantaBlade
                 EventHandle.Instance.onResumeGame();
             }
         }
-
 
         /// <summary>
         ///     登陆账号，获取token
@@ -199,6 +249,21 @@ namespace FantaBlade
             {
                 SdkManager.Auth.LoginByCache();
             }
+        }
+        
+        public static void Share(int shareChannel, string imagePath, string title, string desc)
+        {
+            SdkManager.Share.ShareImage(shareChannel, imagePath, title, desc);
+        }
+
+        public static bool IsInstalled(int loginChannel)
+        {
+            return SdkManager.NativeApi.IsInstall(loginChannel);
+        }
+
+        public static void RegisterChannel(int loginChannel, string appId, string weiboRedirectUrl = "")
+        {
+            SdkManager.NativeApi.RegisterChannel(loginChannel, appId, weiboRedirectUrl);
         }
 
         public static void Feedback()
@@ -431,6 +496,13 @@ namespace FantaBlade
             if (handler != null) handler(token);
         }
 
+        internal static void OnLoginFailure(string msg)
+        {
+            Log.Info("OnLoginFailure: " + msg);
+            var handler = LoginFailure;
+            if (handler != null) handler(msg);
+        }
+
         internal static void OnLoginCancel()
         {
             Log.Info("OnLoginCancel!");
@@ -464,6 +536,27 @@ namespace FantaBlade
             Debug.Log("OnPayCancel");
             var handler = PayCancel;
             if (handler != null) handler();
+        }
+
+        internal static void OnShareSucceed(string msg)
+        {
+            Debug.Log("OnShareSucceed" + msg);
+            var handler = ShareSucceed;
+            if (handler != null) handler(msg);
+        }
+        
+        internal static void OnShareFailure(string msg)
+        {
+            Debug.Log("OnShareFailure" + msg);
+            var handler = ShareFailure;
+            if (handler != null) handler(msg);
+        }
+        
+        internal static void OnShareCancel(string msg)
+        {
+            Debug.Log("OnShareCancel" + msg);
+            var handler = ShareCancel;
+            if (handler != null) handler(msg);
         }
 
         #endregion
@@ -516,6 +609,10 @@ namespace FantaBlade
         ///     支付成功
         /// </summary>
         public static event Action PaySuccess;
+
+        public static event Action<string> ShareSucceed;
+        public static event Action<string> ShareFailure;
+        public static event Action<string> ShareCancel;
 
         /// <summary>
         ///     支付失败

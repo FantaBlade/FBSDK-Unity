@@ -39,5 +39,9 @@ namespace FantaBlade.Internal.Native
         ///     支付取消
         /// </summary>
         void onPayCancel();
+
+        void onShareSucceed(string msg);
+
+        void onShareFailure(string msg);
     }
 }

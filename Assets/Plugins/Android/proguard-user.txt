@@ -1,1 +1,21 @@
 -keep class com.tapdb.sdk.* { *; }
+-keep class com.ta.utdid2.** { *;}
+-keep class com.ut.device.** { *;}
+-keep class com.tencent.mm.opensdk.** {
+*;
+}
+-keep class com.tencent.wxop.** {
+*;
+}
+-keep class com.tencent.mm.sdk.** {
+*;
+}
+-keep class com.tencent.tauth.** {
+*;
+}
+-keep class com.sina.weibo.sdk.auth.** {
+*;
+}
+-keep class com.bytedance.sdk.open.aweme.** {
+*;
+}

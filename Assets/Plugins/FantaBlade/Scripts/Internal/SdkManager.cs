@@ -34,7 +34,7 @@ namespace FantaBlade.Internal
                     : "English";
             }
         }
-        
+
         /// <summary>
         ///     玩家定位
         /// </summary>
@@ -104,6 +104,8 @@ namespace FantaBlade.Internal
         public static readonly AuthManager Auth = new AuthManager();
         public static readonly OrderManager Order = new OrderManager();
         public static readonly LocalizeManager Localize = new LocalizeManager();
+        public static readonly ShareManager Share = new ShareManager();
+        public static readonly MonoUpdateManager MonoUpdate = new MonoUpdateManager();
 
         /// <summary>
         ///     原生层 API
@@ -115,8 +117,8 @@ namespace FantaBlade.Internal
         /// </summary>
         internal static IPaymentApi PaymentApi;
 
-
-        public static void Init(string accessKeyId, bool showFloatingWindow, PublishRegion publishRegion)
+        public static void Init(string accessKeyId, bool showFloatingWindow,
+            PublishRegion publishRegion, bool enableSSDk = true)
         {
             try
             {
@@ -143,23 +145,25 @@ namespace FantaBlade.Internal
                     PaymentApi = new UnityIapPaymentApi();
                 }
 #elif UNITY_IOS && !UNITY_EDITOR
+                // NativeApi  = new iOSNativeApi();
                 PaymentApi = new UnityIapPaymentApi();
 #else
                 PaymentApi = new StubPaymentApi();
+                NativeApi = new StubNativeApi();
 #endif
                 }
 
                 #region UI
 
                 if (Instance != null) return;
-                Instance = FindObjectOfType<SdkManager>();
+                    Instance = FindObjectOfType<SdkManager>();
                 if (Instance != null) return;
-                AccessKeyId = accessKeyId;
+                    AccessKeyId = accessKeyId;
 
                 var ui = Resources.Load<GameObject>("fantablade_sdk/prefab/fantablade_sdk");
                 ui = Instantiate(ui);
                 DontDestroyOnLoad(ui);
-               ui.hideFlags = DebugMode ? HideFlags.None : HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+                ui.hideFlags = DebugMode ? HideFlags.None : HideFlags.HideInHierarchy | HideFlags.HideInInspector;
                 Instance = ui.AddComponent<SdkManager>();
                 Ui.Init();
                 Ui.FloatingWindow.IsActive = showFloatingWindow;
@@ -167,7 +171,7 @@ namespace FantaBlade.Internal
                 {
                     PaymentApi?.Init();
                 }
-
+                Share.SetNativeAPI(NativeApi);
                 // 查询玩家位置
                 if (!string.IsNullOrEmpty(Location))
                 {
@@ -238,6 +242,14 @@ namespace FantaBlade.Internal
         public static bool IsUserAcceptLisense()
         {
             return 1 == PlayerPrefs.GetInt("user_accept_lisense", 0);
+        }
+
+        void Update()
+        {
+            if (null != MonoUpdate)
+            {
+                MonoUpdate.Update(Time.deltaTime);
+            }
         }
     }
 }

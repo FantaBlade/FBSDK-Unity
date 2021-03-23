@@ -50,6 +50,26 @@ namespace FantaBlade.Internal.Native
             _nativeApi.Call("setToken", token);
         }
 
+        public void RegisterChannel(int loginChannel, string appId, string weiboRedirectUrl = "")
+        {
+            _nativeApi.Call("registerChannel", loginChannel, appId, weiboRedirectUrl);
+        }
+
+        public bool IsInstall(int loginChannel)
+        {
+            return _nativeApi.Call<bool>("isInstalled", loginChannel);
+        }
+        
+        public void Login(int loginChannel)
+        {
+            _nativeApi.Call("login", loginChannel);
+        }
+
+        public void Share(int shareChannel, string imagePath, string title, string desc)
+        {
+            _nativeApi.Call("shareImage", shareChannel, imagePath, title, desc);
+        }
+
         public void Logout()
         {
             if (!Api.IsInitialized)

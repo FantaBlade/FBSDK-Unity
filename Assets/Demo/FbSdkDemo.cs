@@ -21,8 +21,16 @@ public class FbSdkDemo : MonoBehaviour
         Api.PayCancel += OnPayCancel;
         Api.Init("44I1ucBEaIRvm4Re", true, PublishRegion.LocalDev);
 //        Api.Init("zsN9eQcEqcmWnBCT", true, PublishRegion.SoutheastAsia, null, true);
+        int[] channels = new[]
+        {
+            Api.LoginChannel.CHANNEL_WECHAT,
+            Api.LoginChannel.CHANNEL_QQ,
+            Api.LoginChannel.CHANNEL_WEIBO,
+            Api.LoginChannel.CHANNEL_DOUYIN,
+        };
+        Api.EnableThirdChannel(channels);
     }
-
+    
     private void OnInitializeSuccess()
     {
         Api.Login();
@@ -65,6 +73,15 @@ public class FbSdkDemo : MonoBehaviour
                 LogProduct(product);
             }
         }
+    }
+    
+    public void ShareImage(int shareChannel)
+    {
+        string fileName = "share_img.png";
+        string path =
+            System.IO.Path.Combine(Application.persistentDataPath + fileName);
+        UnityEngine.ScreenCapture.CaptureScreenshot(fileName);
+        Api.Share(shareChannel, path,"", "");
     }
 
     private void LogProduct(Product product)

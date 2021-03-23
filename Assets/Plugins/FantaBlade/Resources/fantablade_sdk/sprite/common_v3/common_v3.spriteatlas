@@ -42,7 +42,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 349a763bc0fc44e46bc5f938ed6edaac, type: 3}
-    totalSpriteSurfaceArea: 114574
+    totalSpriteSurfaceArea: 147514
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -51,16 +51,20 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 4277e3f3346d85941bc59a692176ab2f, type: 3}
   - {fileID: 21300000, guid: cb985b04fb125af498351455459ca0a0, type: 3}
   - {fileID: 21300000, guid: a291f2c487ca3f54cbcadd8fefbee7e6, type: 3}
+  - {fileID: 21300000, guid: 9acb8d65301c501489b99a47bcbd1b0a, type: 3}
   - {fileID: 21300000, guid: 4c540c75e1ccafc4a88b5f3db1134a7b, type: 3}
   - {fileID: 21300000, guid: 854e66e5da14cdf4ba62fb118718073e, type: 3}
   - {fileID: 21300000, guid: d41157d6ba970274e8948ceafa90550a, type: 3}
   - {fileID: 21300000, guid: c8333487a8da26649811652323ea6582, type: 3}
   - {fileID: 21300000, guid: 2471d4973aca0cc46aa85c3004a39670, type: 3}
+  - {fileID: 21300000, guid: c1dc5588c5b3a844299c9a5ce4e4745d, type: 3}
   - {fileID: 21300000, guid: 7ae92bf8e81c8c942978a2204f36b4b2, type: 3}
   - {fileID: 21300000, guid: 274d9329ed8b31646990a437617ed6f9, type: 3}
   - {fileID: 21300000, guid: 153cdd4a3cfef1a44ad522effbdc843a, type: 3}
   - {fileID: 21300000, guid: 4907b4ea627aa8d45bc6a22ccd0e01f3, type: 3}
+  - {fileID: 21300000, guid: 815a441b8722c6f4294bccf110ae4a3e, type: 3}
   - {fileID: 21300000, guid: 2184ecdb3bd7dd74299b191935b2b45e, type: 3}
+  - {fileID: 21300000, guid: 0f827c3cbe46b2e4d92f9bdf8fb9c534, type: 3}
   - {fileID: 21300000, guid: bc60f61d926ea7c4380367d27e0923f7, type: 3}
   - {fileID: 21300000, guid: 4136229e50eccc247a2f1f3e6d6a3256, type: 3}
   m_PackedSpriteNamesToIndex:
@@ -69,16 +73,20 @@ SpriteAtlas:
   - ui_sdk_close
   - ui_sdk_btn_3
   - ui_sdk_type
+  - ssdk_oks_classic_qq
   - ui_sdk_speedlogin_dialog_bg
   - ui_sdk_btn_1
   - ui_sdk_return
   - ui_sdk_phone_dorp
   - ui_sdk_speedlogin
+  - ssdk_oks_classic_wechat
   - ui_sdk_accountregistration
   - ui_sdk_type_password_show
   - ui_sdk_btn_0
   - ui_sdk_btn_2
+  - douyin
   - ui_sdk_type_password_hide
+  - ssdk_oks_classic_sinaweibo
   - ui_sdk_type_clear
   - ui_sdk_accountlogin
   m_Tag: common_v3
