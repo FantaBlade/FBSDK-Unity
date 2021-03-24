@@ -21,18 +21,18 @@ public class FbSdkDemo : MonoBehaviour
         Api.PayCancel += OnPayCancel;
         Api.Init("44I1ucBEaIRvm4Re", true, PublishRegion.LocalDev);
 //        Api.Init("zsN9eQcEqcmWnBCT", true, PublishRegion.SoutheastAsia, null, true);
-        int[] channels = new[]
-        {
-            Api.LoginChannel.CHANNEL_WECHAT,
-            Api.LoginChannel.CHANNEL_QQ,
-            Api.LoginChannel.CHANNEL_WEIBO,
-            Api.LoginChannel.CHANNEL_DOUYIN,
-        };
-        Api.EnableThirdChannel(channels);
     }
     
     private void OnInitializeSuccess()
     {
+        int[] channels = new[]
+        {
+            Api.LoginChannel.CHANNEL_WECHAT,
+            Api.LoginChannel.CHANNEL_QQ,
+//            Api.LoginChannel.CHANNEL_WEIBO,
+            Api.LoginChannel.CHANNEL_DOUYIN,
+        };
+        Api.EnableThirdChannel(channels);
         Api.Login();
     }
 

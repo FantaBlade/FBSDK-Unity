@@ -118,7 +118,7 @@ namespace FantaBlade.Internal
         internal static IPaymentApi PaymentApi;
 
         public static void Init(string accessKeyId, bool showFloatingWindow,
-            PublishRegion publishRegion, bool enableSSDk = true)
+            PublishRegion publishRegion)
         {
             try
             {

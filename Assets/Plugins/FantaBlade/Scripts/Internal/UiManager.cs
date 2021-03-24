@@ -2,6 +2,7 @@
 using FantaBlade.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace FantaBlade.Internal
 {
@@ -110,6 +111,16 @@ namespace FantaBlade.Internal
         public void ShowNormalUI(int uiId, string resPath)
         {
             _uiRoot.gameObject.SetActive(true);
+            var scaler = _uiRoot.gameObject.GetComponent<CanvasScaler>();
+            if (Screen.orientation == UnityEngine.ScreenOrientation.Portrait ||
+                Screen.orientation == UnityEngine.ScreenOrientation.PortraitUpsideDown)
+            {
+                scaler.referenceResolution = new Vector2(1080, 1920);
+            }
+            else
+            {
+                scaler.referenceResolution = new Vector2(1920, 1080);
+            }
             // use mActiveUIStack find opened ui with uiId
             GameObject go = null;
             if (!mActiveUIs.ContainsKey(uiId))

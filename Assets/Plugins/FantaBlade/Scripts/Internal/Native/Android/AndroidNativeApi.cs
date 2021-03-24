@@ -1,3 +1,5 @@
+
+using System.Collections.Generic;
 #if UNITY_ANDROID
 using System;
 using UnityEngine;
@@ -9,6 +11,7 @@ namespace FantaBlade.Internal.Native
     {
         private static AndroidJavaObject _nativeApi;
         private ProductCollection _products;
+        private List<int> registerChannel = new List<int>();
 
         public void Init()
         {
@@ -52,6 +55,7 @@ namespace FantaBlade.Internal.Native
 
         public void RegisterChannel(int loginChannel, string appId, string weiboRedirectUrl = "")
         {
+            registerChannel.Add(loginChannel);
             _nativeApi.Call("registerChannel", loginChannel, appId, weiboRedirectUrl);
         }
 
@@ -79,6 +83,11 @@ namespace FantaBlade.Internal.Native
             }
 
             _nativeApi.Call("logout");
+        }
+        
+        public bool IsChannelRegister(int loginChannel)
+        {
+            return registerChannel.Contains(loginChannel);
         }
 
         public void Pay(string productId)

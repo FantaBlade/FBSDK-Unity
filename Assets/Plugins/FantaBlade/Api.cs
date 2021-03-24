@@ -42,6 +42,7 @@ namespace FantaBlade
             public const int CHANNEL_WEIBO = 3;
             public const int CHANNEL_DOUYIN = 4;
             public const int CHANNEL_ALIPAY = 5;
+            public const int CHANNEL_APPLE = 6;
         }
 
         // 第三方分享
@@ -88,6 +89,20 @@ namespace FantaBlade
             {
                 return QuickSDK.getInstance().channelName();
             }
+#if UNITY_ANDROID
+            try {
+                AndroidJavaObject context = new AndroidJavaClass ("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject> ("currentActivity"); //获得Context
+                using (var actClass = new AndroidJavaClass("com.mcxiaoke.packer.helper.PackerNg")) {
+                    String channel = actClass.CallStatic<String>("getChannel",context);
+                    if (!string.IsNullOrEmpty(channel))
+                        return channel;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error("GetChannel " + e.ToString());
+            }
+#endif
             return Channel;
         }
         public static int GetChannelType()
@@ -173,7 +188,7 @@ namespace FantaBlade
         /// <param name="showFloatingWindow">显示悬浮窗</param>
         /// <param name="publishRegion">发行区域</param>
         public static void Init(string accessKey, bool showFloatingWindow = true,
-            PublishRegion publishRegion = PublishRegion.China, bool enableSSDK = true)
+            PublishRegion publishRegion = PublishRegion.China)
         {
             // if (Channel.Equals("Quick"))
             // {
@@ -181,7 +196,7 @@ namespace FantaBlade
             // }
             // else
             // {
-                SdkManager.Init(accessKey, showFloatingWindow, publishRegion, enableSSDK);
+                SdkManager.Init(accessKey, showFloatingWindow, publishRegion);
             // }
         }
 
@@ -231,7 +246,7 @@ namespace FantaBlade
         ///     登陆账号，获取token
         /// </summary>
         /// <param name="forceShowUi">强制显示UI，不使用缓存token</param>
-        public static void Login(bool forceShowUi = false)
+        public static void Login(bool forceShowUi = false, bool useQuickLoginFirstTime = false)
         {
             Debug.Log("onlogin");
             if (!IsInitialized) return;
@@ -247,7 +262,7 @@ namespace FantaBlade
             }
             else
             {
-                SdkManager.Auth.LoginByCache();
+                SdkManager.Auth.LoginByCache(useQuickLoginFirstTime);
             }
         }
         

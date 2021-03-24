@@ -13,5 +13,7 @@ namespace FantaBlade.Internal.Native
         bool IsInstall(int loginChannel);
 
         void Logout();
+
+        bool IsChannelRegister(int loginChannel);
     }
 }

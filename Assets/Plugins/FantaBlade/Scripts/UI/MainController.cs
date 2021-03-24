@@ -13,6 +13,11 @@ namespace FantaBlade.UI
 		[SerializeField] private InputField _password;
 		[SerializeField] private List<Window> _windowsList;
 		[SerializeField] private WindowType _initWindowType;
+		[SerializeField] private GameObject wechatBtn;
+		[SerializeField] private GameObject qqBtn;
+		[SerializeField] private GameObject weiboBtn;
+		[SerializeField] private GameObject douyinBtn;
+		[SerializeField] private GameObject appleBtn;
         
 		private bool _isLoggingIn;
 		private readonly Dictionary<WindowType, Window> _windowsDict= new Dictionary<WindowType, Window>();
@@ -30,8 +35,31 @@ namespace FantaBlade.UI
 					CloseWindow(window);
 				}
 			}
-
+			// init third login
+			InitThirdLogin();
 			OpenWindow(_initWindowType);
+		}
+
+		private void SetBtnActive(GameObject go, int loginChannel)
+		{
+			if (null == go)
+			{
+				return;
+			}
+			var active = SdkManager.NativeApi.IsChannelRegister(loginChannel);
+			#if UNITY_IOS
+			active = active && SdkManager.NativeApi.IsInstall(loginChannel);
+			#endif
+			go.SetActive(active);
+		}
+		
+		public void InitThirdLogin()
+		{
+			SetBtnActive(appleBtn, Api.LoginChannel.CHANNEL_APPLE);
+			SetBtnActive(wechatBtn, Api.LoginChannel.CHANNEL_WECHAT);
+			SetBtnActive(qqBtn, Api.LoginChannel.CHANNEL_QQ);
+			SetBtnActive(weiboBtn, Api.LoginChannel.CHANNEL_WEIBO);
+			SetBtnActive(douyinBtn, Api.LoginChannel.CHANNEL_DOUYIN);
 		}
 
 		public void OnLoginClick()

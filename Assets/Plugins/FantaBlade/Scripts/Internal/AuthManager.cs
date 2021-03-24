@@ -80,6 +80,10 @@ namespace FantaBlade.Internal
 
         public void QuickLogin()
         {
+            if (SdkManager.Auth.IsLoggingIn)
+            {
+                return;
+            }
             var deviceUniqueIdentifier = SystemInfo.deviceUniqueIdentifier;
             if (deviceUniqueIdentifier == SystemInfo.unsupportedIdentifier)
             {
@@ -96,11 +100,18 @@ namespace FantaBlade.Internal
             PlatformApi.User.QuickLogin.Post(form, OnLoginCallback);
         }
 
-        public void LoginByCache()
+        public void LoginByCache(bool useQuickLoginFirst = false)
         {
             if (string.IsNullOrEmpty(Token))
             {
-                SdkManager.Ui.ShowLogin();
+                if (useQuickLoginFirst)
+                {
+                    QuickLogin();
+                }
+                else
+                {
+                    SdkManager.Ui.ShowLogin();
+                }
             }
             else
             {
@@ -262,14 +273,14 @@ namespace FantaBlade.Internal
             PlatformApi.User.GetCertification.Get((err, meta, resp) =>
             {
                 IsVerify = (err == null && resp.code == 0 && !resp.antiIndulgence);
-                if (!IsVerify)
-                {
-                    SdkManager.Ui.ShowNormalUI(NormalUIID.VerifyAge);
-                }
-                else
+                if (IsVerify)
                 {
                     Age = resp.age;
                 }
+                // else
+                // {
+                //     SdkManager.Ui.ShowNormalUI(NormalUIID.VerifyAge);
+                // }
             });
         }
 
