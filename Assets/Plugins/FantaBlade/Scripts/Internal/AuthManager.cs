@@ -463,7 +463,6 @@ namespace FantaBlade.Internal
 
         public void OnSDKLoginFinish(bool success, string authCode)
         {
-            Log.Error("OnSDKLoginFinish:" + authCode + " channel:" + curLoginChannel);
             if (success)
             {
                 // 使用authcode换取平台服token
