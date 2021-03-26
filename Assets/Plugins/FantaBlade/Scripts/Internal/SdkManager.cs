@@ -147,6 +147,7 @@ namespace FantaBlade.Internal
 #elif UNITY_IOS && !UNITY_EDITOR
                 NativeApi  = new iOSNativeApi();
                 PaymentApi = new UnityIapPaymentApi();
+                NativeApi?.Init();
 #else
                 PaymentApi = new StubPaymentApi();
                 NativeApi = new StubNativeApi();

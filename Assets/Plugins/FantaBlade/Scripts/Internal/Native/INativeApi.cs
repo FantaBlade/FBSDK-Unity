@@ -4,6 +4,8 @@ namespace FantaBlade.Internal.Native
 {
     internal interface INativeApi
     {
+        void Init();
+        
         void RegisterChannel(int loginChannel, string appId, string weiboRedirectUrl);
 
         void Login(int loginChannel);

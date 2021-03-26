@@ -8,6 +8,10 @@ namespace FantaBlade.Internal.Native
     {
         private List<int> registerChannel = new List<int>();
 
+        public void Init()
+        {
+        }
+
         public void RegisterChannel(int loginChannel, string appId, string weiboRedirectUrl)
         {
             registerChannel.Add(loginChannel);
