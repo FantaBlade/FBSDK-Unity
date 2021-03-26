@@ -9,6 +9,7 @@
 #import "FBSDKAppleLogin.h"
 #import "WXApiManager.h"
 #import "DouYinApiManager.h"
+#import "WeiboApiManager.h"
 
 static int const LOGIN_WECHAT = 1;
 static int const LOGIN_QQ = 2;
@@ -74,6 +75,8 @@ DelegateCallbackFunction logoutCBF = NULL;
             return TRUE;//[[DouYinApiManager sharedManager] isInstalled];
         case LOGIN_APPLE:
             return TRUE;
+        case LOGIN_WEIBO:
+            return [[WeiboApiManager sharedManager] isInstalled];
         default:
             break;
     }
@@ -83,7 +86,7 @@ DelegateCallbackFunction logoutCBF = NULL;
 - (void)share:(int)channel
       imgPath:(NSString*)imagePath
         Title:(NSString*)title
-         Desc:(NSString*)des;{
+         Desc:(NSString*)des{
     switch (channel) {
         case SHARE_WECHAT_SESSION:
             [[WXApiManager sharedManager] sendImageData:imagePath Title:title Description:des AtScene:WXSceneSession];
@@ -92,7 +95,7 @@ DelegateCallbackFunction logoutCBF = NULL;
             [[WXApiManager sharedManager] sendImageData:imagePath Title:title Description:des AtScene:WXSceneTimeline];
             break;
         case SHARE_WEIBO:
-            
+            [[WeiboApiManager sharedManager] shareImage:imagePath Title:title Desc:des];
             break;
         default:
             break;
@@ -116,7 +119,7 @@ DelegateCallbackFunction logoutCBF = NULL;
         case LOGIN_APPLE:
             break;
         case LOGIN_WEIBO:
-            
+            [[WeiboApiManager sharedManager] registerApp:appId redirectUrl:url];
             break;
         default:
             break;

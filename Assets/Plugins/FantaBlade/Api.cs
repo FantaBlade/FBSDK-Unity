@@ -218,7 +218,11 @@ namespace FantaBlade
                         break;
                     case LoginChannel.CHANNEL_WEIBO:
                         appId = WEIBO_APPID;
+                        #if UNITY_ANDROID
                         weiboUrl = WEIBO_REDIRECTURL;
+                        #else
+                        weiboUrl = WECHAT_UNIVERSAL_LINK;
+                        #endif
                         break;
                     case LoginChannel.CHANNEL_DOUYIN:
                         appId = DOUYIN_CLIENTKEY;

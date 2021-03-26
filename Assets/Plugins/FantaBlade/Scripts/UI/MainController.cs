@@ -57,8 +57,8 @@ namespace FantaBlade.UI
 		{
 			SetBtnActive(appleBtn, Api.LoginChannel.CHANNEL_APPLE);
 			SetBtnActive(wechatBtn, Api.LoginChannel.CHANNEL_WECHAT);
-			SetBtnActive(qqBtn, Api.LoginChannel.CHANNEL_QQ);
-			SetBtnActive(weiboBtn, Api.LoginChannel.CHANNEL_WEIBO);
+			// SetBtnActive(qqBtn, Api.LoginChannel.CHANNEL_QQ);
+			// SetBtnActive(weiboBtn, Api.LoginChannel.CHANNEL_WEIBO);
 			SetBtnActive(douyinBtn, Api.LoginChannel.CHANNEL_DOUYIN);
 		}
 

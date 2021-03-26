@@ -29,7 +29,7 @@ public class FbSdkDemo : MonoBehaviour
         {
             Api.LoginChannel.CHANNEL_WECHAT,
             Api.LoginChannel.CHANNEL_QQ,
-//            Api.LoginChannel.CHANNEL_WEIBO,
+            Api.LoginChannel.CHANNEL_WEIBO,
             Api.LoginChannel.CHANNEL_DOUYIN,
             Api.LoginChannel.CHANNEL_APPLE,
         };
@@ -82,7 +82,7 @@ public class FbSdkDemo : MonoBehaviour
         string path =
             System.IO.Path.Combine(Application.persistentDataPath, fileName);
         UnityEngine.ScreenCapture.CaptureScreenshot(fileName);
-        Api.Share(shareChannel, path,"", "");
+        Api.Share(5, path,"", "");
     }
 
     private void LogProduct(Product product)
