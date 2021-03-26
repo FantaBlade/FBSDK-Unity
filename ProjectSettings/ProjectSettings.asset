@@ -159,6 +159,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.fantablade.watergun
     iOS: com.fantablade.watergun
+    iPhone: com.fantablade.watergun
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 19
@@ -228,7 +229,9 @@ PlayerSettings:
   iOSUseLaunchScreenStoryboard: 0
   iOSLaunchScreenCustomStoryboardPath: 
   iOSDeviceRequirements: []
-  iOSURLSchemes: []
+  iOSURLSchemes:
+  - wxeacc4ec2f2d5f24e
+  - awr89o05lcbk46n2
   iOSBackgroundModes: 0
   iOSMetalForceHardShadows: 0
   metalEditorSupport: 1

@@ -135,6 +135,11 @@ namespace FantaBlade.UI
 			SdkManager.Auth.LoginThird(Api.LoginChannel.CHANNEL_DOUYIN);
 		}
 
+		public void AppleLogin()
+		{
+			SdkManager.Auth.LoginThird(Api.LoginChannel.CHANNEL_APPLE);
+		}
+
 		private void CloseWindow(Window window)
 		{
 			if (window)

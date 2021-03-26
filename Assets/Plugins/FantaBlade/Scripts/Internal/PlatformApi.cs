@@ -336,7 +336,7 @@ namespace FantaBlade.Internal
             public static readonly WebRequest<TempTicketResponse> RequestVacodeValidate = Prefix + "vacode/validate";
             public static readonly WebRequest<Response> RequestActivation = Prefix + "activation";
             public static readonly WebRequest<Response> RequestActicationValidate = Prefix + "activation/validate";
-            public static readonly WebRequest<TokenResponse> LoginThird = Prefix + "thirdLogin";
+            public static readonly WebRequest<TokenResponse> LoginThird = Prefix + "thirdlogin";
 
         }
 

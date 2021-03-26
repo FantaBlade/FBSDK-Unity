@@ -31,6 +31,7 @@ public class FbSdkDemo : MonoBehaviour
             Api.LoginChannel.CHANNEL_QQ,
 //            Api.LoginChannel.CHANNEL_WEIBO,
             Api.LoginChannel.CHANNEL_DOUYIN,
+            Api.LoginChannel.CHANNEL_APPLE,
         };
         Api.EnableThirdChannel(channels);
         Api.Login();
@@ -79,7 +80,7 @@ public class FbSdkDemo : MonoBehaviour
     {
         string fileName = "share_img.png";
         string path =
-            System.IO.Path.Combine(Application.persistentDataPath + fileName);
+            System.IO.Path.Combine(Application.persistentDataPath, fileName);
         UnityEngine.ScreenCapture.CaptureScreenshot(fileName);
         Api.Share(shareChannel, path,"", "");
     }

@@ -55,6 +55,7 @@ namespace FantaBlade
         }
         
         public const string WECHAT_APPID = "wxeacc4ec2f2d5f24e";
+        public const string WECHAT_UNIVERSAL_LINK = "https://watergun.hotfix.huanrengame.com/fbsdk/";
         public const string WEIBO_APPID = "1858163759";
         public const string WEIBO_REDIRECTURL = "https://www.fantablade.com/phantomoon/index";
         public const string QQ_APPID = "";
@@ -210,6 +211,7 @@ namespace FantaBlade
                 {
                     case LoginChannel.CHANNEL_WECHAT:
                         appId = WECHAT_APPID;
+                        weiboUrl = WECHAT_UNIVERSAL_LINK;
                         break;
                     case LoginChannel.CHANNEL_QQ:
                         appId = QQ_APPID;

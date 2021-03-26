@@ -23,6 +23,8 @@ namespace FantaBlade.Internal.Native
         [DllImport("__Internal")]
         private static extern void login(int channel);
         [DllImport("__Internal")]
+        private static extern void logout();
+        [DllImport("__Internal")]
         private static extern void share(int channel,string imagePath, string title, string desc);
         [DllImport("__Internal")]
         private static extern void registerThirdApp(int channel, string appId, string weiboRedirectUrl);
@@ -69,7 +71,8 @@ namespace FantaBlade.Internal.Native
         
         public void RegisterChannel(int loginChannel, string appId, string weiboRedirectUrl)
         {
-            register(loginChannel, appId, weiboRedirectUrl);
+            registerChannel.Add(loginChannel);
+            registerThirdApp(loginChannel, appId, weiboRedirectUrl);
         }
 
         public void Login(int loginChannel)
@@ -89,14 +92,14 @@ namespace FantaBlade.Internal.Native
 
         public void Logout()
         {
-            Debug.Log("StubNativeApi");
+            logout();
         }
 
         public bool IsChannelRegister(int loginChannel)
         {
             return registerChannel.Contains(loginChannel);
         }
-        
+
         private static void RunOnMonoThread(Action act)
         {
             SdkManager.MonoUpdate.RunOnMonoThread(act);
