@@ -13,29 +13,29 @@ namespace FantaBlade.Internal.Native
         private delegate void DelegateMessage(string token, bool success);
         
         [DllImport("__Internal")]
-        private static extern void setLoginDelegate(DelegateMessage callback);
+        private static extern void fbsdk_setLoginDelegate(DelegateMessage callback);
         [DllImport("__Internal")]
-        private static extern void setShareDelegate(DelegateMessage callback);
+        private static extern void fbsdk_setShareDelegate(DelegateMessage callback);
         [DllImport("__Internal")]
-        private static extern void setLogoutDelegate(DelegateMessage callback);
+        private static extern void fbsdk_setLogoutDelegate(DelegateMessage callback);
         [DllImport("__Internal")]
-        private static extern bool isInstalled(int channel);
+        private static extern bool fbsdk_isInstalled(int channel);
         [DllImport("__Internal")]
-        private static extern void login(int channel);
+        private static extern void fbsdk_login(int channel);
         [DllImport("__Internal")]
-        private static extern void logout();
+        private static extern void fbsdk_logout();
         [DllImport("__Internal")]
-        private static extern void share(int channel,string imagePath, string title, string desc);
+        private static extern void fbsdk_share(int channel,string imagePath, string title, string desc);
         [DllImport("__Internal")]
-        private static extern void registerThirdApp(int channel, string appId, string weiboRedirectUrl);
+        private static extern void fbsdk_registerThirdApp(int channel, string appId, string weiboRedirectUrl);
         
         private List<int> registerChannel = new List<int>();
 
         public void Init()
         {
-            setLoginDelegate(DelegateLoginMessageCallback);
-            setShareDelegate(DelegateShareMessageCallback);
-            setLogoutDelegate(DelegateLogoutMessageCallback);
+            fbsdk_setLoginDelegate(DelegateLoginMessageCallback);
+            fbsdk_setShareDelegate(DelegateShareMessageCallback);
+            fbsdk_setLogoutDelegate(DelegateLogoutMessageCallback);
         }
 
         [MonoPInvokeCallback(typeof(DelegateMessage))]
@@ -72,27 +72,27 @@ namespace FantaBlade.Internal.Native
         public void RegisterChannel(int loginChannel, string appId, string weiboRedirectUrl)
         {
             registerChannel.Add(loginChannel);
-            registerThirdApp(loginChannel, appId, weiboRedirectUrl);
+            fbsdk_registerThirdApp(loginChannel, appId, weiboRedirectUrl);
         }
 
         public void Login(int loginChannel)
         {
-            login(loginChannel);
+            fbsdk_login(loginChannel);
         }
 
         public void Share(int shareChannel, string imagePath, string title, string desc)
         {
-            share(shareChannel, imagePath, title, desc);
+            fbsdk_share(shareChannel, imagePath, title, desc);
         }
 
         public bool IsInstall(int loginChannel)
         {
-            return isInstalled(loginChannel);
+            return fbsdk_isInstalled(loginChannel);
         }
 
         public void Logout()
         {
-            logout();
+            fbsdk_logout();
         }
 
         public bool IsChannelRegister(int loginChannel)
