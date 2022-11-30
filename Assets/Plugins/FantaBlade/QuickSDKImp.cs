@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System;
+using FantaBlade;
+using FantaBlade.Internal;
 
 namespace quicksdk
 {
@@ -147,6 +149,7 @@ namespace quicksdk
 			quicksdk_nativeLogin();
 #elif UNITY_ANDROID && !UNITY_EDITOR
 			QuickUnitySupportAndroid androidSupport = QuickUnitySupportAndroid.getInstance();
+			EventHandle.showLog("QuickSdk login ", "msg");
 			androidSupport.login();
 #endif
 		}
@@ -232,7 +235,7 @@ namespace quicksdk
 			
 		}
 
-		public bool isFunctionSupported(FuncType type)//1暂停游戏,2进入用户中心,3进入论坛,4处理应用跳转(旧),5显示浮动工具栏,6隐藏浮动工具栏,7处理应用跳转(新)
+		public bool isFunctionSupported(FuncType type)//1暂停游戏,2进入用户中心,3进入论坛,4处理应用跳转(旧),5显示浮动工具栏,6隐藏浮动工具栏,7处理应用跳转(新),8实名认证
 		{
 #if UNITY_IOS && UNITY_EDITOR_NONE
 			switch (type) {
@@ -283,6 +286,9 @@ namespace quicksdk
 				return;
 			case FuncType.QUICK_SDK_FUNC_TYPE_ENTER_CUSTOMER_CENTER:
 				quicksdk_nativeEnterCustomerCenter();
+				return;
+			case FuncType.QUICK_SDK_FUNC_TYPE_REAL_NAME_REGISTER;
+				quicksdk_nativeRealNameAuth(1);
 				return;
 			default:
 				return;
@@ -444,7 +450,20 @@ namespace quicksdk
 			#endif
 			
 		}
-		
+
+        public int getParentChannelType()//geParentChannelCode
+        {
+        #if UNITY_IOS && !UNITY_EDITOR
+			return 0;
+        #elif UNITY_ANDROID && !UNITY_EDITOR
+			QuickUnitySupportAndroid androidSupport = QuickUnitySupportAndroid.getInstance();
+			return androidSupport.getParentChannelTpye();
+        #else
+            return 0;
+        #endif
+
+        }
+
 		#if UNITY_IOS && UNITY_EDITOR_NONE
 		[DllImport("__Internal")]
 		private static extern void quicksdk_nativeSetListener(string gameObjectName);
@@ -452,6 +471,8 @@ namespace quicksdk
 		private static extern void quicksdk_nativeLogin();
 		[DllImport("__Internal")]
 		private static extern void quicksdk_nativeLogout();
+		[DllImport("__Internal")]
+		private static extern void quicksdk_nativeRealNameAuth(int show);
 		[DllImport("__Internal")]
 		private static extern void quicksdk_nativePay(string goodsId, string goodsName, string goodsDesc, string quantifier, string cpOrderId, string callbackUrl, string extrasParams, double price, double amount, int count,
 		                                              string serverId, string serverName, string gameRoleName, string gameRoleId, string gameRoleBalance, string vipLevel, string gameRoleLevel, string partyName);
@@ -759,6 +780,11 @@ namespace quicksdk
             ao.Call("exitGame");
         }
 
+        public int getParentChannelTpye()
+        {
+            return ao.Call<int>("getParentChannelType");
+
+        }
 
 
 

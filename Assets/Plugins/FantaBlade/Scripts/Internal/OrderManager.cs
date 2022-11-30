@@ -91,9 +91,9 @@ namespace FantaBlade.Internal
                                         item.Payouts.Select(payout =>
                                             new PayoutDefinition((PayoutType) payout.type, payout.subtype,
                                                 payout.quantity))),
-                                    new ProductMetadata("¥" + XiaomiPriceTierPrices[item.xiaomiPriceTier].ToString(),
+                                    new ProductMetadata("¥" + ((int)(item.Payouts[0].quantity / 10)).ToString(),
                                         item.defaultDescription.Title, item.defaultDescription.Description, "CNY",
-                                        XiaomiPriceTierPrices[item.xiaomiPriceTier])
+                                        (int)(item.Payouts[0].quantity / 10))
                                 });
                         })
                     .ToArray()

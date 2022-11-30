@@ -31,14 +31,14 @@
 extern "C"{
 #endif
 typedef void (*DelegateCallbackFunction) (const char* token, bool success);
-void setLoginDelegate(DelegateCallbackFunction callback);
-void setShareDelegate(DelegateCallbackFunction callback);
-void setLogoutDelegate(DelegateCallbackFunction callback);
-bool isInstalled(int channel);
-void login(int channel);
-void logout();
-void share(int channel, const char* imagePath, const char* title, const char* desc);
-void registerThirdApp(int channel, const char* appId, const char* weiboRedirectUrl);
+void fbsdk_setLoginDelegate(DelegateCallbackFunction callback);
+void fbsdk_setShareDelegate(DelegateCallbackFunction callback);
+void fbsdk_setLogoutDelegate(DelegateCallbackFunction callback);
+bool fbsdk_isInstalled(int channel);
+void fbsdk_login(int channel);
+void fbsdk_logout();
+void fbsdk_share(int channel, const char* imagePath, const char* title, const char* desc);
+void fbsdk_registerThirdApp(int channel, const char* appId, const char* weiboRedirectUrl);
 #ifdef __cplusplus
 }
 #endif

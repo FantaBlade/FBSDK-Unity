@@ -108,6 +108,10 @@ namespace quicksdk
 		{
 			return QuickSDKImp.getInstance ().channelType ();
 		}
+        public int parentChannelType()
+        {
+            return QuickSDKImp.getInstance().getParentChannelType();
+        }
 		public string SDKVersion()      //QuickSDK版本
 		{
 			return QuickSDKImp.getInstance ().SDKVersion ();   

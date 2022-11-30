@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using FantaBlade.Internal.Native;
 using UnityEngine;
 
@@ -106,6 +107,7 @@ namespace FantaBlade.Internal
         public static readonly LocalizeManager Localize = new LocalizeManager();
         public static readonly ShareManager Share = new ShareManager();
         public static readonly MonoUpdateManager MonoUpdate = new MonoUpdateManager();
+        private List<int> hideLoginChannels = new List<int>();
 
         /// <summary>
         ///     原生层 API
@@ -145,7 +147,9 @@ namespace FantaBlade.Internal
                     PaymentApi = new UnityIapPaymentApi();
                 }
 #elif UNITY_IOS && !UNITY_EDITOR
-                NativeApi  = new iOSNativeApi();
+                NativeApi = new iOSNativeApi();
+                Debug.Log("NativeApi = new iOSNativeApi");
+                Debug.Log(NativeApi != null);
                 PaymentApi = new UnityIapPaymentApi();
                 NativeApi?.Init();
 #else
@@ -180,8 +184,8 @@ namespace FantaBlade.Internal
                 }
                 else
                 {
-                    bool needRequestIpJson = PublishRegion == PublishRegion.SoutheastAsia;
-                    if (needRequestIpJson)
+                    bool isChinaNative = PublishRegion != PublishRegion.SoutheastAsia && PublishRegion != PublishRegion.TW;
+                    if (!isChinaNative)
                     {
                         PlatformApi.Util.GetIpJson.Get((err, info, response) =>
                         {
@@ -243,6 +247,23 @@ namespace FantaBlade.Internal
         public static bool IsUserAcceptLisense()
         {
             return 1 == PlayerPrefs.GetInt("user_accept_lisense", 0);
+        }
+
+        public void HideLoginChannel(int loginChannel, bool enable)
+        {
+            if (!enable)
+            {
+                hideLoginChannels.Add(loginChannel);
+            }
+            else
+            {
+                hideLoginChannels.Remove(loginChannel);
+            }
+        }
+
+        public bool IsLoginChannelEnable(int loginChannel)
+        {
+            return NativeApi!=null && NativeApi.IsChannelRegister(loginChannel) && !hideLoginChannels.Contains(loginChannel);
         }
 
         void Update()

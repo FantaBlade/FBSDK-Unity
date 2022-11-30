@@ -37,6 +37,7 @@ namespace FantaBlade
                 
         // 第三方登陆
         public static class LoginChannel {
+            public const int CHANNEL_OFFICIAL = 0;
             public const int CHANNEL_WECHAT = 1;
             public const int CHANNEL_QQ = 2;
             public const int CHANNEL_WEIBO = 3;
@@ -58,7 +59,7 @@ namespace FantaBlade
         public const string WECHAT_UNIVERSAL_LINK = "https://watergun.hotfix.huanrengame.com/fbsdk/";
         public const string WEIBO_APPID = "1858163759";
         public const string WEIBO_REDIRECTURL = "https://www.fantablade.com/phantomoon/index";
-        public const string QQ_APPID = "";
+        public const string QQ_APPID = "101940541";
         public const string DOUYIN_CLIENTKEY = "awr89o05lcbk46n2";
         
         #region API
@@ -76,7 +77,9 @@ namespace FantaBlade
     public static readonly string Channel = "Test3";
 #elif QUICK
     public static readonly string Channel = "Quick";
-#elif GOOGLE_PLAY
+#elif DOUYIN
+    public static readonly string Channel = "Douyin";
+#elif OFFICIALSEA
     public static readonly string Channel = "Google Play";
 #else
         public static readonly string Channel = "Official";
@@ -84,6 +87,11 @@ namespace FantaBlade
 #else
     public static readonly string Channel = "Unknown";
 #endif
+        public static int GetApiVersion()
+        {
+            return 1;
+        }
+
         public static string GetChannel()
         {
             if (Channel.Equals("Quick"))
@@ -91,6 +99,20 @@ namespace FantaBlade
                 return QuickSDK.getInstance().channelName();
             }
 #if UNITY_ANDROID
+#if DOUYIN
+            try {
+                AndroidJavaObject context = new AndroidJavaClass ("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject> ("currentActivity"); //获得Context
+                using (var actClass = new AndroidJavaClass("com.bytedance.hume.readapk.HumeSDK")) {
+                    String channel = actClass.CallStatic<String>("getChannel",context);
+                    if (!string.IsNullOrEmpty(channel))
+                        return channel;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Warning("GetChannel " + e.ToString());
+            }
+#elif !UNITY_EDITOR
             try {
                 AndroidJavaObject context = new AndroidJavaClass ("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject> ("currentActivity"); //获得Context
                 using (var actClass = new AndroidJavaClass("com.mcxiaoke.packer.helper.PackerNg")) {
@@ -101,8 +123,10 @@ namespace FantaBlade
             }
             catch (Exception e)
             {
-                Log.Error("GetChannel " + e.ToString());
+                Log.Warning("GetChannel " + e.ToString());
+                return Channel;
             }
+#endif
 #endif
             return Channel;
         }
@@ -191,22 +215,19 @@ namespace FantaBlade
         public static void Init(string accessKey, bool showFloatingWindow = true,
             PublishRegion publishRegion = PublishRegion.China)
         {
-            // if (Channel.Equals("Quick"))
-            // {
-            //     OnInitializeSuccess();
-            // }
-            // else
-            // {
-                SdkManager.Init(accessKey, showFloatingWindow, publishRegion);
-            // }
+// #if UNITY_IOS && !UNITY_EDITOR
+            // Unity.Advertisement.IosSupport.ATTrackingStatusBinding.RequestAuthorizationTracking();
+// #endif
+            SdkManager.Init(accessKey, showFloatingWindow, publishRegion);
         }
 
-        public static void EnableThirdChannel(int[] loginChannels)
+        public static void EnableThirdChannel(int[] loginChannels, string[] appIds)
         {
-            foreach (var channel in loginChannels)
+            for (int i = 0, max = loginChannels.Length; i < max; ++i)
             {
                 string appId = "";
                 string weiboUrl = "";
+                int channel = loginChannels[i];
                 switch (channel)
                 {
                     case LoginChannel.CHANNEL_WECHAT:
@@ -215,21 +236,28 @@ namespace FantaBlade
                         break;
                     case LoginChannel.CHANNEL_QQ:
                         appId = QQ_APPID;
+                        weiboUrl = Application.identifier+".fileprovider";
                         break;
                     case LoginChannel.CHANNEL_WEIBO:
                         appId = WEIBO_APPID;
-                        #if UNITY_ANDROID
+#if UNITY_ANDROID
                         weiboUrl = WEIBO_REDIRECTURL;
-                        #else
+#else
                         weiboUrl = WECHAT_UNIVERSAL_LINK;
-                        #endif
+#endif
                         break;
                     case LoginChannel.CHANNEL_DOUYIN:
                         appId = DOUYIN_CLIENTKEY;
                         break;
                 }
+                appId = string.IsNullOrEmpty(appIds[i]) ? appId : appIds[i];
                 RegisterChannel(channel, appId, weiboUrl);
             }
+        }
+
+        public static void HideLoginChannel(int loginChannel, bool enable)
+        {
+            SdkManager.Instance.HideLoginChannel(loginChannel, enable);
         }
 
         public static void OnStop()
@@ -284,7 +312,7 @@ namespace FantaBlade
 
         public static void RegisterChannel(int loginChannel, string appId, string weiboRedirectUrl = "")
         {
-            SdkManager.NativeApi.RegisterChannel(loginChannel, appId, weiboRedirectUrl);
+            SdkManager.NativeApi?.RegisterChannel(loginChannel, appId, weiboRedirectUrl);
         }
 
         public static void Feedback()

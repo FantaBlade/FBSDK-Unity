@@ -33,7 +33,18 @@ public class FbSdkDemo : MonoBehaviour
             Api.LoginChannel.CHANNEL_DOUYIN,
             Api.LoginChannel.CHANNEL_APPLE,
         };
-        Api.EnableThirdChannel(channels);
+        string[] channelAppIds = new[]
+        {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        };
+        Api.EnableThirdChannel(channels, channelAppIds);
         Api.Login();
     }
 
@@ -60,7 +71,7 @@ public class FbSdkDemo : MonoBehaviour
     public void Pay()
     {
         Api.OrderInfo orderInfo = new Api.OrderInfo();
-        orderInfo.id = "android.test.purchased";
+        orderInfo.id = "com.fantablade.watergun.currency_charge_1001";
         Api.Pay(orderInfo);
     }
 

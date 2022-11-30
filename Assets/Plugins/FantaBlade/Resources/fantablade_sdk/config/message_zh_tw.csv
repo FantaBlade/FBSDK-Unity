@@ -10,6 +10,8 @@ reject,拒 絕
 pay,支 付
 please_input_mobile_number,請輸入手機號碼
 please_input_password,請輸入密碼
+please_input_password_with_tips,密碼建議6位以上字母與數字
+please_input_username_with_tips,用戶名請以字母開頭且不小於6位
 login,登 錄
 account_login,帳號登錄
 register,註冊
@@ -25,8 +27,18 @@ please_input_validate_code,請輸入驗證碼
 get_verify_code,獲取驗證碼
 please_input_your_name,請輸入姓名
 please_input_id_card,請輸入有效身份證號
+confirm_account_formation,確認賬戶信息
+confirm_formation,確認信息
+confirm_cancel_account,確認註銷
+confirm_cancel_account_content,請在下框輸入“我確認註銷賬號”以完成註銷
+confirm_cancel_account_content2,我確認註銷賬號
+cancel_account_result,您的賬號註銷申請成功，賬號已凍結，賬號將於7日後註銷。 7日內登陸賬號會自動解除凍結狀態，取消註銷申請
+error_diff_text,與要求輸入文字不一致
 game_verify_name,實名登記
 game_verify_content,註冊信息只能提交一次，不可修改，請慎重填寫！
+cancel_account_content,註銷幻刃賬號是<color=#d6222eff>不可恢復的操作</color>，您所綁定的郵箱地址、手機號碼、第三方賬號也將會解除綁定。此外，您的所有幻刃遊戲記錄也將無法找回。幻刃賬號註銷申請一旦成功發起，您的幻刃賬號立即會被凍結。您可以在成功發起註銷申請之日起7個自然日內重新登錄幻刃賬號（例如幻刃遊戲、幻刃官網），您登錄之後會自動取消凍結狀態。您成功發起註銷申請之日起7個自然日後，註銷流程將會正式完成，您的幻刃賬號將不可恢復，也無法找回您幻刃賬號的任何信息或數據。如果您希望永久註銷您的賬號，請點擊下方的'註銷賬號'按鈕。
+cancel_account_title,明確條款
+cancel_account,註銷賬號
 next,下一步
 please_confirm_password,請確認密碼
 reset_password,重置密碼

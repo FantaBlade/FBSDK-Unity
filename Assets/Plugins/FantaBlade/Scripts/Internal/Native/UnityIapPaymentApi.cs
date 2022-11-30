@@ -7,8 +7,8 @@ namespace FantaBlade.Internal.Native
     {
         private IStoreController _controller;
         private IExtensionProvider _extensions;
-        private IAppleExtensions _appleExtensions;
-        private ITransactionHistoryExtensions _transactionHistoryExtensions;
+        // private IAppleExtensions _appleExtensions;
+        // private ITransactionHistoryExtensions _transactionHistoryExtensions;
 
         private bool _purchaseInProgress;
 
@@ -61,9 +61,9 @@ namespace FantaBlade.Internal.Native
         {
             _controller = controller;
             _extensions = extensions;
-            _appleExtensions = extensions.GetExtension<IAppleExtensions>();
-            _transactionHistoryExtensions = extensions.GetExtension<ITransactionHistoryExtensions>();
-            _appleExtensions.RegisterPurchaseDeferredListener(OnDeferred);
+            // _appleExtensions = extensions.GetExtension<IAppleExtensions>();
+            // _transactionHistoryExtensions = extensions.GetExtension<ITransactionHistoryExtensions>();
+            // _appleExtensions.RegisterPurchaseDeferredListener(OnDeferred);
             foreach (var item in controller.products.all)
             {
                 if (item.availableToPurchase)
@@ -130,13 +130,13 @@ namespace FantaBlade.Internal.Native
         {
             Log.Info("Purchase failed: " + item.definition.id);
             // Detailed debugging information
-            Log.Info("Store specific error code: " +
-                     _transactionHistoryExtensions.GetLastStoreSpecificPurchaseErrorCode());
-            if (_transactionHistoryExtensions.GetLastPurchaseFailureDescription() != null)
-            {
-                Log.Info("Purchase failure description message: " +
-                         _transactionHistoryExtensions.GetLastPurchaseFailureDescription().message);
-            }
+            // Log.Info("Store specific error code: " +
+            //          _transactionHistoryExtensions.GetLastStoreSpecificPurchaseErrorCode());
+            // if (_transactionHistoryExtensions.GetLastPurchaseFailureDescription() != null)
+            // {
+            //     Log.Info("Purchase failure description message: " +
+            //              _transactionHistoryExtensions.GetLastPurchaseFailureDescription().message);
+            // }
 
             _purchaseInProgress = false;
 

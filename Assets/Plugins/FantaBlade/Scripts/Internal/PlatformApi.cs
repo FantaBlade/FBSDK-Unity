@@ -20,7 +20,7 @@ namespace FantaBlade.Internal
                     {
                         {"UserCenterHost", "http://www.fantablade.cn/"},
                         {"ApiHost", "api.fantablade.cn"},
-                        {"ApiHost2", "api.fantablade.cn"},
+                        {"ApiHost2", "api-protect.fantablade.cn"},
                         {"ApiVersion", "v0.1"},
                         {"Protocol", "http"},
                         {"ApiIp", "172.26.194.121"}
@@ -34,7 +34,18 @@ namespace FantaBlade.Internal
                         {"ApiHost2", "api.protect.fantablade.com"},
                         {"ApiVersion", "v1"},
                         {"Protocol", "https"},
-                        {"ApiIp", "106.14.169.198"}
+                        {"ApiIp", "127.0.0.1"}
+                    }
+                },
+                {
+                    PublishRegion.TW, new Dictionary<string, string>
+                    {
+                        {"UserCenterHost", "https://tw.fantablade.com/"},
+                        {"ApiHost", "api.tw.fantablade.com"},
+                        {"ApiHost2", "api.tw.fantablade.com"},
+                        {"ApiVersion", "v1"},
+                        {"Protocol", "https"},
+                        {"ApiIp", "127.0.0.1"}
                     }
                 },
                 {
@@ -45,7 +56,7 @@ namespace FantaBlade.Internal
                         {"ApiHost2", "api.sea.fantablade.com"},
                         {"ApiVersion", "v1"},
                         {"Protocol", "https"},
-                        {"ApiIp", "47.254.201.119"}
+                        {"ApiIp", "127.0.0.1"}
                     }
                 }
             };
@@ -208,7 +219,7 @@ namespace FantaBlade.Internal
                 var uri = GetUri();
                 var request = method == RequestMethod.Post ? UnityWebRequest.Post(uri.AbsoluteUri, form):UnityWebRequest.Get(uri.AbsoluteUri);
                 // Log.Debug("AccessKeyId:"+SdkManager.AccessKeyId);
-                Log.Debug("Authorization:"+SdkManager.Auth.Token);
+                // Log.Debug("Authorization:"+SdkManager.Auth.Token);
                 request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
                 if (SdkManager.Auth.Token != null) request.SetRequestHeader("Authorization", SdkManager.Auth.Token);
                 request.timeout = 5;
@@ -216,7 +227,11 @@ namespace FantaBlade.Internal
                 if (request.isNetworkError)
                 {
                     SwitchApiHost();
+#if UNITY_EDITOR
                     Log.Error(string.Format("url: {0} {1}", request.url, request.error));
+#else
+                    Log.Warning(string.Format("url: {0} {1}", request.url, request.error));
+#endif
                     uri = GetUri();
                     request = method == RequestMethod.Post ? UnityWebRequest.Post(uri.AbsoluteUri, form):UnityWebRequest.Get(uri.AbsoluteUri);
                     request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
@@ -227,9 +242,13 @@ namespace FantaBlade.Internal
                 else if (request.isHttpError && request.responseCode == 404)
                 {
                     SwitchApiHost();
-                    Log.Error(string.Format("url: {0} {1} {2}\n{3}", request.url, request.responseCode, request.error,
+#if UNITY_EDITOR
+                    Log.Error(string.Format("url: {0} {1} {2}\n{3}\nAuthorization:{4}", request.url, request.responseCode, request.error,
+                        request.downloadHandler.text, SdkManager.Auth.Token));
+#else
+                    Log.Warning(string.Format("url: {0} {1} {2}\n{3}", request.url, request.responseCode, request.error,
                         request.downloadHandler.text));
-                    
+#endif
                     uri = GetUri();
                     request = method == RequestMethod.Post ? UnityWebRequest.Post(uri.AbsoluteUri, form):UnityWebRequest.Get(uri.AbsoluteUri);
                     request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
@@ -243,17 +262,23 @@ namespace FantaBlade.Internal
                 if (request.isNetworkError)
                 {
                     SwitchApiHost();
+#if UNITY_EDITOR
                     Log.Error(string.Format("url: {0} {1}", request.url, request.error));
+#else
+                    Log.Warning(string.Format("url: {0} {1}", request.url, request.error));
+#endif
                     err = request.error;
                 }
                 else if (request.isHttpError)
                 {
-                    if (request.responseCode == 404)
-                    {
-                        SwitchApiHost();
-                    }
+                    SwitchApiHost();
+#if UNITY_EDITOR
                     Log.Error(string.Format("url: {0} {1} {2}\n{3}", request.url, request.responseCode, request.error,
                         request.downloadHandler.text));
+#else
+                    Log.Warning(string.Format("url: {0} {1} {2}\n{3}", request.url, request.responseCode, request.error,
+                        request.downloadHandler.text));
+#endif
                     err = request.error;
                 }
                 else
@@ -287,6 +312,23 @@ namespace FantaBlade.Internal
                 */
                 return _protocol + "://" + _apiHost + "/" + _version;
             }
+            
+            private string GetCurrentPlatform()
+            {
+#if UNITY_ANDROID
+                return "Android";
+#elif UNITY_IOS
+                return "IOS";
+#elif UNITY_PS4
+                return "PS4";
+#elif UNITY_XBOXONE
+                return "XBox";
+#elif UNITY_STANDALONE || UNITY_WEBGL
+                return "PC";
+#else
+                return (Input.touchSupported ? "Touch" : "PC");
+#endif
+            }
 
             private Uri GetUri()
             {
@@ -298,7 +340,7 @@ namespace FantaBlade.Internal
                     }
                     else
                     {
-                        _uri = new Uri(string.Join("/", new[] {_apiUrl, _path})+"?lang="+SdkManager.Localize.GetLanguageName());
+                        _uri = new Uri(string.Join("/", new[] {_apiUrl, _path})+"?lang="+SdkManager.Localize.GetLanguageName()+"&ref="+GetCurrentPlatform());
                     }
                 }
                 if (_uri2 == null)
@@ -309,7 +351,7 @@ namespace FantaBlade.Internal
                     }
                     else
                     {
-                        _uri2 = new Uri(string.Join("/", new[] {_apiUrl2, _path})+"?lang="+SdkManager.Localize.GetLanguageName());
+                        _uri2 = new Uri(string.Join("/", new[] {_apiUrl2, _path})+"?lang="+SdkManager.Localize.GetLanguageName()+"&ref="+GetCurrentPlatform());
                     }
                 }
                 return _useBackup?_uri2:_uri;
@@ -325,7 +367,7 @@ namespace FantaBlade.Internal
             public static readonly WebRequest<TokenResponse> TouristUpgrade = Prefix + "bind/tourist";
             public static readonly WebRequest<CertificationInfoResponse> GetCertification = Prefix + "certification/fetch";
             public static readonly WebRequest<Response> VerifyAge = Prefix + "certification/update";
-            public static readonly WebRequest<AntiIndulgenceInfoResponse> GetAntiIndulgence = Prefix + "anti_indulgence";
+            // public static readonly WebRequest<AntiIndulgenceInfoResponse> GetAntiIndulgence = Prefix + "anti_indulgence";
             public static readonly WebRequest<TokenResponse> Login = Prefix + "login";
             public static readonly WebRequest<TokenResponse> QuickLogin = Prefix + "quicklogin";
             public static readonly WebRequest<TokenResponse> RefreshToken = Prefix + "refresh/token";
@@ -337,7 +379,10 @@ namespace FantaBlade.Internal
             public static readonly WebRequest<Response> RequestActivation = Prefix + "activation";
             public static readonly WebRequest<Response> RequestActicationValidate = Prefix + "activation/validate";
             public static readonly WebRequest<TokenResponse> LoginThird = Prefix + "thirdlogin";
-
+            public static readonly WebRequest<TokenResponse> CancelAccount = Prefix + "deleteUser";
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+            public static readonly WebRequest<Response> FakePay = "sandbox/order/app/pay";
+#endif
         }
 
         public static class Feedback

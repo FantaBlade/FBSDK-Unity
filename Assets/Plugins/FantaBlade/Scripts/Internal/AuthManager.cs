@@ -70,6 +70,7 @@ namespace FantaBlade.Internal
 
             if (err != null)
             {
+                SdkManager.Ui.ShowLogin();
                 SdkManager.Ui.Dialog.Show(err, "ok");
             }
             else
@@ -96,6 +97,7 @@ namespace FantaBlade.Internal
             {
                 {"uniqueDeviceId", deviceUniqueIdentifier}
             };
+            PlayerPrefs.SetInt("loginChannel", Api.LoginChannel.CHANNEL_OFFICIAL);
             SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.QuickLogin.Post(form, OnLoginCallback);
         }
@@ -133,6 +135,7 @@ namespace FantaBlade.Internal
         public void Login(string identifier, string password, string countryCode = "")
         {
             IsLoggingIn = true;
+            PlayerPrefs.SetInt("loginChannel", Api.LoginChannel.CHANNEL_OFFICIAL);
             var form = new Dictionary<string, string>
             {
                 {"countryCode", countryCode},
@@ -153,6 +156,18 @@ namespace FantaBlade.Internal
             };
             SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.LoginThird.Post(form, OnThirdLoginCallback);
+        }
+        public void CancelAccount(string name, string idcard, string mobile, string code, PlatformApi.WebRequest<PlatformApi.TokenResponse>.WebResponseEventHandler callback)
+        {
+            var form = new Dictionary<string, string>
+            {
+                {"mobile", mobile},
+                {"vacode", code},
+                {"realName", name},
+                {"idCard", idcard},
+            };
+            SdkManager.Ui.Dialog.ShowLoading();
+            PlatformApi.User.CancelAccount.Post(form, callback);
         }
 
         public void OnThirdLoginCallback(string err,
@@ -176,6 +191,7 @@ namespace FantaBlade.Internal
         {
             // 获取第三方access_token/auth_code
             curLoginChannel = channel;
+            PlayerPrefs.SetInt("loginChannel", channel);
             SdkManager.NativeApi.Login(curLoginChannel);
         }
 
@@ -471,6 +487,11 @@ namespace FantaBlade.Internal
             else if (authCode == "UserCancel")
             {
                 Api.OnLoginCancel();
+            }
+            else if (authCode == "iOSNotSupport")
+            {
+                SdkManager.Ui.Dialog.Show("系统版本不支持,请使用其他方式或升级系统", "ok");
+                Api.OnLoginFailure(authCode);
             }
             else
             {

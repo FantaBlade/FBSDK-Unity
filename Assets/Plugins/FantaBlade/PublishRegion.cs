@@ -16,6 +16,11 @@ namespace FantaBlade
         China,
 
         /// <summary>
+        ///     台湾
+        /// </summary>
+        TW,
+
+        /// <summary>
         ///     东南亚
         /// </summary>
         SoutheastAsia

@@ -46,7 +46,7 @@ namespace FantaBlade.UI
 			{
 				return;
 			}
-			var active = SdkManager.NativeApi.IsChannelRegister(loginChannel);
+			var active = SdkManager.Instance.IsLoginChannelEnable(loginChannel);
 			#if UNITY_IOS
 			active = active && SdkManager.NativeApi.IsInstall(loginChannel);
 			#endif
@@ -57,7 +57,7 @@ namespace FantaBlade.UI
 		{
 			SetBtnActive(appleBtn, Api.LoginChannel.CHANNEL_APPLE);
 			SetBtnActive(wechatBtn, Api.LoginChannel.CHANNEL_WECHAT);
-			// SetBtnActive(qqBtn, Api.LoginChannel.CHANNEL_QQ);
+			SetBtnActive(qqBtn, Api.LoginChannel.CHANNEL_QQ);
 			// SetBtnActive(weiboBtn, Api.LoginChannel.CHANNEL_WEIBO);
 			SetBtnActive(douyinBtn, Api.LoginChannel.CHANNEL_DOUYIN);
 		}

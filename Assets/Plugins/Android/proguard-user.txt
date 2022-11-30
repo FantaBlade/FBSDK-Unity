@@ -1,21 +1,56 @@
 -keep class com.tapdb.sdk.* { *; }
--keep class com.ta.utdid2.** { *;}
--keep class com.ut.device.** { *;}
--keep class com.tencent.mm.opensdk.** {
-*;
+-keep public class com.adjust.sdk.** { *; }
+-keep class com.netease.htprotect.** { *; }
+-keep class com.netease.mobsec.** { *; }
+-keep class com.unity.androidnotifications.** { *; }
+-keep class com.mcxiaoke.packer.helper.PackerNg { *; }
+-keep class com.bytedance.hume.readapk.HumeSDK { *; }
+-keep class com.bytedance.applog.** { *; }
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+-keep class cn.thinkingdata.android.** { *; }
+-keep class com.quicksdk.** { *; }
+-keep class com.qk.game.** { *; }
+-keep class com.asus.msa.SupplementaryDID.* { *; }
+-keep class com.asus.msa.sdid.* { *; }
+-keep class com.android.creator.* { *; }
+-keep class com.android.msasdk.* { *; }
+-keep class com.huawei.hms.ads.identifier.* { *; }
+-keep class com.zui.deviceidservice.* { *; }
+-keep class com.zui.opendeviceidlibrary.* { *; }
+-keep class com.meizu.flyme.openidsdk.* { *; }
+-keep class com.bun.miitmdid.provider.nubia.NubiaIdentityImpl
+-keep class com.heytap.openid.* { *; }
+-keep class com.samsung.android.deviceidservice.* { *; }
+-keep class com.vivo.identifier.* { *; }
+-keep class com.bun.miitmdid.provider.xiaomi.IdentifierManager
+-keep class com.bun.lib.* { *; }
+-keep class com.coolpad.deviceidsupport.* { *; }
+-keep class com.bun.miitmdid.core.** { *; }
+-keep class com.bun.miitmdid.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keep class com.google.android.play.core.** { *; }
+-keep class com.google.android.gms.common.ConnectionResult {
+    int SUCCESS;
 }
--keep class com.tencent.wxop.** {
-*;
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient {
+    com.google.android.gms.ads.identifier.AdvertisingIdClient$Info getAdvertisingIdInfo(android.content.Context);
 }
--keep class com.tencent.mm.sdk.** {
-*;
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info {
+    java.lang.String getId();
+    boolean isLimitAdTrackingEnabled();
 }
--keep class com.tencent.tauth.** {
-*;
-}
--keep class com.sina.weibo.sdk.auth.** {
-*;
-}
--keep class com.bytedance.sdk.open.aweme.** {
-*;
-}
+-keep public class com.android.installreferrer.**{ *; }
+-keep class com.adjust.**{*;}
+-keep class com.tencent.**{*;}
+-keep class com.anythink.**{*;}
+-keep class com.bytedance.**{*;}
+-keep class com.ss.**{*;}
+-keep class com.sina.**{*;}
+-flattenpackagehierarchy 'fanta'
+-repackageclasses 'fanta'
+-keep class tw.com.mycard.paymentsdk.**{*;}
+-keep class tw.com.mycard.sdk.libs.**{*;}
+-keep class tw.com.mycard.sdk.baseLib.**{*;}
+-keep class com.tds.tapdb.sdk.**{*;}
+-printconfiguration ../full-config.txt

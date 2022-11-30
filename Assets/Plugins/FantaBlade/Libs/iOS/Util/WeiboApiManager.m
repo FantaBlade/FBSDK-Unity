@@ -44,7 +44,7 @@
     WBImageObject *imageObj = [WBImageObject object];
     imageObj.delegate = self;
     _messageObject = [WBMessageObject message];
-    _messageObject.text = @"abc";
+    _messageObject.text = desc;
     _messageObject.imageObject = imageObj;
     imageObj.imageData = UIImagePNGRepresentation(image);
     [self realShare];

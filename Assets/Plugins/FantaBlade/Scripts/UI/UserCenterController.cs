@@ -9,12 +9,16 @@ namespace FantaBlade.UI
         [SerializeField] private Text _username;
         [SerializeField] private GameObject _touristUpgradeBtn;
         [SerializeField] private GameObject _verifyBtn;
+        [SerializeField] private GameObject _cancelBtn;
 
         private void OnEnable()
         {
             _touristUpgradeBtn.SetActive(SdkManager.Auth.IsTourist);
             _verifyBtn.SetActive(!SdkManager.Auth.IsTourist && !SdkManager.Auth.IsVerify);
             _username.text = SdkManager.Auth.Username;
+#if UNITY_IOS
+            _cancelBtn.SetActive(true);
+#endif
         }
 
         public void OnHide()
@@ -25,6 +29,11 @@ namespace FantaBlade.UI
         public void OnOpenProfile()
         {
             Application.OpenURL(PlatformApi.UserCenterHost + "auth?authToken=" + SdkManager.Auth.Token);
+        }
+
+        public void OnOpenCancelAccount()
+        {
+            SdkManager.Ui.ShowNormalUI(NormalUIID.CancelAccount);
         }
         
         public void OnOpenVerifyAge()

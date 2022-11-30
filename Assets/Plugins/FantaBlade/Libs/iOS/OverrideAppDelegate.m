@@ -2,6 +2,7 @@
 #import "WXApi.h"
 #import "WXApiManager.h"
 #import "DouYinOpenSDK/DouYinOpenSDKApplicationDelegate.h"
+#import "TencentOpenAPI/TencentOAuth.h"
 @interface OverrideAppDelegate : UnityAppController
 @end
 
@@ -22,6 +23,7 @@ IMPL_APP_CONTROLLER_SUBCLASS(OverrideAppDelegate)
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
+    [TencentOAuth HandleOpenURL:url];
     return [super application:application didFinishLaunchingWithOptions:@{}];
 }
 
@@ -29,6 +31,7 @@ IMPL_APP_CONTROLLER_SUBCLASS(OverrideAppDelegate)
 {
     [[DouyinOpenSDKApplicationDelegate sharedInstance] application:app openURL:url sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey] annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
     [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
+    [TencentOAuth HandleOpenURL:url];
     return [super application:app openURL:url options:options];
 }
 
@@ -36,6 +39,7 @@ IMPL_APP_CONTROLLER_SUBCLASS(OverrideAppDelegate)
 {
     [[DouyinOpenSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
     [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
+    [TencentOAuth HandleOpenURL:url];
     return [super application:application didFinishLaunchingWithOptions:@{}];
 }
 

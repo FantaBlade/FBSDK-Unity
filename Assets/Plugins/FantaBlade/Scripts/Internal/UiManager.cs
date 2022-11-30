@@ -16,6 +16,7 @@ namespace FantaBlade.Internal
         VerifyAge,
         Feedback,
         UserLicense,
+        CancelAccount,
     }
 
     public class NormalUIPath
@@ -38,6 +39,8 @@ namespace FantaBlade.Internal
                     return "fantablade_sdk/prefab/verify_age";
                 case NormalUIID.Feedback:
                     return "fantablade_sdk/prefab/feedback";
+                case NormalUIID.CancelAccount:
+                    return "fantablade_sdk/prefab/cancel_account";
                 case NormalUIID.UserLicense:
                     return "fantablade_sdk/prefab/user_license";
                 default:

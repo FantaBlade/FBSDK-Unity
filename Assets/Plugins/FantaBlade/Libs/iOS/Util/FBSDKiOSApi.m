@@ -10,6 +10,7 @@
 #import "WXApiManager.h"
 #import "DouYinApiManager.h"
 #import "WeiboApiManager.h"
+#import "TencentQQManagerApi.h"
 
 static int const LOGIN_WECHAT = 1;
 static int const LOGIN_QQ = 2;
@@ -50,16 +51,20 @@ DelegateCallbackFunction logoutCBF = NULL;
             [[DouYinApiManager sharedManager] loginWithViewController:currentVC];
             break;
         case LOGIN_APPLE:
-            [[FBSDKAppleLogin shared] loginWithCompleteHandler:^(BOOL successed, NSString * _Nullable user, NSString * _Nullable familyName, NSString * _Nullable givenName, NSString * _Nullable email, NSString * _Nullable password, NSData * _Nullable identityToken, NSData * _Nullable authorizationCode, NSError * _Nullable error, NSString * _Nonnull msg) {
-                //NSLog(identityToken);
-                if (NULL == identityToken){
-                    [[FBSDKApi sharedInstance] onLoginCallback:@"Failed" result:false];
-                }else{
-                    NSString* idStr = [[NSString alloc] initWithData:identityToken encoding:NSUTF8StringEncoding];
-                    NSLog(idStr);
-                    [[FBSDKApi sharedInstance] onLoginCallback:idStr result:true];
-                }
-            }];
+            if (@available(iOS 13.0, *)) {
+                [[FBSDKAppleLogin shared] loginWithCompleteHandler:^(BOOL successed, NSString * _Nullable user, NSString * _Nullable familyName, NSString * _Nullable givenName, NSString * _Nullable email, NSString * _Nullable password, NSData * _Nullable identityToken, NSData * _Nullable authorizationCode, NSError * _Nullable error, NSString * _Nonnull msg) {
+                    //NSLog(identityToken);
+                    if (NULL == identityToken){
+                        [[FBSDKApi sharedInstance] onLoginCallback:@"Failed" result:false];
+                    }else{
+                        NSString* idStr = [[NSString alloc] initWithData:identityToken encoding:NSUTF8StringEncoding];
+                        NSLog(idStr);
+                        [[FBSDKApi sharedInstance] onLoginCallback:idStr result:true];
+                    }
+                }];
+            }else{
+                [[FBSDKApi sharedInstance] onLoginCallback:@"iOSNotSupport" result:false];
+            }
             break;
         default:
             break;
@@ -77,6 +82,9 @@ DelegateCallbackFunction logoutCBF = NULL;
             return TRUE;
         case LOGIN_WEIBO:
             return [[WeiboApiManager sharedManager] isInstalled];
+        case LOGIN_QQ:
+            return [[TencentQQManagerApi sharedManager] isInstalled];
+            break;
         default:
             break;
     }
@@ -97,6 +105,9 @@ DelegateCallbackFunction logoutCBF = NULL;
         case SHARE_WEIBO:
             [[WeiboApiManager sharedManager] shareImage:imagePath Title:title Desc:des];
             break;
+        case SHARE_QQ_SESSION:
+            [[TencentQQManagerApi sharedManager] shareImage:imagePath Title:title Desc:des];
+            break;
         default:
             break;
     }
@@ -106,9 +117,6 @@ DelegateCallbackFunction logoutCBF = NULL;
                    AppId:(NSString*)appId
         weiboRedirectUrl:(NSString*)url
 {
-    NSLog(@"channel:%d", channel);
-    NSLog(@"appId:%@", appId);
-    NSLog(@"appId:%@", url);
     switch (channel) {
         case LOGIN_WECHAT:
             [WXApi registerApp:appId universalLink:url];
@@ -120,6 +128,9 @@ DelegateCallbackFunction logoutCBF = NULL;
             break;
         case LOGIN_WEIBO:
             [[WeiboApiManager sharedManager] registerApp:appId redirectUrl:url];
+            break;
+        case LOGIN_QQ:
+            [[TencentQQManagerApi sharedManager] registerApp:appId];
             break;
         default:
             break;
@@ -170,43 +181,43 @@ DelegateCallbackFunction logoutCBF = NULL;
 extern "C"{
 #endif
     
-void setLoginDelegate(DelegateCallbackFunction callback)
+void fbsdk_setLoginDelegate(DelegateCallbackFunction callback)
 {
     loginCBF = callback;
 }
 
-void setShareDelegate(DelegateCallbackFunction callback)
+void fbsdk_setShareDelegate(DelegateCallbackFunction callback)
 {
     shareCBF = callback;
 }
 
-void setLogoutDelegate(DelegateCallbackFunction callback)
+void fbsdk_setLogoutDelegate(DelegateCallbackFunction callback)
 {
     logoutCBF = callback;
 }
 
-bool isInstalled(int channel)
+bool fbsdk_isInstalled(int channel)
 {
     return [[FBSDKApi sharedInstance] isInstalled:channel];
 }
 
-void login(int channel)
+void fbsdk_login(int channel)
 {
     [[FBSDKApi sharedInstance] login:channel];
 }
 
-void logout()
+void fbsdk_logout()
 {
 }
 
-void share(int channel, const char* imagePath, const char* title, const char* desc){
+void fbsdk_share(int channel, const char* imagePath, const char* title, const char* desc){
     NSString *nsImagePath = [FBSDKApi CreateNSString:imagePath];
     NSString *nsTitle = [FBSDKApi CreateNSString:title];
     NSString *nsDesc = [FBSDKApi CreateNSString:desc];
     [[FBSDKApi sharedInstance] share:channel imgPath:nsImagePath Title:nsTitle Desc:nsDesc];
 }
 
-void registerThirdApp(int channel, const char* appId, const char* weiboRedirectUrl){
+void fbsdk_registerThirdApp(int channel, const char* appId, const char* weiboRedirectUrl){
     NSString *nsAppId = [FBSDKApi CreateNSString:appId];
     NSString *url = [FBSDKApi CreateNSString:weiboRedirectUrl];
     [[FBSDKApi sharedInstance] registerThirdApp:channel

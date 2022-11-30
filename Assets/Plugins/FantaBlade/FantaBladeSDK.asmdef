@@ -1,14 +1,18 @@
 {
     "name": "FantaBladeSDK",
+    "rootNamespace": "",
     "references": [
-        "ShareSDK"
+        "UnityEngine.Purchasing",
+        "UnityEngine.Purchasing.Apple",
+        "UnityEngine.Purchasing.Stores"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

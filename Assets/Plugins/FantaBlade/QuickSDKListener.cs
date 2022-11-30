@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using FantaBlade;
+using FantaBlade.Internal;
 
 namespace quicksdk
 {
@@ -52,6 +54,7 @@ namespace quicksdk
 
         public void onLoginSuccess(string msg)
         {
+	        EventHandle.showLog("QuickSdk onLoginSuccess ", msg);
             var data = SimpleJSON.JSONNode.Parse(msg);
             UserInfo userInfo = new UserInfo();
             userInfo.uid = data["userId"].Value;
@@ -64,6 +67,7 @@ namespace quicksdk
 
 		public void onSwitchAccountSuccess(string msg)
 		{
+			EventHandle.showLog("QuickSdk onSwitchAccountSuccess ", msg);
 			var data = SimpleJSON.JSONNode.Parse(msg);
 			UserInfo userInfo = new UserInfo();
 			userInfo.uid = data["userId"].Value;
@@ -76,6 +80,7 @@ namespace quicksdk
 
         public void onLoginFailed(string msg)
         {
+	        EventHandle.showLog("QuickSdk onLoginFailed ", msg);
             var data = SimpleJSON.JSONNode.Parse(msg);
 			ErrorMsg errMsg = new ErrorMsg();
 			errMsg.errMsg = data["msg"].Value;
@@ -130,6 +135,7 @@ namespace quicksdk
 		
         public void onSuccess(string infos)
         {
+	        EventHandle.showLog("QuickSdk onSuccess ", infos);
             onSucceed(infos);
         }
 
