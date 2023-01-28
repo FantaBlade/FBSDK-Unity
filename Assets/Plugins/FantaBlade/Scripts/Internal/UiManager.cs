@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FantaBlade.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace FantaBlade.Internal
 {
@@ -212,8 +214,21 @@ namespace FantaBlade.Internal
 
         public void ShowLogin()
         {
-            SdkManager.Ui.ShowNormalUI(NormalUIID.Login);
-
+            
+            Debug.Log(Api.IsSupportAuth(Api.LoginChannel.CHANNEL_MOBILE));
+            Debug.Log(DateTimeOffset.Now.ToUnixTimeSeconds() - SdkManager.Auth.mobileAuthTimestamp);
+            if (Api.IsSupportAuth(Api.LoginChannel.CHANNEL_MOBILE)
+                && DateTimeOffset.Now.ToUnixTimeSeconds() - SdkManager.Auth.mobileAuthTimestamp > 3)
+            {
+                SdkManager.Auth.mobileAuthTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+                Debug.Log("调起手机认证");
+                SdkManager.Auth.LoginThird(Api.LoginChannel.CHANNEL_MOBILE);
+            }
+            else
+            {
+                Debug.Log("手机认证不支持，调起常规登录");
+                SdkManager.Ui.ShowNormalUI(NormalUIID.Login);
+            }
 
             //if (_login == null)
             //{

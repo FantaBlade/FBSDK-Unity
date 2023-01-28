@@ -21,6 +21,8 @@ namespace FantaBlade.Internal.Native
         [DllImport("__Internal")]
         private static extern bool fbsdk_isInstalled(int channel);
         [DllImport("__Internal")]
+        private static extern bool fbsdk_isSupportAuth(int channel);
+        [DllImport("__Internal")]
         private static extern void fbsdk_login(int channel);
         [DllImport("__Internal")]
         private static extern void fbsdk_logout();
@@ -88,6 +90,11 @@ namespace FantaBlade.Internal.Native
         public bool IsInstall(int loginChannel)
         {
             return fbsdk_isInstalled(loginChannel);
+        }
+
+        public bool IsSupportAuth(int loginChannel)
+        {
+            return fbsdk_isSupportAuth(loginChannel);
         }
 
         public void Logout()

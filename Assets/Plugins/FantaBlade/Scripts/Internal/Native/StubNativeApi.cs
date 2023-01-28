@@ -33,6 +33,13 @@ namespace FantaBlade.Internal.Native
             Debug.Log("StubNativeApi");
             return false;
         }
+        
+        public bool IsSupportAuth(int loginChannel)
+        {
+            Debug.Log("StubNativeApi");
+            return false;
+        }
+
 
         public void Logout()
         {

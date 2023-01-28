@@ -74,6 +74,10 @@ public class FbSdkDemo : MonoBehaviour
         orderInfo.id = "com.fantablade.watergun.currency_charge_1001";
         Api.Pay(orderInfo);
     }
+    public void UserCenter()
+    {
+        Api.OpenUserCenter();
+    }
 
     public void ShowProducts()
     {

@@ -13,6 +13,8 @@ namespace FantaBlade.Internal.Native
         void Share(int shareChannel, string imagePath, string title, string desc);
 
         bool IsInstall(int loginChannel);
+        
+        bool IsSupportAuth(int loginChannel);
 
         void Logout();
 

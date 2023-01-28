@@ -3,7 +3,6 @@
 allprojects {
     buildscript {
         repositories {**ARTIFACTORYREPOSITORY**
-            mavenCentral()
             maven {
                 url "https://maven.aliyun.com/repository/public"
             }

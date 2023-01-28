@@ -139,6 +139,10 @@ namespace FantaBlade.UI
 		{
 			SdkManager.Auth.LoginThird(Api.LoginChannel.CHANNEL_APPLE);
 		}
+		public void MobileLogin()
+		{
+			SdkManager.Auth.LoginThird(Api.LoginChannel.CHANNEL_MOBILE);
+		}
 
 		private void CloseWindow(Window window)
 		{

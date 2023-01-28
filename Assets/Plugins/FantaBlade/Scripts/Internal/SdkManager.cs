@@ -11,7 +11,7 @@ namespace FantaBlade.Internal
         /// <summary>
         ///     Debug 模式
         /// </summary>
-        public static readonly bool DebugMode = false;
+        public static readonly bool DebugMode = true;
 
 
         /// <summary>
@@ -36,6 +36,7 @@ namespace FantaBlade.Internal
             }
         }
 
+        public static string Ip = "";
         /// <summary>
         ///     玩家定位
         /// </summary>
@@ -182,33 +183,25 @@ namespace FantaBlade.Internal
                 {
                     if (LocationSuccess != null) LocationSuccess(Location);
                 }
-                else
+                PlatformApi.Util.GetIpJson.Get((err, info, response) =>
                 {
-                    bool isChinaNative = PublishRegion != PublishRegion.SoutheastAsia && PublishRegion != PublishRegion.TW;
-                    if (!isChinaNative)
+                    if (err == null)
                     {
-                        PlatformApi.Util.GetIpJson.Get((err, info, response) =>
+                        Ip = response.query;
+                        Debug.Log("ip:"+response.query);
+                        if (string.IsNullOrEmpty(Location))
                         {
-                            if (err == null)
-                            {
-                                if (Location != response.countryCode)
-                                {
-                                    Location = response.countryCode;
-                                }
-                            }
-                        });
+                            Location = response.countryCode;
+                        }
                     }
-                    else
-                    {
-                        Location = "CN";
-                    }
-                }
+                });
                 #endregion
 
                 Api.OnInitializeSuccess();
             }
             catch (Exception e)
             {
+                Debug.Log(e);
                 Api.OnInitializeFailure(e.Message);
             }
         }

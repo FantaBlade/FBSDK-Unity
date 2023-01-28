@@ -153,7 +153,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.fantablade.watergun
+    Android: com.fantablade.fbsdk.demo
     iPhone: com.fantablade.watergun
   buildNumber:
     Standalone: 0
@@ -161,8 +161,8 @@ PlayerSettings:
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 19
-  AndroidTargetSdkVersion: 26
+  AndroidMinSdkVersion: 21
+  AndroidTargetSdkVersion: 31
   AndroidPreferredInstallLocation: 1
   aotOptions: 
   stripEngineCode: 1
@@ -238,21 +238,21 @@ PlayerSettings:
   clonedFromGUID: 00000000000000000000000000000000
   templatePackageId: 
   templateDefaultScene: 
-  useCustomMainManifest: 0
+  useCustomMainManifest: 1
   useCustomLauncherManifest: 0
-  useCustomMainGradleTemplate: 0
-  useCustomLauncherGradleManifest: 0
-  useCustomBaseGradleTemplate: 0
-  useCustomGradlePropertiesTemplate: 0
-  useCustomProguardFile: 0
-  AndroidTargetArchitectures: 1
+  useCustomMainGradleTemplate: 1
+  useCustomLauncherGradleManifest: 1
+  useCustomBaseGradleTemplate: 1
+  useCustomGradlePropertiesTemplate: 1
+  useCustomProguardFile: 1
+  AndroidTargetArchitectures: 3
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/workspace/proj/unity/WaterGun/Assets/Publish/fantablade.keystore
+  AndroidKeystoreName: '{inproject}: Assets/Publish/fantablade.keystore'
   AndroidKeyaliasName: fantablade
   AndroidBuildApkPerCpuArchitecture: 0
-  AndroidTVCompatibility: 1
+  AndroidTVCompatibility: 0
   AndroidIsGame: 1
   AndroidEnableTango: 0
   androidEnableBanner: 1
@@ -264,7 +264,7 @@ PlayerSettings:
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
   chromeosInputEmulation: 1
-  AndroidMinifyWithR8: 0
+  AndroidMinifyWithR8: 1
   AndroidMinifyRelease: 0
   AndroidMinifyDebug: 0
   AndroidValidateAppBundleSize: 1
@@ -668,24 +668,25 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    1: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    4: TextMeshPro
-    7: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    13: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    14: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    19: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    21: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    25: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    27: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    28: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    29: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    30: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    32: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
-    33: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
+    1: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    4: TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    7: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    13: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    14: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    19: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    21: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    25: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    27: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    28: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    29: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    30: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    31: EASY_MOBILE;EASY_MOBILE_PRO
+    32: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
+    33: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;EASY_MOBILE;EASY_MOBILE_PRO
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
-    Android: 0
+    Android: 1
     Standalone: 0
   il2cppCompilerConfiguration: {}
   managedStrippingLevel: {}

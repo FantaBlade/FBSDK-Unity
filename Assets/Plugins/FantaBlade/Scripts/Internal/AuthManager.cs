@@ -70,6 +70,7 @@ namespace FantaBlade.Internal
 
             if (err != null)
             {
+                mobileAuthTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
                 SdkManager.Ui.ShowLogin();
                 SdkManager.Ui.Dialog.Show(err, "ok");
             }
@@ -156,6 +157,17 @@ namespace FantaBlade.Internal
             };
             SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.LoginThird.Post(form, OnThirdLoginCallback);
+        }
+        
+        public void MobileLogin(string authCode)
+        {
+            IsLoggingIn = true;
+            var form = new Dictionary<string, string>
+            {
+                {"code", authCode}
+            };
+            SdkManager.Ui.Dialog.ShowLoading();
+            PlatformApi.User.MobileLogin.Post(form, OnLoginCallback);
         }
         public void CancelAccount(string name, string idcard, string mobile, string code, PlatformApi.WebRequest<PlatformApi.TokenResponse>.WebResponseEventHandler callback)
         {
@@ -360,7 +372,7 @@ namespace FantaBlade.Internal
             SdkManager.Ui.Dialog.ShowLoading();
             PlatformApi.User.Register.Post(form, (err, meta, resp) =>
             {
-                if (resp.code == 0)
+                if (resp != null && resp.code == 0)
                 {
                     SdkManager.Ui.HideLogin();
                 }
@@ -477,12 +489,25 @@ namespace FantaBlade.Internal
             });
         }
 
+        public long mobileAuthTimestamp = 0;
         public void OnSDKLoginFinish(bool success, string authCode)
         {
+            Debug.Log(authCode);
+            mobileAuthTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
             if (success)
             {
-                // 使用authcode换取平台服token
-                LoginByThird(authCode, curLoginChannel);
+                if (curLoginChannel == Api.LoginChannel.CHANNEL_MOBILE)
+                {
+                    MobileLogin(authCode);
+                }
+                else
+                {
+                    // 使用authcode换取平台服token
+                    LoginByThird(authCode, curLoginChannel);
+                }
+            }else if (curLoginChannel == Api.LoginChannel.CHANNEL_MOBILE)
+            {
+                SdkManager.Ui.ShowLogin();
             }
             else if (authCode == "UserCancel")
             {

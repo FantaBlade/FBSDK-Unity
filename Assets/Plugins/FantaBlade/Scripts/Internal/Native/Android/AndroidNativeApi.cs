@@ -64,6 +64,11 @@ namespace FantaBlade.Internal.Native
             return _nativeApi.Call<bool>("isInstalled", loginChannel);
         }
         
+        public bool IsSupportAuth(int loginChannel)
+        {
+            return _nativeApi.Call<bool>("isSupportAuth", loginChannel);
+        }
+        
         public void Login(int loginChannel)
         {
             _nativeApi.Call("login", loginChannel);

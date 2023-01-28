@@ -44,6 +44,9 @@ namespace FantaBlade
             public const int CHANNEL_DOUYIN = 4;
             public const int CHANNEL_ALIPAY = 5;
             public const int CHANNEL_APPLE = 6;
+            public const int CHANNEL_GOOGLE = 7;
+            public const int CHANNEL_FACEBOOK = 8;
+            public const int CHANNEL_MOBILE = 9;
         }
 
         // 第三方分享
@@ -64,7 +67,9 @@ namespace FantaBlade
         
         #region API
 
-#if UNITY_IOS
+#if SOFUNNY
+        public static readonly string Channel = "SoFunny";
+#elif UNITY_IOS
     public static readonly string Channel = "App Store";
 #elif UNITY_ANDROID
 #if TAPTAP
@@ -187,6 +192,10 @@ namespace FantaBlade
                 var userInfo = EventHandle.Instance._UserInfo;
                 return userInfo.realName;
             }
+            if (Channel.Equals("SoFunny"))
+            {
+                return true;//上海外不触发实名制
+            }
             return SdkManager.Auth.IsVerify;
         }
         
@@ -196,6 +205,10 @@ namespace FantaBlade
             {
                 var userInfo = EventHandle.Instance._UserInfo;
                 return userInfo.age;
+            }
+            if (Channel.Equals("SoFunny"))
+            {
+                return 18;//上海外不触发实名制
             }
             return SdkManager.Auth.Age;
         }
@@ -219,6 +232,10 @@ namespace FantaBlade
             // Unity.Advertisement.IosSupport.ATTrackingStatusBinding.RequestAuthorizationTracking();
 // #endif
             SdkManager.Init(accessKey, showFloatingWindow, publishRegion);
+            if (Channel.Equals("SoFunny"))
+            {
+                SoFunnyController.Init();
+            }
         }
 
         public static void EnableThirdChannel(int[] loginChannels, string[] appIds)
@@ -282,11 +299,17 @@ namespace FantaBlade
         /// <param name="forceShowUi">强制显示UI，不使用缓存token</param>
         public static void Login(bool forceShowUi = false, bool useQuickLoginFirstTime = false)
         {
-            Debug.Log("onlogin");
+            Log.Debug("onlogin");
             if (!IsInitialized) return;
             if (Channel.Equals("Quick"))
             {
                 QuickSDK.getInstance().login();
+                return;
+            }
+
+            if (Channel.Equals("SoFunny"))
+            {
+                SoFunnyController.Login();
                 return;
             }
 
@@ -309,6 +332,11 @@ namespace FantaBlade
         {
             return SdkManager.NativeApi.IsInstall(loginChannel);
         }
+        
+        public static bool IsSupportAuth(int loginChannel)
+        {
+            return SdkManager.NativeApi.IsSupportAuth(loginChannel);
+        }
 
         public static void RegisterChannel(int loginChannel, string appId, string weiboRedirectUrl = "")
         {
@@ -329,6 +357,11 @@ namespace FantaBlade
             if (Channel.Equals("Quick"))
             {
                 QuickSDK.getInstance().logout();
+                return;
+            }
+            if (Channel.Equals("SoFunny"))
+            {
+                SoFunnyController.Logout();
                 return;
             }
 
@@ -382,6 +415,12 @@ namespace FantaBlade
                 return;
             }
 
+            if (Channel.Equals("SoFunny"))
+            {
+                SoFunnyController.OpenUserCenter();
+                return;
+            }
+            
             if (SdkManager.Auth.Token == null)
             {
                 Login(true);
@@ -396,6 +435,10 @@ namespace FantaBlade
             if (!IsInitialized) return;
 
             if (Channel.Equals("Quick"))
+            {
+                return;
+            }
+            if (Channel.Equals("SoFunny"))
             {
                 return;
             }
@@ -582,28 +625,28 @@ namespace FantaBlade
 
         internal static void OnPayCancel()
         {
-            Debug.Log("OnPayCancel");
+            Log.Debug("OnPayCancel");
             var handler = PayCancel;
             if (handler != null) handler();
         }
 
         internal static void OnShareSucceed(string msg)
         {
-            Debug.Log("OnShareSucceed" + msg);
+            Log.Debug("OnShareSucceed" + msg);
             var handler = ShareSucceed;
             if (handler != null) handler(msg);
         }
         
         internal static void OnShareFailure(string msg)
         {
-            Debug.Log("OnShareFailure" + msg);
+            Log.Debug("OnShareFailure" + msg);
             var handler = ShareFailure;
             if (handler != null) handler(msg);
         }
         
         internal static void OnShareCancel(string msg)
         {
-            Debug.Log("OnShareCancel" + msg);
+            Log.Debug("OnShareCancel" + msg);
             var handler = ShareCancel;
             if (handler != null) handler(msg);
         }

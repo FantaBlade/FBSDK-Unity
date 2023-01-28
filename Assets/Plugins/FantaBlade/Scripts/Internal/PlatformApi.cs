@@ -222,15 +222,16 @@ namespace FantaBlade.Internal
                 // Log.Debug("Authorization:"+SdkManager.Auth.Token);
                 request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
                 if (SdkManager.Auth.Token != null) request.SetRequestHeader("Authorization", SdkManager.Auth.Token);
+                Log.Debug(string.Format("{0} request url: {1} Authorization={2}", SdkManager.Ip, request.url, SdkManager.Auth.Token != null? SdkManager.Auth.Token : ""));
                 request.timeout = 5;
                 yield return request.SendWebRequest();
                 if (request.isNetworkError)
                 {
                     SwitchApiHost();
 #if UNITY_EDITOR
-                    Log.Error(string.Format("url: {0} {1}", request.url, request.error));
+                    Log.Error(string.Format("{0} url: {1} {2}", SdkManager.Ip, request.url, request.error));
 #else
-                    Log.Warning(string.Format("url: {0} {1}", request.url, request.error));
+                    Log.Warning(string.Format("{0} url: {1} {2}", SdkManager.Ip, request.url, request.error));
 #endif
                     uri = GetUri();
                     request = method == RequestMethod.Post ? UnityWebRequest.Post(uri.AbsoluteUri, form):UnityWebRequest.Get(uri.AbsoluteUri);
@@ -263,9 +264,9 @@ namespace FantaBlade.Internal
                 {
                     SwitchApiHost();
 #if UNITY_EDITOR
-                    Log.Error(string.Format("url: {0} {1}", request.url, request.error));
+                    Log.Error(string.Format("{0} url: {1} {2}", SdkManager.Ip, request.url, request.error));
 #else
-                    Log.Warning(string.Format("url: {0} {1}", request.url, request.error));
+                    Log.Warning(string.Format("{0} url: {1} {2}", SdkManager.Ip, request.url, request.error));
 #endif
                     err = request.error;
                 }
@@ -370,6 +371,7 @@ namespace FantaBlade.Internal
             // public static readonly WebRequest<AntiIndulgenceInfoResponse> GetAntiIndulgence = Prefix + "anti_indulgence";
             public static readonly WebRequest<TokenResponse> Login = Prefix + "login";
             public static readonly WebRequest<TokenResponse> QuickLogin = Prefix + "quicklogin";
+            public static readonly WebRequest<TokenResponse> MobileLogin = Prefix + "mobilelogin";
             public static readonly WebRequest<TokenResponse> RefreshToken = Prefix + "refresh/token";
             public static readonly WebRequest<Response> RequestValidateCode = Prefix + "vacode";
             public static readonly WebRequest<Response> RequestValidateCodeForRigister = Prefix + "vacode/register";
@@ -490,6 +492,7 @@ namespace FantaBlade.Internal
         public class IpJsonResponse : Response
         {
             public string countryCode;
+            public string query;
 
             public IpJsonResponse()
             {

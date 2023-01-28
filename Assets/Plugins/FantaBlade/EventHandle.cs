@@ -13,7 +13,7 @@ namespace FantaBlade
 
         public static void showLog(string title, string message)
         {
-            Debug.Log("EventHandle:title: " + title + ", message: " + message);
+            Log.Debug("EventHandle:title: " + title + ", message: " + message);
         }
         public void Start()
         {
@@ -36,7 +36,7 @@ namespace FantaBlade
         {
             showLog("onInitFailed", "msg: " + err.errMsg);
             //初始化失败的回调
-            Debug.Log(err);
+            Log.Debug(err);
             Api.OnInitializeFailure(err.ToString());
         }
 

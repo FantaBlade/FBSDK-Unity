@@ -434,6 +434,7 @@ public class QuickPrivacyPolicyActivity extends Activity {
                     // 玩家点击同意后，跳转到 Unity 的 Activity
                     Intent intent = new Intent(QuickPrivacyPolicyActivity.this, SplashActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             });
             dialog.show();
@@ -442,6 +443,7 @@ public class QuickPrivacyPolicyActivity extends Activity {
             // 已经同意过了，直接跳转到 Unity 的 Activity
             Intent intent = new Intent(QuickPrivacyPolicyActivity.this, SplashActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 }
