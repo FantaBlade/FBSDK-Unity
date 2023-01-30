@@ -492,7 +492,6 @@ namespace FantaBlade.Internal
         public long mobileAuthTimestamp = 0;
         public void OnSDKLoginFinish(bool success, string authCode)
         {
-            Debug.Log(authCode);
             mobileAuthTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
             if (success)
             {

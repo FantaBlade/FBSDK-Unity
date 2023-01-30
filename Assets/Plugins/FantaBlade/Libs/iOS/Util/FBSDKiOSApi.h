@@ -35,6 +35,7 @@ void fbsdk_setLoginDelegate(DelegateCallbackFunction callback);
 void fbsdk_setShareDelegate(DelegateCallbackFunction callback);
 void fbsdk_setLogoutDelegate(DelegateCallbackFunction callback);
 bool fbsdk_isInstalled(int channel);
+bool fbsdk_isSupportAuth(int channel);
 void fbsdk_login(int channel);
 void fbsdk_logout();
 void fbsdk_share(int channel, const char* imagePath, const char* title, const char* desc);

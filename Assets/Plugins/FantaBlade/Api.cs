@@ -58,13 +58,6 @@ namespace FantaBlade
             public const int WEIBO = 5;
         }
         
-        public const string WECHAT_APPID = "wxeacc4ec2f2d5f24e";
-        public const string WECHAT_UNIVERSAL_LINK = "https://watergun.hotfix.huanrengame.com/fbsdk/";
-        public const string WEIBO_APPID = "1858163759";
-        public const string WEIBO_REDIRECTURL = "https://www.fantablade.com/phantomoon/index";
-        public const string QQ_APPID = "101940541";
-        public const string DOUYIN_CLIENTKEY = "awr89o05lcbk46n2";
-        
         #region API
 
 #if SOFUNNY
@@ -248,23 +241,26 @@ namespace FantaBlade
                 switch (channel)
                 {
                     case LoginChannel.CHANNEL_WECHAT:
-                        appId = WECHAT_APPID;
-                        weiboUrl = WECHAT_UNIVERSAL_LINK;
+                        appId = FantaBlade.Config.WECHAT_APPID;
+                        weiboUrl = FantaBlade.Config.WECHAT_UNIVERSAL_LINK;
                         break;
                     case LoginChannel.CHANNEL_QQ:
-                        appId = QQ_APPID;
+                        appId = FantaBlade.Config.QQ_APPID;
                         weiboUrl = Application.identifier+".fileprovider";
                         break;
                     case LoginChannel.CHANNEL_WEIBO:
-                        appId = WEIBO_APPID;
+                        appId = FantaBlade.Config.WEIBO_APPID;
 #if UNITY_ANDROID
-                        weiboUrl = WEIBO_REDIRECTURL;
+                        weiboUrl = FantaBlade.Config.WEIBO_REDIRECTURL;
 #else
-                        weiboUrl = WECHAT_UNIVERSAL_LINK;
+                        weiboUrl = FantaBlade.Config.WECHAT_UNIVERSAL_LINK;
 #endif
                         break;
                     case LoginChannel.CHANNEL_DOUYIN:
-                        appId = DOUYIN_CLIENTKEY;
+                        appId = FantaBlade.Config.DOUYIN_CLIENTKEY;
+                        break;
+                    case LoginChannel.CHANNEL_MOBILE:
+                        appId = FantaBlade.Config.MOBILE_SECRETINFO;
                         break;
                 }
                 appId = string.IsNullOrEmpty(appIds[i]) ? appId : appIds[i];

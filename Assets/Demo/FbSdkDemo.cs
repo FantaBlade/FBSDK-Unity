@@ -32,6 +32,7 @@ public class FbSdkDemo : MonoBehaviour
             Api.LoginChannel.CHANNEL_WEIBO,
             Api.LoginChannel.CHANNEL_DOUYIN,
             Api.LoginChannel.CHANNEL_APPLE,
+            Api.LoginChannel.CHANNEL_MOBILE,
         };
         string[] channelAppIds = new[]
         {

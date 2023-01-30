@@ -11,7 +11,11 @@ namespace FantaBlade.Internal
         /// <summary>
         ///     Debug 模式
         /// </summary>
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
         public static readonly bool DebugMode = true;
+#else
+        public static readonly bool DebugMode = false;
+#endif
 
 
         /// <summary>

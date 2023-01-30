@@ -133,7 +133,7 @@ namespace ThinkingAnalytics
 
         [Header("Project")]
         [Tooltip("项目相关配置, APP ID 会在项目申请时给出")]
-        [HideInInspector]
+        // [HideInInspector]
         public Token[] tokens = new Token[1];
 
         #endregion

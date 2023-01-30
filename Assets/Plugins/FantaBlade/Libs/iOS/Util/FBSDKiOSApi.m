@@ -9,6 +9,7 @@
 #import "FBSDKAppleLogin.h"
 #import "WXApiManager.h"
 #import "DouYinApiManager.h"
+#import "MobileApiManager.h"
 #import "WeiboApiManager.h"
 #import "TencentQQManagerApi.h"
 
@@ -18,6 +19,7 @@ static int const LOGIN_WEIBO = 3;
 static int const LOGIN_DOUYIN = 4;
 static int const LOGIN_ALIPAY = 5;
 static int const LOGIN_APPLE = 6;
+static int const LOGIN_MOBILE = 9;
 
 static int const SHARE_WECHAT_SESSION = 1;
 static int const SHARE_WECHAT_TIMELINE = 2;
@@ -50,6 +52,9 @@ DelegateCallbackFunction logoutCBF = NULL;
         case LOGIN_DOUYIN:
             [[DouYinApiManager sharedManager] loginWithViewController:currentVC];
             break;
+        case LOGIN_MOBILE:
+            [[MobileApiManager sharedManager] loginWithViewController:currentVC];
+            break;
         case LOGIN_APPLE:
             if (@available(iOS 13.0, *)) {
                 [[FBSDKAppleLogin shared] loginWithCompleteHandler:^(BOOL successed, NSString * _Nullable user, NSString * _Nullable familyName, NSString * _Nullable givenName, NSString * _Nullable email, NSString * _Nullable password, NSData * _Nullable identityToken, NSData * _Nullable authorizationCode, NSError * _Nullable error, NSString * _Nonnull msg) {
@@ -78,12 +83,26 @@ DelegateCallbackFunction logoutCBF = NULL;
             return [WXApi isWXAppInstalled];
         case LOGIN_DOUYIN:
             return TRUE;//[[DouYinApiManager sharedManager] isInstalled];
+        case LOGIN_MOBILE:
+            return TRUE;
         case LOGIN_APPLE:
             return TRUE;
         case LOGIN_WEIBO:
             return [[WeiboApiManager sharedManager] isInstalled];
         case LOGIN_QQ:
             return [[TencentQQManagerApi sharedManager] isInstalled];
+            break;
+        default:
+            break;
+    }
+    return FALSE;
+}
+
+- (BOOL)isSupportAuth:(int)channel
+{
+    switch (channel) {
+        case LOGIN_MOBILE:
+            return [[MobileApiManager sharedManager] isSupportAuth];
             break;
         default:
             break;
@@ -123,6 +142,9 @@ DelegateCallbackFunction logoutCBF = NULL;
             break;
         case LOGIN_DOUYIN:
             [[DouYinApiManager sharedManager] registerApp:appId];
+            break;
+        case LOGIN_MOBILE:
+            [[MobileApiManager sharedManager] registerApp:appId];
             break;
         case LOGIN_APPLE:
             break;
@@ -199,6 +221,11 @@ void fbsdk_setLogoutDelegate(DelegateCallbackFunction callback)
 bool fbsdk_isInstalled(int channel)
 {
     return [[FBSDKApi sharedInstance] isInstalled:channel];
+}
+
+bool fbsdk_isSupportAuth(int channel)
+{
+    return [[FBSDKApi sharedInstance] isSupportAuth:channel];
 }
 
 void fbsdk_login(int channel)
