@@ -15,7 +15,7 @@ namespace FantaBlade.Internal
 
         public string Username
         {
-            get { return _jwt.Audiences; }
+            get { return _jwt != null ? _jwt.Audiences : ""; }
         }
         
         private SecurityToken _jwt;
