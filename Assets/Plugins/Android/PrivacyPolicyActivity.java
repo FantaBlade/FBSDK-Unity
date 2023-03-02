@@ -30,7 +30,7 @@ public class PrivacyPolicyActivity extends Activity {
 
         if (anInt==true){
             AlertDialog.Builder dialog = new AlertDialog.Builder(PrivacyPolicyActivity.this);
-            dialog.setTitle("隐私协议");  //设置标题
+            dialog.setTitle("个人信息保护指引");  //设置标题
             dialog.setMessage("上海幻刃网络科技有限公司（下文简称“幻刃网络”、“我们”）深知个人信息对您的重要性，并承诺竭尽全力保护您的个人信息安全。在您使用幻刃网络为您提供的服务过程中，包括但不限于您与幻刃网络的交互行为及/或您注册和使用幻刃网络提供的产品或服务（以下统称“幻刃网络服务”或“服务”），为保障您的隐私权益，幻刃网络特此制定了本《隐私政策》，以向您说明在您使用幻刃网络服务时，我们如何收集、使用、共享、转让以及存储您的信息，以及我们为您提供的访问、更新、删除和保护这些信息的方式。\n"
                               +" \n"
                               +"本《隐私政策》适用于我们为您提供的幻刃网络服务。当您使用我们提供的产品和服务时，我们将按照本《隐私政策》的约定处理和保护您的个人信息，请仔细阅读并了解以下内容：\n"

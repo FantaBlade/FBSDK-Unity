@@ -191,11 +191,11 @@ namespace FantaBlade.Internal
                 {
                     if (err == null)
                     {
-                        Ip = response.query;
-                        Debug.Log("ip:"+response.query);
+                        Ip = response.ip;
+                        Debug.Log("ip:"+response.ip);
                         if (string.IsNullOrEmpty(Location))
                         {
-                            Location = response.countryCode;
+                            Location = response.country_code;
                         }
                     }
                 });

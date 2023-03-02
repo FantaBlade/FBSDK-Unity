@@ -21,16 +21,23 @@
 static BOOL support = YES;
 
 
-+ (TXCustomModel *)buildFullScreenAutorotateModelWithButton1Title:(NSString *)button1Title
-                                                          target1:(id)target1
-                                                        selector1:(SEL)selector1
-                                                     button2Title:(NSString *)button2Title
-                                                          target2:(id)target2
-                                                        selector2:(SEL)selector2 {
+- (TXCustomModel *)buildFullScreenAutorotateModel {
     TXCustomModel *model = [[TXCustomModel alloc] init];
+    // 横竖屏切换
     model.supportedInterfaceOrientations = UIInterfaceOrientationMaskAllButUpsideDown;
+    // 仅支持竖屏
+    // model.supportedInterfaceOrientations = UIInterfaceOrientationMaskPortrait;
+    // 仅支持横屏
+    // model.supportedInterfaceOrientations = UIInterfaceOrientationMaskLandscape;
+
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    bool isPortrait = screenSize.height > screenSize.width;
+    int designHeight = (int)(screenSize.height * 0.87);
+    int padding = (int)(screenSize.height * 0.13);
+    int unit = designHeight / 10;
     // model.navColor = [UIColor orangeColor];
     model.navIsHidden = YES;
+    model.prefersStatusBarHidden = YES;
     NSDictionary *attributes = @{
         NSForegroundColorAttributeName : [UIColor whiteColor],
         NSFontAttributeName : [UIFont systemFontOfSize:20.0]
@@ -39,72 +46,76 @@ static BOOL support = YES;
     // model.navBackImage = [UIImage imageNamed:@"icon_nav_back_light"];
     // model.logoImage = [UIImage imageNamed:@"taobao"];
     model.changeBtnIsHidden = YES;
-    model.privacyOne = @[@"幻刃隐私协议", @"https://www.fantablade.com/system/privacy"];
-    model.sloganText = [[NSAttributedString alloc] initWithString:@"登录幻刃账号"attributes:@{NSForegroundColorAttributeName : UIColor.orangeColor,NSFontAttributeName : [UIFont systemFontOfSize:16.0]}];
+    model.sloganText = [[NSAttributedString alloc] initWithString:@"登录幻刃账号"attributes:@{NSForegroundColorAttributeName : UIColor.blackColor,NSFontAttributeName : [UIFont systemFontOfSize:20.0]}];
     model.logoFrameBlock = ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
         return CGRectZero; //模拟隐藏该控件
     };
+    model.checkBoxIsHidden = NO;
+    model.checkBoxWH = 17.0;
     model.sloganFrameBlock = ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
-        // if (screenSize.height > screenSize.width) {
-            // frame.size.width = superViewSize.width - 40;
-            // frame.size.height = 20;
-            // frame.origin.x = 20;
-            frame.origin.y = 20;// + 80 + 20;
+            frame.origin.y = (int)(unit*1.2)+padding;
             return frame;
-        // } else {
-        //     return CGRectZero;
-        // }
     };
+    model.numberFont = [UIFont systemFontOfSize:35.0];
     model.numberFrameBlock = ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
-        if (screenSize.height > screenSize.width) {
-            frame.origin.y = 130 + 20 + 15;
+        if (isPortrait) {
+            frame.origin.y = unit * 2+padding;
         } else {
-            frame.origin.y = 15 + 80 + 15;
+            frame.origin.y = unit * 3+padding;
         }
         return frame;
     };
+    model.loginBtnText = [[NSAttributedString alloc] initWithString:@"一键登录"attributes:@{NSForegroundColorAttributeName : UIColor.whiteColor,NSFontAttributeName : [UIFont systemFontOfSize:15.0]}];
     model.loginBtnFrameBlock = ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
-        if (screenSize.height > screenSize.width) {
-            frame.origin.y = 170 + 30 + 20;
+        if (isPortrait) {
+            frame.size.width = superViewSize.width-40;
+            frame.origin.x = (int)((superViewSize.width - frame.size.width) / 2);
+            frame.origin.y = unit * 3+padding;
         } else {
-            frame.origin.y = 110 + 30 + 20;
+            frame.size.width = (int)((superViewSize.width-40)/2.5 - 8);
+            frame.size.height = 41;
+            frame.origin.x = (int)((superViewSize.width - frame.size.width) / 2);
+            frame.origin.y = unit * 5+padding;
         }
         return frame;
     };
     
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button1 setTitle:button1Title forState:UIControlStateNormal];
-    [button1 addTarget:target1 action:selector1 forControlEvents:UIControlEventTouchUpInside];
-    
-    UIButton *button2 = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button2 setTitle:button2Title forState:UIControlStateNormal];
-    [button2 addTarget:target2 action:selector2 forControlEvents:UIControlEventTouchUpInside];
-    
+    [button1 setTitle:@"切换到其他方式" forState:UIControlStateNormal];
+    [button1 addTarget:self action:@selector(hideMobileController) forControlEvents:UIControlEventTouchUpInside];
     model.customViewBlock = ^(UIView * _Nonnull superCustomView) {
         [superCustomView addSubview:button1];
-        [superCustomView addSubview:button2];
     };
     model.customViewLayoutBlock = ^(CGSize screenSize, CGRect contentViewFrame, CGRect navFrame, CGRect titleBarFrame, CGRect logoFrame, CGRect sloganFrame, CGRect numberFrame, CGRect loginFrame, CGRect changeBtnFrame, CGRect privacyFrame) {
-        if (screenSize.height > screenSize.width) {
             button1.frame = CGRectMake(CGRectGetMinX(loginFrame),
                                        CGRectGetMaxY(loginFrame) + 20,
                                        CGRectGetWidth(loginFrame),
                                        30);
-            
-            button2.frame = CGRectMake(CGRectGetMinX(loginFrame),
-                                       CGRectGetMaxY(button1.frame) + 15,
-                                       CGRectGetWidth(loginFrame),
-                                       30);
-        } else {
-            button1.frame = CGRectMake(CGRectGetMinX(loginFrame),
-                                       CGRectGetMaxY(loginFrame) + 20,
-                                       CGRectGetWidth(loginFrame) * 0.5,
-                                       30);
-            
-            button2.frame = CGRectMake(CGRectGetMaxX(button1.frame),
-                                       CGRectGetMinY(button1.frame),
-                                       CGRectGetWidth(loginFrame) * 0.5,
-                                       30);
+    };
+    model.privacyOne = @[@"幻刃隐私协议", @"https://www.fantablade.com/system/privacy"];
+    model.privacyAlignment = NSTextAlignmentCenter;
+    model.privacyFont = [UIFont systemFontOfSize:13.0];
+    model.privacyAlertIsNeedShow = YES;
+    // model.privacyAlertBackgroundColor = [UIColor colorWithRed:68.0f/255.0f green:142.0f/255.0f blue:247.0f/255.0f alpha:1.0];
+    // model.privacyAlertContentColors = @[UIColor.grayColor, UIColor.blackColor];
+    // model.privacyAlertButtonTextColors = @[UIColor.whiteColor,UIColor.blueColor];
+    model.privacyAlertContentAlignment = NSTextAlignmentCenter;
+    model.privacyAlertButtonFont = [UIFont systemFontOfSize:15.0];
+    model.privacyAlertTitleFrameBlock = ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
+        return CGRectMake(0, 15, frame.size.width, frame.size.height);
+    };
+    model.privacyAlertPrivacyContentFrameBlock = ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
+        return CGRectMake(frame.origin.x, 50, frame.size.width, frame.size.height);
+    };
+    model.privacyAlertButtonFrameBlock = ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
+        return CGRectMake(25,superViewSize.height - 50 - 20, superViewSize.width-50, 41);;
+    };
+    model.privacyAlertFrameBlock = ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
+        if (isPortrait) {
+            return CGRectMake(20, (superViewSize.height - 150)*0.5, screenSize.width-40, 150);
+        }else{
+            int width = (int)((superViewSize.width-40)/2);
+            return CGRectMake((int)((superViewSize.width - width) / 2), (superViewSize.height - 150)*0.5, width, 150);
         }
     };
     return model;
@@ -112,24 +123,35 @@ static BOOL support = YES;
 
 - (void)registerApp:(NSString *)appId
 {
+    NSLog(@"设置秘钥：%@", appId);
      //设置SDK参数，App⽣命周期内调⽤⼀次即可
      [[TXCommonHandler sharedInstance] setAuthSDKInfo:appId complete:^(NSDictionary * _Nonnull resultDic) {
 //         [weakSelf showResult:resultDic];
+        NSLog(@"设置秘钥结果：%@", resultDic);
+        [[[TXCommonHandler sharedInstance] getReporter] setConsolePrintLoggerEnable:YES];
      }];
+
      //2.检测当前环境是否⽀持⼀键登录
-     [[TXCommonHandler sharedInstance] checkEnvAvailableWithAuthType:PNSAuthTypeLoginToken complete:^(NSDictionary * _Nullable resultDic) {
-        support = [PNSCodeSuccess isEqualToString:[resultDic objectForKey:@"resultCode"]];  }];
+     // [[TXCommonHandler sharedInstance] checkEnvAvailableWithAuthType:PNSAuthTypeLoginToken complete:^(NSDictionary * _Nullable resultDic) {
+     //    support = [PNSCodeSuccess isEqualToString:[resultDic objectForKey:@"resultCode"]];  }];
+}
+
+- (void)hideMobileController {
+    // PNSSmsLoginController *controller = [[PNSSmsLoginController alloc] init];
+    // controller.isHiddenNavgationBar = NO;
+    // if (self.presentedViewController) {
+    //     //找到授权页的导航控制器
+    //     [(UINavigationController *)self.presentedViewController pushViewController:controller animated:YES];
+    // }
+    NSLog(@"获取LoginToken失败回调：%@", @"用户取消登录");
+    [[TXCommonHandler sharedInstance] cancelLoginVCAnimated:YES complete:nil];
+    [[FBSDKApi sharedInstance] onLoginCallback:@"用户取消登录" result:FALSE];
 }
 
 - (void)loginWithViewController:(UIViewController *)viewController
 {
-    __weak typeof(self) weakSelf = self;
-    TXCustomModel *model = [MobileApiManager buildFullScreenAutorotateModelWithButton1Title:@"短信登录（使用系统导航栏）"
-                                                               target1:self
-                                                             selector1:@selector(gotoSmsControllerAndShowNavBar)
-                                                          button2Title:@"短信登录（隐藏系统导航栏）"
-                                                               target2:self
-                                                             selector2:@selector(gotoSmsControllerAndHiddenNavBar)];
+    // __weak typeof(self) weakSelf = self;
+    TXCustomModel *model = [self buildFullScreenAutorotateModel];
     //3.1调⽤加速授权⻚弹起接⼝，提前获取必要参数，为后⾯弹起授权⻚加速
 //     [[TXCommonHandler sharedInstance] accelerateLoginPageWithTimeout:timeout complete:^(NSDictionary * _Nonnull resultDic) {
 //     if ([PNSCodeSuccess isEqualToString:[resultDic objectForKey:@"resultCode"]] == NO)     {
@@ -139,7 +161,7 @@ static BOOL support = YES;
 //     }
     //3.2调⽤获取登录Token接⼝，可以立刻弹起授权⻚，model的创建需要放在主线程
     [[TXCommonHandler sharedInstance] getLoginTokenWithTimeout:3.0
-                                                    controller:self
+                                                    controller:viewController
                                                          model:model
                                                       complete:^(NSDictionary * _Nonnull resultDic) {
         NSString *resultCode = [resultDic objectForKey:@"resultCode"];
@@ -157,9 +179,9 @@ static BOOL support = YES;
         }else if([PNSCodeLoginControllerClickProtocol isEqualToString:resultCode] ||
                  [PNSCodeLoginPrivacyAlertViewPrivacyContentClick isEqualToString:resultCode]){
             NSLog(@"页面点击事件回调：%@", resultDic);
-            NSString *privacyUrl = [resultDic objectForKey:@"url"];
-            NSString *privacyName = [resultDic objectForKey:@"urlName"];
-            NSLog(@"如果TXCustomModel的privacyVCIsCustomized设置成YES，则SDK内部不会跳转协议页，需要自己实现");
+            // NSString *privacyUrl = [resultDic objectForKey:@"url"];
+            // NSString *privacyName = [resultDic objectForKey:@"urlName"];
+            // NSLog(@"如果TXCustomModel的privacyVCIsCustomized设置成YES，则SDK内部不会跳转协议页，需要自己实现");
             // if(model.privacyVCIsCustomized){
                 // PrivacyWebViewController *controller = [[PrivacyWebViewController alloc] initWithUrl:privacyUrl andUrlName:privacyName];
                 // controller.isHiddenNavgationBar = NO;
@@ -173,12 +195,14 @@ static BOOL support = YES;
         } else if ([PNSCodeSuccess isEqualToString:resultCode]) {
             NSLog(@"获取LoginToken成功回调：%@", resultDic);
             //NSString *token = [resultDic objectForKey:@"token"];
-            NSLog(@"接下来可以拿着Token去服务端换取手机号，有了手机号就可以登录，SDK提供服务到此结束");
+            // NSLog(@"接下来可以拿着Token去服务端换取手机号，有了手机号就可以登录，SDK提供服务到此结束");
             //[weakSelf dismissViewControllerAnimated:YES completion:nil];
             NSString *token = [resultDic objectForKey:@"token"];
             [[FBSDKApi sharedInstance] onLoginCallback:token result:TRUE];
+            //[weakSelf dismissViewControllerAnimated:YES completion:nil];
             [[TXCommonHandler sharedInstance] cancelLoginVCAnimated:YES complete:nil];
         } else {
+            support = NO;
             NSLog(@"获取LoginToken或拉起授权页失败回调：%@", resultDic);
             // [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
             //失败后可以跳转到短信登录界面
@@ -190,6 +214,8 @@ static BOOL support = YES;
             //     navigationController = (UINavigationController *)weakSelf.presentedViewController;
             // }
             // [navigationController pushViewController:controller animated:YES];
+            //[weakSelf dismissViewControllerAnimated:YES completion:nil];
+            [[TXCommonHandler sharedInstance] cancelLoginVCAnimated:YES complete:nil];
             [[FBSDKApi sharedInstance] onLoginCallback:@"获取登录Token失败" result:FALSE];
         }
     }];

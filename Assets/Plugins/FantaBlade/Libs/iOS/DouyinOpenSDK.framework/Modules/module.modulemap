@@ -1,6 +1,9 @@
 framework module DouyinOpenSDK {
-  umbrella header "DouyinOpenSDK-umbrella.h"
-
+  header "DouyinOpenSDK-umbrella.h"
+  header "DouyinOpenSDKApplicationDelegate.h"
+  header "DouyinOpenSDKAuth.h"
+  header "DouyinOpenSDKObjects.h"
+  header "DouyinOpenSDKShare.h"
+ 
   export *
-  module * { export * }
 }

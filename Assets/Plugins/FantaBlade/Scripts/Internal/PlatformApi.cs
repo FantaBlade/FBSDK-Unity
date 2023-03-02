@@ -285,10 +285,17 @@ namespace FantaBlade.Internal
                 else
                 {
                     var result = request.downloadHandler.text;
-                    response = JsonUtility.FromJson<TResponse>(result);
-                    if (response.code != 0)
+                    try
                     {
-                        err = response.message;
+                        response = JsonUtility.FromJson<TResponse>(result);
+                        if (response.code != 0)
+                        {
+                            err = response.message;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(string.Format("{0} url: {1} parse response error!", SdkManager.Ip, request.url));
                     }
                 }
 
@@ -335,7 +342,7 @@ namespace FantaBlade.Internal
             {
                 if (_uri == null)
                 {
-                    if (_path.StartsWith("http://"))
+                    if (_path.StartsWith("http"))
                     {
                         _uri = new Uri(_path);
                     }
@@ -346,7 +353,7 @@ namespace FantaBlade.Internal
                 }
                 if (_uri2 == null)
                 {
-                    if (_path.StartsWith("http://"))
+                    if (_path.StartsWith("http"))
                     {
                         _uri2 = new Uri(_path);
                     }
@@ -401,7 +408,7 @@ namespace FantaBlade.Internal
             private const string Prefix = Server + "/util/";
 
             public static readonly WebRequest<IpInfoResponse> GetIpInfo = Prefix + "getIpInfo";
-            public static readonly WebRequest<IpJsonResponse> GetIpJson = "http://ip-api.com/json";
+            public static readonly WebRequest<IpJsonResponse> GetIpJson = "https://ipapi.co/json";//"https://ip-api.com/json";
         }
 
         public static class Iap
@@ -491,8 +498,8 @@ namespace FantaBlade.Internal
 
         public class IpJsonResponse : Response
         {
-            public string countryCode;
-            public string query;
+            public string country_code;
+            public string ip;
 
             public IpJsonResponse()
             {
