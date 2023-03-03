@@ -123,12 +123,12 @@ static BOOL support = YES;
 
 - (void)registerApp:(NSString *)appId
 {
-    NSLog(@"设置秘钥：%@", appId);
+    // NSLog(@"设置秘钥：%@", appId);
      //设置SDK参数，App⽣命周期内调⽤⼀次即可
      [[TXCommonHandler sharedInstance] setAuthSDKInfo:appId complete:^(NSDictionary * _Nonnull resultDic) {
 //         [weakSelf showResult:resultDic];
-        NSLog(@"设置秘钥结果：%@", resultDic);
-        [[[TXCommonHandler sharedInstance] getReporter] setConsolePrintLoggerEnable:YES];
+        // NSLog(@"设置秘钥结果：%@", resultDic);
+        // [[[TXCommonHandler sharedInstance] getReporter] setConsolePrintLoggerEnable:YES];
      }];
 
      //2.检测当前环境是否⽀持⼀键登录
