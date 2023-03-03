@@ -68,7 +68,7 @@ static BOOL support = YES;
     model.loginBtnText = [[NSAttributedString alloc] initWithString:@"一键登录"attributes:@{NSForegroundColorAttributeName : UIColor.whiteColor,NSFontAttributeName : [UIFont systemFontOfSize:15.0]}];
     model.loginBtnFrameBlock = ^CGRect(CGSize screenSize, CGSize superViewSize, CGRect frame) {
         if (isPortrait) {
-            frame.size.width = superViewSize.width-40;
+            frame.size.width = superViewSize.width-48;
             frame.origin.x = (int)((superViewSize.width - frame.size.width) / 2);
             frame.origin.y = unit * 3+padding;
         } else {
