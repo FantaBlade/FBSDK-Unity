@@ -228,11 +228,7 @@ namespace FantaBlade.Internal
                 if (request.isNetworkError)
                 {
                     SwitchApiHost();
-#if UNITY_EDITOR
                     Log.Error(string.Format("{0} url: {1} {2}", SdkManager.Ip, request.url, request.error));
-#else
-                    Log.Warning(string.Format("{0} url: {1} {2}", SdkManager.Ip, request.url, request.error));
-#endif
                     uri = GetUri();
                     request = method == RequestMethod.Post ? UnityWebRequest.Post(uri.AbsoluteUri, form):UnityWebRequest.Get(uri.AbsoluteUri);
                     request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
@@ -243,13 +239,8 @@ namespace FantaBlade.Internal
                 else if (request.isHttpError && request.responseCode == 404)
                 {
                     SwitchApiHost();
-#if UNITY_EDITOR
-                    Log.Error(string.Format("url: {0} {1} {2}\n{3}\nAuthorization:{4}", request.url, request.responseCode, request.error,
+                    Log.Error(string.Format("url: {0} {1} {2}\n{3}\n Authorization:{4}", request.url, request.responseCode, request.error,
                         request.downloadHandler.text, SdkManager.Auth.Token));
-#else
-                    Log.Warning(string.Format("url: {0} {1} {2}\n{3}", request.url, request.responseCode, request.error,
-                        request.downloadHandler.text));
-#endif
                     uri = GetUri();
                     request = method == RequestMethod.Post ? UnityWebRequest.Post(uri.AbsoluteUri, form):UnityWebRequest.Get(uri.AbsoluteUri);
                     request.SetRequestHeader("AccessKeyId", SdkManager.AccessKeyId);
@@ -263,23 +254,14 @@ namespace FantaBlade.Internal
                 if (request.isNetworkError)
                 {
                     SwitchApiHost();
-#if UNITY_EDITOR
                     Log.Error(string.Format("{0} url: {1} {2}", SdkManager.Ip, request.url, request.error));
-#else
-                    Log.Warning(string.Format("{0} url: {1} {2}", SdkManager.Ip, request.url, request.error));
-#endif
                     err = request.error;
                 }
                 else if (request.isHttpError)
                 {
                     SwitchApiHost();
-#if UNITY_EDITOR
                     Log.Error(string.Format("url: {0} {1} {2}\n{3}", request.url, request.responseCode, request.error,
                         request.downloadHandler.text));
-#else
-                    Log.Warning(string.Format("url: {0} {1} {2}\n{3}", request.url, request.responseCode, request.error,
-                        request.downloadHandler.text));
-#endif
                     err = request.error;
                 }
                 else
