@@ -108,10 +108,6 @@ namespace quicksdk
 		{
 			return QuickSDKImp.getInstance ().channelType ();
 		}
-        public int parentChannelType()
-        {
-            return QuickSDKImp.getInstance().getParentChannelType();
-        }
 		public string SDKVersion()      //QuickSDK版本
 		{
 			return QuickSDKImp.getInstance ().SDKVersion ();   
@@ -143,8 +139,20 @@ namespace quicksdk
 			return QuickSDKImp.getInstance ().enterUserCenter ();
 		}
 
+        public String getOaid()
+        {
+            return QuickSDKImp.getInstance().getOaid();
+        }
 
-		
+        public String getParentChannelType()
+        {
+            return QuickSDKImp.getInstance().getParentChannelType();
+        }
 
-	}
+
+
+
+
+
+    }
 }

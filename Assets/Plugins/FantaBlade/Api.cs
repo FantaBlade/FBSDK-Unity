@@ -77,6 +77,8 @@ namespace FantaBlade
     public static readonly string Channel = "Quick";
 #elif DOUYIN
     public static readonly string Channel = "Douyin";
+#elif KUAISHOU
+    public static readonly string Channel = "Kuaishou";
 #elif OFFICIALSEA
     public static readonly string Channel = "Google Play";
 #else
@@ -299,7 +301,15 @@ namespace FantaBlade
             if (!IsInitialized) return;
             if (Channel.Equals("Quick"))
             {
-                QuickSDK.getInstance().login();
+                if (EventHandle.isInit)
+                {
+                    Log.Info("QuickSDK.getInstance().login(");
+                    QuickSDK.getInstance().login();
+                }
+                else
+                {
+                    QuickSDK.getInstance().init();
+                }
                 return;
             }
 
@@ -469,12 +479,16 @@ namespace FantaBlade
         /// </summary>
         public static void Pay(OrderInfo order)
         {
+            Log.Debug(order.id);
             if (Channel.Equals("Quick"))
             {
                 quicksdk.OrderInfo orderInfo = new quicksdk.OrderInfo();
                 orderInfo.goodsID = order.id;
                 orderInfo.goodsName = order.name;
-                orderInfo.goodsDesc = order.name;
+                if (GetChannelType() == 24)//华为传商品类型：0消耗型
+                    orderInfo.goodsDesc = "0";
+                else
+                    orderInfo.goodsDesc = order.name;
                 orderInfo.quantifier = "个";
                 orderInfo.extrasParams = order.id;
                 orderInfo.count = order.count;

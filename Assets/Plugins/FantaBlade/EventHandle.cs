@@ -10,6 +10,7 @@ namespace FantaBlade
     {
         public Api.UserInfo _UserInfo = new Api.UserInfo();
         public static EventHandle Instance;
+        public static bool isInit = false;
 
         public static void showLog(string title, string message)
         {
@@ -22,14 +23,21 @@ namespace FantaBlade
                 Instance = this;
                 showLog("Quick.getInstance().setListener", "");
                 QuickSDK.getInstance().setListener(this);
+                // QuickSDK.getInstance().init();
             }
         }
 
         public override void onInitSuccess()
         {
+            isInit = true;
             showLog("onInitSuccess", "");
             //初始化成功的回调
             // Api.OnInitializeSuccess();
+            Api.Login();
+            if (QuickSDK.getInstance().isFunctionSupported(FuncType.QUICK_SDK_FUNC_TYPE_QUERY_GOODS_INFO))
+            {
+                QuickSDK.getInstance().callFunction(FuncType.QUICK_SDK_FUNC_TYPE_QUERY_GOODS_INFO);
+            }
         }
 
         public override void onInitFailed(ErrorMsg err)
@@ -37,7 +45,9 @@ namespace FantaBlade
             showLog("onInitFailed", "msg: " + err.errMsg);
             //初始化失败的回调
             Log.Debug(err);
-            Api.OnInitializeFailure(err.ToString());
+            // Api.OnInitializeFailure(err.ToString());
+            QuickSDK.getInstance().reInit();
+            Api.OnLoginCancel();
         }
 
         public override void onLoginSuccess(quicksdk.UserInfo userInfo)
@@ -58,7 +68,7 @@ namespace FantaBlade
         public override void onLoginFailed(ErrorMsg errMsg)
         {
             showLog("onLoginFailed", "msg: "+ errMsg.errMsg);
-            QuickSDK.getInstance().reInit();
+            // QuickSDK.getInstance().reInit();
             //登录失败的回调
             //如果游戏没有登录按钮，应在这里再次调用登录接口
             Api.OnLoginCancel();
@@ -109,7 +119,7 @@ namespace FantaBlade
                     showLog("onSucceed QUICK_SDK_FUNC_TYPE_REAL_NAME_REGISTER ", _UserInfo.age+"  "+_UserInfo.switchAccount+" "+real);
                     break;
                 default:
-                    showLog("onSucceed ", info.FunctionType+"");
+                    showLog("onSucceed ", info.FunctionType+" "+infos);
                     break;
             }
         }

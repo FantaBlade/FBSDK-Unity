@@ -20,6 +20,8 @@
         maven {
             url "https://jitpack.io"
         }
+        mavenCentral()
+        google()
         flatDir {
             dirs 'libs'
         }

@@ -135,7 +135,7 @@ public static class PlayerPackager
             // PlistElementDict rootDict = plist.root;
             // rootDict.SetBoolean("UIRequiresFullScreen",true);
             // plist.WriteToFile(plistPath);
-// #endif
+#endif
         }
         else if (buildTarget == BuildTarget.Android)
         {

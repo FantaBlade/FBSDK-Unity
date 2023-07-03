@@ -187,7 +187,19 @@ namespace FantaBlade.Internal
                 {
                     if (LocationSuccess != null) LocationSuccess(Location);
                 }
-                PlatformApi.Util.GetIpJson.Get((err, info, response) =>
+                PlatformApi.Util.GetIpApi.Get((err, info, response) =>
+                {
+                    if (err == null)
+                    {
+                        Ip = response.query;
+                        Debug.Log("ip:"+response.query);
+                        if (string.IsNullOrEmpty(Location))
+                        {
+                            Location = response.countryCode;
+                        }
+                    }
+                });
+                PlatformApi.Util.GetIpCo.Get((err, info, response) =>
                 {
                     if (err == null)
                     {

@@ -390,7 +390,8 @@ namespace FantaBlade.Internal
             private const string Prefix = Server + "/util/";
 
             public static readonly WebRequest<IpInfoResponse> GetIpInfo = Prefix + "getIpInfo";
-            public static readonly WebRequest<IpJsonResponse> GetIpJson = "https://ipapi.co/json";//"https://ip-api.com/json";
+            public static readonly WebRequest<IpApiResponse> GetIpApi = "http://ip-api.com/json";
+            public static readonly WebRequest<IpCoResponse> GetIpCo = "https://ipapi.co/json";
         }
 
         public static class Iap
@@ -478,12 +479,23 @@ namespace FantaBlade.Internal
             public string tempTicket;
         }
 
-        public class IpJsonResponse : Response
+        public class IpApiResponse : Response
+        {
+            public string countryCode;
+            public string query;
+
+            public IpApiResponse()
+            {
+                code = 0;
+            }
+        }
+
+        public class IpCoResponse : Response
         {
             public string country_code;
             public string ip;
 
-            public IpJsonResponse()
+            public IpCoResponse()
             {
                 code = 0;
             }
