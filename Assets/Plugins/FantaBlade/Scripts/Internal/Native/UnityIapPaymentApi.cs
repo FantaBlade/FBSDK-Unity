@@ -6,6 +6,7 @@ namespace FantaBlade.Internal.Native
     internal class UnityIapPaymentApi : IPaymentApi, IStoreListener
     {
         private IStoreController _controller;
+
         private IExtensionProvider _extensions;
         // private IAppleExtensions _appleExtensions;
         // private ITransactionHistoryExtensions _transactionHistoryExtensions;
@@ -93,7 +94,13 @@ namespace FantaBlade.Internal.Native
         public void OnInitializeFailed(InitializationFailureReason error)
         {
             string errorStr = "Billing failed to initialize!";
-            Log.Info(errorStr);
+
+            OnInitializeFailed(error, errorStr);
+        }
+
+        public void OnInitializeFailed(InitializationFailureReason error, string message)
+        {
+            Log.Info(message);
             switch (error)
             {
                 case InitializationFailureReason.AppNotKnown:
@@ -101,17 +108,17 @@ namespace FantaBlade.Internal.Native
                     break;
                 case InitializationFailureReason.PurchasingUnavailable:
                     // Ask the user if billing is disabled in device settings.
-                    errorStr = "Billing disabled!";
-                    Log.Info(errorStr);
+                    message = "Billing disabled!";
+                    Log.Info(message);
                     break;
                 case InitializationFailureReason.NoProductsAvailable:
                     // Developer configuration error; check product metadata.
-                    errorStr = "No products available for purchase!";
-                    Log.Info(errorStr);
+                    message = "No products available for purchase!";
+                    Log.Info(message);
                     break;
             }
 
-            Api.OnPaymentInitializeFailure(errorStr);
+            Api.OnPaymentInitializeFailure(message);
         }
 
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs e)
@@ -169,7 +176,7 @@ namespace FantaBlade.Internal.Native
                 var product = _purchaseQueue.Dequeue();
                 var form = new Dictionary<string, string>
                 {
-                    {"receipt", product.receipt}
+                    { "receipt", product.receipt }
                 };
                 PlatformApi.Iap.PurchaseNotify.Post(form, (err, meta, resp) =>
                 {
