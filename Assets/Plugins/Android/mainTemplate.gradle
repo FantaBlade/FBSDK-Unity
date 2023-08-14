@@ -3,28 +3,12 @@
 // Android Resolver Repos Start
 ([rootProject] + (rootProject.subprojects as List)).each { project ->
     project.repositories {
-        // def unityProjectPath = $/file:///**DIR_UNITYPROJECT**/$.replace("\\", "/")
+        def unityProjectPath = $/file:///**DIR_UNITYPROJECT**/$.replace("\\", "/")
+        maven {
+            url "https://maven.google.com"
+        }
         mavenLocal()
-        maven {
-            url "file:../../Assets/EasyMobile/GeneratedLocalRepo/EasyMobile/Plugins/Android/m2repository"
-        }
-        maven {
-            url 'https://artifact.bytedance.com/repository/Volcengine/'
-        }
-        maven {
-            url "https://maven.aliyun.com/repository/public"
-        }
-        maven{
-            url "https://maven.aliyun.com/repository/google"
-        }
-        maven {
-            url "https://jitpack.io"
-        }
         mavenCentral()
-        google()
-        flatDir {
-            dirs 'libs'
-        }
     }
 }
 // Android Resolver Repos End
@@ -35,10 +19,7 @@ apply plugin: 'com.android.library'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
-    // implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.android.support:appcompat-v7:28.0.0' // Assets/AnyThinkAds/Plugins/Android/China/Editor/Dependencies.xml:3
-    // implementation 'com.sglib.easymobile:easy-mobile:1.+' // Assets/EasyMobile/Editor/EasyMobileDependencies.xml:28
+    implementation 'com.android.support:appcompat-v7:28.0.0' // Assets/Plugins/SDK/TopOn/AnyThinkAds/Plugins/Android/China/Editor/Dependencies.xml:3
 // Android Resolver Dependencies End
 	// implementation 'com.bytedance.ies.ugc.aweme:opensdk-china-external:0.1.4.0'
  //    implementation 'com.bytedance.ies.ugc.aweme:opensdk-common:0.1.4.0'

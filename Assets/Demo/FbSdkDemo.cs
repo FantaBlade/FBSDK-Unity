@@ -1,5 +1,7 @@
-﻿using System.Globalization;
-using FantaBlade;
+﻿using System.Collections.Generic;
+using FantaBlade.Mediation;
+using FantaBlade.Platform;
+using FantaBlade.Platform.AD;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -14,39 +16,28 @@ public class FbSdkDemo : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        Api.InitializeSuccess += OnInitializeSuccess;
-        Api.LoginSuccess += OnLoginSuccess;
-        Api.LogoutSuccess += OnLogoutSuccess;
-        Api.PaySuccess += OnPaySuccess;
-        Api.PayCancel += OnPayCancel;
-        Api.Init("44I1ucBEaIRvm4Re", true, PublishRegion.LocalDev);
+        FantaBladeMediation.InitializeSuccess += OnInitializeSuccess;
+        FantaBladeMediation.LoginSuccess += OnLoginSuccess;
+        FantaBladeMediation.LogoutSuccess += OnLogoutSuccess;
+        FantaBladeMediation.PaySuccess += OnPaySuccess;
+        FantaBladeMediation.PayCancel += OnPayCancel;
+        FantaBladeMediation.Init("44I1ucBEaIRvm4Re", true, PublishRegion.LocalDev);
 //        Api.Init("zsN9eQcEqcmWnBCT", true, PublishRegion.SoutheastAsia, null, true);
     }
     
     private void OnInitializeSuccess()
     {
-        int[] channels = new[]
+        FantaBladePlatform.LoginChannel[] channels = new[]
         {
-            Api.LoginChannel.CHANNEL_WECHAT,
-            Api.LoginChannel.CHANNEL_QQ,
-            Api.LoginChannel.CHANNEL_WEIBO,
-            Api.LoginChannel.CHANNEL_DOUYIN,
-            Api.LoginChannel.CHANNEL_APPLE,
-            Api.LoginChannel.CHANNEL_MOBILE,
+            FantaBladePlatform.LoginChannel.CHANNEL_WECHAT,
+            FantaBladePlatform.LoginChannel.CHANNEL_QQ,
+            FantaBladePlatform.LoginChannel.CHANNEL_WEIBO,
+            FantaBladePlatform.LoginChannel.CHANNEL_DOUYIN,
+            FantaBladePlatform.LoginChannel.CHANNEL_APPLE,
+            FantaBladePlatform.LoginChannel.CHANNEL_MOBILE,
         };
-        string[] channelAppIds = new[]
-        {
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            ""
-        };
-        Api.EnableThirdChannel(channels, channelAppIds);
-        Api.Login();
+        FantaBladePlatform.EnableThirdChannel(channels);
+        FantaBladePlatform.Login();
     }
 
     private void OnLoginSuccess(string token)
@@ -56,7 +47,7 @@ public class FbSdkDemo : MonoBehaviour
 
     private void OnLogoutSuccess()
     {
-        Api.Login();
+        FantaBladePlatform.Login();
     }
 
     private void OnPaySuccess()
@@ -71,18 +62,17 @@ public class FbSdkDemo : MonoBehaviour
 
     public void Pay()
     {
-        Api.OrderInfo orderInfo = new Api.OrderInfo();
-        orderInfo.id = "com.fantablade.watergun.currency_charge_1001";
-        Api.Pay(orderInfo);
+        string orderId = "com.fantablade.watergun.currency_charge_1001";
+        FantaBladePlatform.Pay(orderId);
     }
     public void UserCenter()
     {
-        Api.OpenUserCenter();
+        FantaBladePlatform.OpenUserCenter();
     }
 
     public void ShowProducts()
     {
-        var products = Api.GetProducts();
+        var products = FantaBladePlatform.GetProducts();
         if (products != null)
         {
             foreach (var product in products)
@@ -98,7 +88,7 @@ public class FbSdkDemo : MonoBehaviour
         string path =
             System.IO.Path.Combine(Application.persistentDataPath, fileName);
         UnityEngine.ScreenCapture.CaptureScreenshot(fileName);
-        Api.Share(5, path,"", "");
+        FantaBladeShare.Share(5, path,"", "");
     }
 
     private void LogProduct(Product product)
@@ -113,5 +103,19 @@ public class FbSdkDemo : MonoBehaviour
                 product.metadata.localizedPriceString,
                 product.transactionID
             }));
+    }
+
+    public void ShowAd()
+    {
+        FantaBladeAD.Init(new FantaBladeADConfig()
+        {
+            Channel = FantaBladeMediation.Channel,
+            DebugMode = true,
+            UserId = "AAAAAAA",
+            TopOnConfig = new TopOnConfig("a64d9b54901bd3", "9a8753daa6d353462a836351efd577a2")
+        });
+        var placementId = "b64d9e14835dc8";
+        FantaBladeAD.AddAdPlacementIDs(new []{"b64d9e14835dc8"}, new Dictionary<string, string>());
+        StartCoroutine(FantaBladeAD.ShowAdCoroutine(placementId));
     }
 }

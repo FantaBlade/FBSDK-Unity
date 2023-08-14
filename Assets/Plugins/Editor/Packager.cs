@@ -142,7 +142,7 @@ public static class PlayerPackager
             string manifestPath = string.Format("{0}/src/main/AndroidManifest.xml", path);
             // if (!File.Exists(manifestPath))
             //     return;
-            if (FantaBlade.Api.Channel.Equals("Quick"))
+            if (FantaBlade.Mediation.FantaBladeMediation.Channel.Equals("Quick"))
             {
                 // File.Copy("Assets/Plugins/FantaBlade/AndroidManifest.xml",manifestPath,true);
                 // manifestDoc = AppendAndroidPermissionField(manifestDoc,"android.permission.GET_TASKS");

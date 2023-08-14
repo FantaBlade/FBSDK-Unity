@@ -1,0 +1,28 @@
+{
+	"name": "com.fantablade.sdk.platform",
+	"displayName": "FantaBlade SDK Platform",
+	"description": "Platform library of FantaBlade SDK",
+	"version": "0.1.0",
+	"unity": "2018.3",
+	"author": {
+		"name": "FantaBlade",
+		"email": "cto@fantablade.com",
+		"url": "https://fantablade.com/"
+	},
+	"dependencies": {
+		"com.fantablade.sdk.common": "0.1.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://git.fantablade.cn/FantaBlade/Platform/FBSDK-Unity.git"
+	},
+	"keywords": [
+		"fantablade",
+		"sdk"
+	],
+	"license": "SEE LICENSE IN LICENSE",
+	"bugs": {
+		"url": "https://git.fantablade.cn/FantaBlade/Platform/FBSDK-Unity/-/issues"
+	},
+	"homepage": "https://fantablade.com/"
+}

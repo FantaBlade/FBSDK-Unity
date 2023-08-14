@@ -1,0 +1,19 @@
+{
+    "name": "FantaBlade.Platform",
+    "rootNamespace": "",
+    "references": [
+        "FantaBlade.Common",
+        "UnityEngine.Purchasing",
+        "UnityEngine.Purchasing.Apple",
+        "UnityEngine.Purchasing.Stores"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
