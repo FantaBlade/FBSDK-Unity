@@ -69,20 +69,6 @@
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             tools:node="remove" />
-<!--        <provider-->
-<!--            android:name="android.support.v4.content.FileProvider"-->
-<!--            android:authorities="quicksdk_packName.fileprovider"-->
-<!--            android:exported="false"-->
-<!--            android:grantUriPermissions="true" >-->
-<!--            <meta-data-->
-<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
-<!--                android:resource="@xml/filepaths" >-->
-<!--            </meta-data>-->
-<!--        </provider>-->
-<!--            <provider
-                android:name="com.fantablade.fbsdk.ShareFileProvider"
-                tools:node="remove">
-            </provider>-->
             <provider
                     android:name="com.sglib.easymobile.androidnative.EMFileProvider"
                     android:authorities="quicksdk_packName.easymobile_fileprovider"

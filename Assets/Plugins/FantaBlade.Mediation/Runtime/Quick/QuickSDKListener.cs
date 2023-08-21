@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using FantaBlade.Mediation;
+using System.Collections;
 
 namespace quicksdk
 {
@@ -32,13 +32,17 @@ namespace quicksdk
 
         public abstract void onExitSuccess();
 
+        public abstract void onPrivaceAgree();
+        public abstract void onPrivaceRefuse();
+
 
         //callback end
 
 
-		public void onInitSuccess(string msg)
+        public void onInitSuccess(string msg)
 		{
-			onInitSuccess();
+            Debug.Log("QuickSdkListener  onInitSuccess");
+            onInitSuccess();
 		}
 
 		public void onInitFailed(string msg)
@@ -52,7 +56,6 @@ namespace quicksdk
 
         public void onLoginSuccess(string msg)
         {
-	        EventHandle.showLog("QuickSdk onLoginSuccess ", msg);
             var data = SimpleJSON.JSONNode.Parse(msg);
             UserInfo userInfo = new UserInfo();
             userInfo.uid = data["userId"].Value;
@@ -65,7 +68,6 @@ namespace quicksdk
 
 		public void onSwitchAccountSuccess(string msg)
 		{
-			EventHandle.showLog("QuickSdk onSwitchAccountSuccess ", msg);
 			var data = SimpleJSON.JSONNode.Parse(msg);
 			UserInfo userInfo = new UserInfo();
 			userInfo.uid = data["userId"].Value;
@@ -78,7 +80,6 @@ namespace quicksdk
 
         public void onLoginFailed(string msg)
         {
-	        EventHandle.showLog("QuickSdk onLoginFailed ", msg);
             var data = SimpleJSON.JSONNode.Parse(msg);
 			ErrorMsg errMsg = new ErrorMsg();
 			errMsg.errMsg = data["msg"].Value;
@@ -128,18 +129,27 @@ namespace quicksdk
 
         public void onExitSuccess(string msg)
         {
+            Debug.Log("QuickSdkListener  onExitSuccess");
             onExitSuccess();
         }
 		
         public void onSuccess(string infos)
         {
-	        EventHandle.showLog("QuickSdk onSuccess ", infos);
             onSucceed(infos);
         }
 
         public void onFail(string msg)
         {
             onFailed(msg);
+        }
+
+        public void onPrivaceAgree(string msg)
+        {
+            onPrivaceAgree();
+        }
+        public void onPrivaceRefuse(string msg)
+        {
+            onPrivaceRefuse();
         }
 
     }

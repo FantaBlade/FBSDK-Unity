@@ -186,6 +186,16 @@ namespace FantaBlade.Mediation
             QuickSDK.getInstance().exitGame();
         }
 
+        public override void onPrivaceAgree()
+        {
+            FantaBladeMediation.OnPrivacyAgree();
+        }
+
+        public override void onPrivaceRefuse()
+        {
+            FantaBladeMediation.OnPrivacyRefuse();
+        }
+
         public void onPauseGame()
         {
             // Time.timeScale = 0;

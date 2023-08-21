@@ -12,6 +12,25 @@ namespace FantaBlade.Platform
     /// </summary>
     public static class FantaBladePlatform
     {
+        private static readonly string DefinedChannel;
+        
+        static FantaBladePlatform()
+        {
+#if UNITY_IOS
+            DefinedChannel = "AppStore";
+#elif UNITY_ANDROID
+            #if TAPTAP
+                DefinedChannel = "TapTap";
+            #elif GOOGLE_PLAY
+                DefinedChannel = "GooglePlay";
+            #else
+                DefinedChannel = "Official";
+            #endif
+#else
+            DefinedChannel = "Official";
+#endif
+        }
+        
         // 第三方登陆
         public enum LoginChannel
         {
@@ -28,19 +47,6 @@ namespace FantaBlade.Platform
         }
 
         #region API
-        
-        // 兼容编译选项模式
-#if UNITY_IOS
-        public static readonly string Channel = "App Store";
-#elif UNITY_ANDROID
-#if TAPTAP
-        public static readonly string DefinedChannel = "TapTap";
-#elif GOOGLE_PLAY
-        public static readonly string DefinedChannel = "Google Play";
-#else
-        public static readonly string DefinedChannel = "Official";
-#endif
-#endif
 
         public static string Channel
         {
@@ -125,24 +131,24 @@ namespace FantaBlade.Platform
             for (int i = 0, max = loginChannels.Length; i < max; ++i)
             {
                 string appId = "";
-                string weiboUrl = "";
+                string param = "";
                 LoginChannel channel = loginChannels[i];
                 switch (channel)
                 {
                     case LoginChannel.CHANNEL_WECHAT:
                         appId = Config.WECHAT_APPID;
-                        weiboUrl = Config.WECHAT_UNIVERSAL_LINK;
+                        param = Config.WECHAT_UNIVERSAL_LINK;
                         break;
                     case LoginChannel.CHANNEL_QQ:
                         appId = Config.QQ_APPID;
-                        weiboUrl = Application.identifier + ".fileprovider";
+                        param = Application.identifier + ".fileprovider";
                         break;
                     case LoginChannel.CHANNEL_WEIBO:
                         appId = Config.WEIBO_APPID;
 #if UNITY_ANDROID
-                        weiboUrl = Config.WEIBO_REDIRECTURL;
+                        param = Config.WEIBO_REDIRECTURL;
 #else
-                        weiboUrl = FantaBlade.Config.WECHAT_UNIVERSAL_LINK;
+                        param = Config.WECHAT_UNIVERSAL_LINK;
 #endif
                         break;
                     case LoginChannel.CHANNEL_DOUYIN:
@@ -158,7 +164,7 @@ namespace FantaBlade.Platform
                     appId = customAppId;
                 }
 
-                RegisterChannel(channel, appId, weiboUrl);
+                RegisterChannel(channel, appId, param);
             }
         }
 

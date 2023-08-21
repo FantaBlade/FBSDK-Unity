@@ -27,7 +27,12 @@ namespace quicksdk
 			QuickSDKImp.getInstance().init();
 		}
 
-		public void init()
+        public void showPrivace()
+        {
+            QuickSDKImp.getInstance().callShowPrivace();
+        }
+
+        public void init()
         {
 			QuickSDKImp.getInstance().init();
 		}
@@ -92,10 +97,15 @@ namespace quicksdk
 		{
 			return QuickSDKImp.getInstance ().isFunctionSupported (type);
 		}
-		public void callFunction(FuncType type)
+		public String callFunction(FuncType type)
 		{
-			QuickSDKImp.getInstance ().callFunction (type);
+			return QuickSDKImp.getInstance ().callFunction (type);
 		}
+
+        public String callFunctionWithResult(FuncType type)
+        {
+            return QuickSDKImp.getInstance().callFuncWithResult(type);
+        }
         public string channelName()          //获取渠道名称
 		{
 			return QuickSDKImp.getInstance ().channelName ();

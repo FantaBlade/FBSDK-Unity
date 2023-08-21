@@ -20,6 +20,16 @@
     <activity android:name="com.tencent.tauth.AuthActivity" android:exported="false" tools:node="merge" />
     <activity android:name="com.sina.weibo.sdk.share.WbShareResultActivity" android:exported="false" tools:node="merge" />
     <receiver android:name="com.unity.androidnotifications.UnityNotificationRestartOnBootReceiver" android:exported="false" tools:node="merge" />
+    <provider
+            android:name="com.fantablade.fbsdk.ShareFileProvider"
+            android:authorities="com.fantablade.fbsdk.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:node="remove">
+      <meta-data
+              android:name="android.support.FILE_PROVIDER_PATHS"
+              android:resource="@xml/share_file_paths" />
+    </provider>
   </application>
   <queries>
     <package android:name="com.tencent.mobileqq" />

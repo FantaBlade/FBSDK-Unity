@@ -22,35 +22,41 @@ namespace FantaBlade.Mediation
     public class FantaBladeMediation
     {
         private static GameRoleInfo _gameRoleInfo = new GameRoleInfo();
-        
+
+        private static readonly string DefinedChannel;
+
+        static FantaBladeMediation()
+        {
+#if SOFUNNY
+        DefinedChannel = "SoFunny";
+#elif UNITY_IOS
+        DefinedChannel = "App Store";
+#elif UNITY_ANDROID
+        #if QUICK
+            DefinedChannel = "Quick";
+        #elif DOUYIN
+            DefinedChannel = "Douyin";
+        #elif KUAISHOU
+            DefinedChannel = "Kuaishou";
+        #elif TAPTAP
+            DefinedChannel = "TapTap";
+        #elif GOOGLE_PLAY
+            DefinedChannel = "Google Play";
+        #else
+            DefinedChannel = "Official";
+        #endif
+#else
+            DefinedChannel = "Official";
+#endif
+        }
+
         #region API
 
-        // 兼容编译选项模式
-#if SOFUNNY
-        public static readonly string DefinedChannel = "SoFunny";
-#elif UNITY_IOS
-        public static readonly string Channel = "App Store";
-#elif UNITY_ANDROID
-#if QUICK
-        public static readonly string DefinedChannel = "Quick";
-#elif DOUYIN
-        public static readonly string DefinedChannel = "Douyin";
-#elif KUAISHOU
-        public static readonly string DefinedChannel = "Kuaishou"
-#elif TAPTAP
-        public static readonly string DefinedChannel = "TapTap";
-#elif GOOGLE_PLAY
-        public static readonly string DefinedChannel = "Google Play";
-#else
-        public static readonly string DefinedChannel = "Official";
-#endif
-#endif
-        
         public static string Channel
         {
             get
             {
-                if (DefinedChannel=="Quick")
+                if (DefinedChannel == "Quick")
                 {
                     return QuickSDK.getInstance().channelName();
                 }
@@ -166,6 +172,24 @@ namespace FantaBlade.Mediation
             if (Channel.Equals("Quick") && EventHandle.Instance)
             {
                 EventHandle.Instance.onResumeGame();
+            }
+        }
+
+        public static void ShowPrivace()
+        {
+            if (Channel.Equals("Quick"))
+            {
+                if (EventHandle.isInit)
+                {
+                    Log.Info("QuickSDK.getInstance().login(");
+                    QuickSDK.getInstance().login();
+                }
+                else
+                {
+                    QuickSDK.getInstance().showPrivace();
+                }
+
+                return;
             }
         }
 
@@ -376,6 +400,20 @@ namespace FantaBlade.Mediation
             if (handler != null) handler(token);
         }
 
+        internal static void OnPrivacyAgree()
+        {
+            Log.Info("OnPrivacyAgree: ");
+            var handler = PrivacyAgree;
+            if (handler != null) handler();
+        }
+
+        internal static void OnPrivacyRefuse()
+        {
+            Log.Info("OnPrivacyRefuse: ");
+            var handler = PrivacyRefuse;
+            if (handler != null) handler();
+        }
+
         internal static void OnLoginSuccess(string token)
         {
             Log.Info("OnLoginSuccess: " + token);
@@ -471,6 +509,17 @@ namespace FantaBlade.Mediation
         public static event Action<string> PaymentInitializeFailure;
 
         /// <summary>
+        ///     隐私协议通过
+        /// </summary>
+        public static event Action PrivacyAgree;
+
+
+        /// <summary>
+        ///     隐私协议不通过
+        /// </summary>
+        public static event Action PrivacyRefuse;
+
+        /// <summary>
         ///     登陆成功
         /// </summary>
         public static event Action<string> LoginSuccess;
@@ -498,10 +547,6 @@ namespace FantaBlade.Mediation
         /// </summary>
         public static event Action PaySuccess;
 
-        public static event Action<string> ShareSucceed;
-        public static event Action<string> ShareFailure;
-        public static event Action<string> ShareCancel;
-
         /// <summary>
         ///     支付失败
         /// </summary>
@@ -512,6 +557,10 @@ namespace FantaBlade.Mediation
         ///     支付取消
         /// </summary>
         public static event Action PayCancel;
+
+        public static event Action<string> ShareSucceed;
+        public static event Action<string> ShareFailure;
+        public static event Action<string> ShareCancel;
 
         #endregion
     }
