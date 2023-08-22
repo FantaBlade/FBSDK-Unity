@@ -2,6 +2,8 @@ using System;
 using FantaBlade.Common;
 using FantaBlade.Platform;
 using quicksdk;
+using UnityEngine;
+using Object = UnityEngine.Object;
 #if UNITY_ANDROID && !UNITY_EDITOR
 using UnityEngine;
 #endif
@@ -21,6 +23,8 @@ namespace FantaBlade.Mediation
 
     public class FantaBladeMediation
     {
+        private static bool _isInitialized;
+        
         private static GameRoleInfo _gameRoleInfo = new GameRoleInfo();
 
         private static readonly string DefinedChannel;
@@ -149,14 +153,43 @@ namespace FantaBlade.Mediation
         public static void Init(string accessKey, bool showFloatingWindow = true,
             PublishRegion publishRegion = PublishRegion.China)
         {
+            if (_isInitialized) return;
 // #if UNITY_IOS && !UNITY_EDITOR
             // Unity.Advertisement.IosSupport.ATTrackingStatusBinding.RequestAuthorizationTracking();
 // #endif
-            FantaBladePlatform.Init(accessKey, showFloatingWindow, publishRegion);
-            if (Channel.Equals("SoFunny"))
+            if (Channel == "Quick")
+            {
+                var go = new GameObject("QuickSDK");
+                go.AddComponent<EventHandle>();
+                Object.DontDestroyOnLoad(go);
+            }
+            else if (Channel.Equals("SoFunny"))
             {
                 SoFunnyController.Init();
             }
+            else
+            {
+                FantaBladePlatform.Init(accessKey, showFloatingWindow, publishRegion);
+                FantaBladePlatform.InitializeSuccess += OnInitializeSuccess;
+                FantaBladePlatform.InitializeFailure += OnInitializeFailure;
+                FantaBladePlatform.PaymentInitializeSuccess += OnPaymentInitializeSuccess;
+                FantaBladePlatform.PaymentInitializeFailure += OnPaymentInitializeFailure;
+                FantaBladePlatform.SwitchAccountSuccess += OnSwitchAccountSuccess;
+                // FantaBladePlatform.PrivacyAgree += OnPrivacyAgree;
+                // FantaBladePlatform.PrivacyRefuse += OnPrivacyRefuse;
+                FantaBladePlatform.LoginSuccess += OnLoginSuccess;
+                FantaBladePlatform.LoginFailure += OnLoginFailure;
+                FantaBladePlatform.LoginCancel += OnLoginCancel;
+                FantaBladePlatform.LogoutSuccess += OnLogoutSuccess;
+                FantaBladePlatform.PaySuccess += OnPaySuccess;
+                FantaBladePlatform.PayFailure += OnPayFailure;
+                FantaBladePlatform.PayCancel += OnPayCancel;
+                FantaBladeShare.ShareSucceed += OnShareSucceed;
+                FantaBladeShare.ShareFailure += OnShareFailure;
+                FantaBladeShare.ShareCancel += OnShareCancel;
+            }
+
+            _isInitialized = true;
         }
 
         public static void OnStop()
