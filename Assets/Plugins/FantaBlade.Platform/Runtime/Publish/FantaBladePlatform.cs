@@ -14,6 +14,9 @@ namespace FantaBlade.Platform
     {
         private static readonly string DefinedChannel;
         
+        private static bool _isInitialized;
+        private static bool _isPaymentInitialized;
+
         static FantaBladePlatform()
         {
 #if UNITY_IOS
@@ -52,9 +55,6 @@ namespace FantaBlade.Platform
         {
             get { return DefinedChannel; }
         }
-
-        private static bool _isInitialized;
-        private static bool _isPaymentInitialized;
 
         /// <summary>
         /// 是否需要验证激活
@@ -128,49 +128,12 @@ namespace FantaBlade.Platform
 
         public static void EnableThirdChannel(LoginChannel[] loginChannels, Dictionary<LoginChannel, string> appIds = null)
         {
-            for (int i = 0, max = loginChannels.Length; i < max; ++i)
-            {
-                string appId = "";
-                string param = "";
-                LoginChannel channel = loginChannels[i];
-                switch (channel)
-                {
-                    case LoginChannel.CHANNEL_WECHAT:
-                        appId = Config.WECHAT_APPID;
-                        param = Config.WECHAT_UNIVERSAL_LINK;
-                        break;
-                    case LoginChannel.CHANNEL_QQ:
-                        appId = Config.QQ_APPID;
-                        param = Application.identifier + ".fileprovider";
-                        break;
-                    case LoginChannel.CHANNEL_WEIBO:
-                        appId = Config.WEIBO_APPID;
-#if UNITY_ANDROID
-                        param = Config.WEIBO_REDIRECTURL;
-#else
-                        param = Config.WECHAT_UNIVERSAL_LINK;
-#endif
-                        break;
-                    case LoginChannel.CHANNEL_DOUYIN:
-                        appId = Config.DOUYIN_CLIENTKEY;
-                        break;
-                    case LoginChannel.CHANNEL_MOBILE:
-                        appId = Config.MOBILE_SECRETINFO;
-                        break;
-                }
-
-                if (appIds != null && appIds.TryGetValue(channel, out var customAppId))
-                {
-                    appId = customAppId;
-                }
-
-                RegisterChannel(channel, appId, param);
-            }
+            SdkManager.EnableThirdChannel(loginChannels, appIds);
         }
 
-        public static void HideLoginChannel(LoginChannel loginChannel, bool enable)
+        public static void ActiveLoginChannel(LoginChannel loginChannel, bool enable)
         {
-            SdkManager.Instance.HideLoginChannel(loginChannel, enable);
+            SdkManager.ActiveLoginChannel(loginChannel, enable);
         }
 
         /// <summary>
@@ -200,11 +163,6 @@ namespace FantaBlade.Platform
         public static bool IsSupportAuth(LoginChannel loginChannel)
         {
             return SdkManager.NativeApi.IsSupportAuth((int)loginChannel);
-        }
-
-        public static void RegisterChannel(LoginChannel loginChannel, string appId, string weiboRedirectUrl = "")
-        {
-            SdkManager.NativeApi?.RegisterChannel((int)loginChannel, appId, weiboRedirectUrl);
         }
 
         public static void Feedback()
@@ -255,7 +213,7 @@ namespace FantaBlade.Platform
 
         public static void OpenUserLicense()
         {
-            SdkManager.Instance.UserAcceptLisense();
+            SdkManager.UserAcceptLisense();
             SdkManager.Ui.ShowNormalUI(NormalUIID.UserLicense);
         }
 

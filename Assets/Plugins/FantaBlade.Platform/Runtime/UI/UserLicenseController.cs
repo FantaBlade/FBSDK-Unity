@@ -38,7 +38,7 @@ namespace FantaBlade.Platform.UI
 
         public void OnClickLisenseAccept()
         {
-            SdkManager.Instance.UserAcceptLisense();
+            SdkManager.UserAcceptLisense();
             _window.Disappear();
         }
     }

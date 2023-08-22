@@ -46,7 +46,7 @@ namespace FantaBlade.Platform.UI
 			{
 				return;
 			}
-			var active = SdkManager.Instance.IsLoginChannelEnable(loginChannel);
+			var active = SdkManager.IsLoginChannelEnable(loginChannel);
 			#if UNITY_IOS
 			active = active && SdkManager.NativeApi.IsInstall(loginChannel);
 			#endif

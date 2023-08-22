@@ -10,6 +10,9 @@ namespace FantaBlade.Platform.Internal
 {
     internal class SdkManager : MonoBehaviour
     {
+        private static readonly List<FantaBladePlatform.LoginChannel> _loginThirdChannels =
+            new List<FantaBladePlatform.LoginChannel>();
+
         /// <summary>
         ///     Debug 模式
         /// </summary>
@@ -24,7 +27,7 @@ namespace FantaBlade.Platform.Internal
         ///     发行区域
         /// </summary>
         public static PublishRegion PublishRegion;
-        
+
         /// <summary>
         ///     语言
         /// </summary>
@@ -35,14 +38,15 @@ namespace FantaBlade.Platform.Internal
             get
             {
                 return Language == SystemLanguage.Chinese
-                    || Language == SystemLanguage.ChineseSimplified
-                    || Language == SystemLanguage.ChineseTraditional
+                       || Language == SystemLanguage.ChineseSimplified
+                       || Language == SystemLanguage.ChineseTraditional
                     ? "Chinese"
                     : "English";
             }
         }
 
         public static string Ip = "";
+
         /// <summary>
         ///     玩家定位
         /// </summary>
@@ -76,7 +80,7 @@ namespace FantaBlade.Platform.Internal
                 PlayerPrefs.Save();
             }
         }
-        
+
         public static string CachePhoneNumber
         {
             get
@@ -91,7 +95,7 @@ namespace FantaBlade.Platform.Internal
                 PlayerPrefs.Save();
             }
         }
-        
+
         public static event Action<string> LocationSuccess;
 
 #if UNITY_ANDROID //&& !UNITY_EDITOR
@@ -114,7 +118,6 @@ namespace FantaBlade.Platform.Internal
         public static readonly ShareManager Share = new ShareManager();
         public static readonly LocalizeManager Localize = new LocalizeManager();
         public static readonly MonoUpdateManager MonoUpdate = new MonoUpdateManager();
-        private List<FantaBladePlatform.LoginChannel> hideLoginChannels = new List<FantaBladePlatform.LoginChannel>();
 
         /// <summary>
         ///     原生层 API
@@ -160,17 +163,17 @@ namespace FantaBlade.Platform.Internal
                 PaymentApi = new UnityIapPaymentApi();
                 NativeApi?.Init();
 #else
-                PaymentApi = new StubPaymentApi();
-                NativeApi = new StubNativeApi();
+                    PaymentApi = new StubPaymentApi();
+                    NativeApi = new StubNativeApi();
 #endif
                 }
 
                 #region UI
 
                 if (Instance != null) return;
-                    Instance = FindObjectOfType<SdkManager>();
+                Instance = FindObjectOfType<SdkManager>();
                 if (Instance != null) return;
-                    AccessKeyId = accessKeyId;
+                AccessKeyId = accessKeyId;
 
                 var ui = Resources.Load<GameObject>("fantablade_sdk/prefab/fantablade_sdk");
                 ui = Instantiate(ui);
@@ -183,18 +186,20 @@ namespace FantaBlade.Platform.Internal
                 {
                     PaymentApi?.Init();
                 }
+
                 Share.SetNativeAPI(NativeApi);
                 // 查询玩家位置
                 if (!string.IsNullOrEmpty(Location))
                 {
                     if (LocationSuccess != null) LocationSuccess(Location);
                 }
+
                 PlatformApi.Util.GetIpApi.Get((err, info, response) =>
                 {
                     if (err == null)
                     {
                         Ip = response.query;
-                        Debug.Log("ip:"+response.query);
+                        Debug.Log("ip:" + response.query);
                         if (string.IsNullOrEmpty(Location))
                         {
                             Location = response.countryCode;
@@ -206,13 +211,14 @@ namespace FantaBlade.Platform.Internal
                     if (err == null)
                     {
                         Ip = response.ip;
-                        Debug.Log("ip:"+response.ip);
+                        Debug.Log("ip:" + response.ip);
                         if (string.IsNullOrEmpty(Location))
                         {
                             Location = response.country_code;
                         }
                     }
                 });
+
                 #endregion
 
                 FantaBladePlatform.OnInitializeSuccess();
@@ -224,15 +230,70 @@ namespace FantaBlade.Platform.Internal
             }
         }
 
+        public static void EnableThirdChannel(FantaBladePlatform.LoginChannel[] loginChannels,
+            Dictionary<FantaBladePlatform.LoginChannel, string> appIds = null)
+        {
+            for (int i = 0, max = loginChannels.Length; i < max; ++i)
+            {
+                string appId = "";
+                string param = "";
+                FantaBladePlatform.LoginChannel channel = loginChannels[i];
+                switch (channel)
+                {
+                    case FantaBladePlatform.LoginChannel.CHANNEL_WECHAT:
+                        appId = Config.WECHAT_APPID;
+                        param = Config.WECHAT_UNIVERSAL_LINK;
+                        break;
+                    case FantaBladePlatform.LoginChannel.CHANNEL_QQ:
+                        appId = Config.QQ_APPID;
+                        param = Application.identifier + ".fileprovider";
+                        break;
+                    case FantaBladePlatform.LoginChannel.CHANNEL_WEIBO:
+                        appId = Config.WEIBO_APPID;
+#if UNITY_ANDROID
+                        param = Config.WEIBO_REDIRECTURL;
+#else
+                        param = Config.WECHAT_UNIVERSAL_LINK;
+#endif
+                        break;
+                    case FantaBladePlatform.LoginChannel.CHANNEL_DOUYIN:
+                        appId = Config.DOUYIN_CLIENTKEY;
+                        break;
+                    case FantaBladePlatform.LoginChannel.CHANNEL_MOBILE:
+                        appId = Config.MOBILE_SECRETINFO;
+                        break;
+                }
+
+                if (appIds != null && appIds.TryGetValue(channel, out var customAppId))
+                {
+                    appId = customAppId;
+                }
+
+                RegisterChannel(channel, appId, param);
+            }
+        }
+
+        public static void RegisterChannel(FantaBladePlatform.LoginChannel loginChannel, string appId,
+            string weiboRedirectUrl = "")
+        {
+            if (!_loginThirdChannels.Contains(loginChannel))
+            {
+                NativeApi?.RegisterChannel((int)loginChannel, appId, weiboRedirectUrl);
+                _loginThirdChannels.Add(loginChannel);
+            }
+        }
+
         public static void UpdateLanguage(SystemLanguage language = SystemLanguage.Unknown)
         {
             if (language == SystemLanguage.Unknown)
             {
-                SystemLanguage cachedLang = (SystemLanguage)PlayerPrefs.GetInt("fantablade_sdk_language", (int)SystemLanguage.Unknown);
+                SystemLanguage cachedLang =
+                    (SystemLanguage)PlayerPrefs.GetInt("fantablade_sdk_language", (int)SystemLanguage.Unknown);
                 if (cachedLang == SystemLanguage.Unknown)
                 {
                     cachedLang = Application.systemLanguage;
                 }
+
                 language = cachedLang;
             }
 
@@ -242,15 +303,16 @@ namespace FantaBlade.Platform.Internal
                 PlayerPrefs.SetInt("fantablade_sdk_language", (int)Language);
                 PlayerPrefs.Save();
             }
+
             Localize.Init(Language);
         }
 
-        public new static Coroutine StartCoroutine(IEnumerator coroutine)
+        public static Coroutine StartCoroutine(IEnumerator coroutine)
         {
-            return ((MonoBehaviour) Instance).StartCoroutine(coroutine);
+            return ((MonoBehaviour)Instance).StartCoroutine(coroutine);
         }
 
-        public void UserAcceptLisense()
+        public static void UserAcceptLisense()
         {
             PlayerPrefs.SetInt("user_accept_lisense", 1);
         }
@@ -260,24 +322,40 @@ namespace FantaBlade.Platform.Internal
             return 1 == PlayerPrefs.GetInt("user_accept_lisense", 0);
         }
 
-        public void HideLoginChannel(FantaBladePlatform.LoginChannel loginChannel, bool enable)
+        public static void ActiveLoginChannel(FantaBladePlatform.LoginChannel loginChannel, bool enable)
         {
-            if (!enable)
+            if (enable)
             {
-                hideLoginChannels.Add(loginChannel);
+                _loginThirdChannels.Add(loginChannel);
             }
             else
             {
-                hideLoginChannels.Remove(loginChannel);
+                _loginThirdChannels.Remove(loginChannel);
             }
         }
 
-        public bool IsLoginChannelEnable(FantaBladePlatform.LoginChannel loginChannel)
+        /// <summary>
+        ///     登录渠道是否设定开启
+        /// </summary>
+        /// <param name="loginChannel"></param>
+        /// <returns></returns>
+        public static bool IsLoginChannelEnable(FantaBladePlatform.LoginChannel loginChannel)
         {
-            return NativeApi!=null && NativeApi.IsChannelRegister((int)loginChannel) && !hideLoginChannels.Contains(loginChannel);
+            return _loginThirdChannels.Contains(loginChannel) && NativeApi != null &&
+                   NativeApi.IsChannelRegister((int)loginChannel);
         }
 
-        void Update()
+        /// <summary>
+        ///     登录渠道是否可以使用
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsLoginChannelAvailable(FantaBladePlatform.LoginChannel loginChannel)
+        {
+            return IsLoginChannelEnable(loginChannel) && FantaBladePlatform.IsSupportAuth(loginChannel) &&
+                   FantaBladePlatform.IsInstalled((int)loginChannel);
+        }
+
+        private void Update()
         {
             if (null != MonoUpdate)
             {

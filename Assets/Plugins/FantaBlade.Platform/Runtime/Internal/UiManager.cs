@@ -215,7 +215,7 @@ namespace FantaBlade.Platform.Internal
 
         public void ShowLogin()
         {
-            if (FantaBladePlatform.IsSupportAuth(FantaBladePlatform.LoginChannel.CHANNEL_MOBILE)
+            if (SdkManager.IsLoginChannelAvailable(FantaBladePlatform.LoginChannel.CHANNEL_MOBILE)
                 && DateTimeOffset.Now.ToUnixTimeSeconds() - SdkManager.Auth.mobileAuthTimestamp > 3)
             {
                 SdkManager.Auth.mobileAuthTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
@@ -225,55 +225,34 @@ namespace FantaBlade.Platform.Internal
             else
             {
                 Log.Debug("手机认证不支持，调起常规登录");
-                SdkManager.Ui.ShowNormalUI(NormalUIID.Login);
+                ShowNormalUI(NormalUIID.Login);
             }
-
-            //if (_login == null)
-            //{
-            //    var login = Resources.Load<GameObject>("fantablade_sdk/prefab/login");
-            //    _login = Object.Instantiate(login);
-            //    SetLayer(_defaultLayer, _login.transform);
-            //    ControllerInit(_login);
-            //}
-
-            //_login.SetActive(true);
         }
 
         public void HideLogin()
         {
-            SdkManager.Ui.HideNormalUI((int) NormalUIID.Login);
+            HideNormalUI((int) NormalUIID.Login);
             HideRoot();
-            //_login.SetActive(false);
         }
 
         public void ShowActivation()
         {
-            SdkManager.Ui.ShowNormalUI(NormalUIID.Activation);
+            ShowNormalUI(NormalUIID.Activation);
         }
         
         public void HideActivation()
         {
-            SdkManager.Ui.HideNormalUI((int)NormalUIID.Activation);
+            HideNormalUI((int)NormalUIID.Activation);
         }
 
         public void ShowGameCenter(NormalUIID ui = NormalUIID.None)
         {
-            SdkManager.Ui.ShowNormalUI(NormalUIID.UserCenter);
-            //if (_userCenter == null)
-            //{
-            //    var userCenter = Resources.Load<GameObject>("fantablade_sdk/prefab/user_center");
-            //    _userCenter = Object.Instantiate(userCenter);
-            //    SetLayer(_defaultLayer, _userCenter.transform);
-            //    ControllerInit(_userCenter);
-            //}
-
-            //_userCenter.SetActive(true);
+            ShowNormalUI(NormalUIID.UserCenter);
         }
 
         public void HideGameCenter()
         {
-            SdkManager.Ui.HideNormalUI((int) NormalUIID.UserCenter);
-            //_userCenter.SetActive(false);
+            HideNormalUI((int) NormalUIID.UserCenter);
         }
 
         private void ControllerInit(GameObject root)

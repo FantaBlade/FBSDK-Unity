@@ -76,7 +76,7 @@ namespace FantaBlade.Platform.UI
 
         public void OnClickLisenseAccept()
         {
-            SdkManager.Instance.UserAcceptLisense();
+            SdkManager.UserAcceptLisense();
 //            _userLicense.Disappear();
             var username = _username.text;
             var password = _password.text;
