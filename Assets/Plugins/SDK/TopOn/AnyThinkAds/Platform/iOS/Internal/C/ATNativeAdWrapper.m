@@ -150,7 +150,7 @@ UIEdgeInsets SafeAreaInsets_ATUnityNative() {
     statusDict[@"isReady"] = @(checkLoadModel.isReady);
     statusDict[@"adInfo"] = checkLoadModel.adOfferInfo;
     NSLog(@"ATNativeAdWrapper::statusDict = %@", statusDict);
-    return statusDict.jsonString;
+    return statusDict.jsonFilterString;
 }
 - (void)entryScenarioWithPlacementID:(NSString *)placementID scenarioID:(NSString *)scenarioID{
     
@@ -160,7 +160,7 @@ UIEdgeInsets SafeAreaInsets_ATUnityNative() {
 -(NSString*) getValidAdCaches:(NSString *)placementID {
     NSArray *array = [[ATAdManager sharedManager] getNativeValidAdsForPlacementID:placementID];
     NSLog(@"ATNativeAdWrapper::array = %@", array);
-    return array.jsonString;
+    return array.jsonFilterString;
 }
 
 -(void) showNativeAdWithPlacementID:(NSString*)placementID metricsJSONString:(NSString*)metricsJSONString extraJsonString:(NSString*)extraJsonString {

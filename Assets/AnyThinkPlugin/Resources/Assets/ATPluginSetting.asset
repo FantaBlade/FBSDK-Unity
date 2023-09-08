@@ -15,18 +15,18 @@ MonoBehaviour:
   adMobAndroidAppId: 
   adMobIosAppId: 
   coreNetwork:
-    Name: 
-    DisplayName: 
-    DownloadUrl: 
+    Name: Core
+    DisplayName: Core
+    DownloadUrl: https://topon-sdk-release.oss-cn-hangzhou.aliyuncs.com/Unity/6.2.51-plugin/China/AnyThinkCore.unitypackage
     DependenciesFilePath: 
-    PluginFileName: 
+    PluginFileName: AnyThinkCore.unitypackage
     PluginFilePaths: []
     LatestVersions:
-      Unity: 
-      Android: 
-      Ios: 
+      Unity: 2.0.1
+      Android: 6.2.51
+      Ios: 6.2.51
     CurrentVersions:
-      Unity: 
-      Android: 
-      Ios: 
-  enableAndroidX: 0
+      Unity: 2.0.1
+      Android: 6.2.51
+      Ios: 6.2.51
+  enableAndroidX: 1

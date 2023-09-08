@@ -1,4 +1,4 @@
-namespace FantaBlade.Platform.AD
+namespace FantaBlade.AD
 {
     public class FantaBladeADConfig
     {

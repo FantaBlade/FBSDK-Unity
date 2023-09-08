@@ -12,17 +12,28 @@ extern NSString *const kATUnityUtilitiesInterstitialCloseNotification;
 extern NSString *const kATUnityUtilitiesRewardedVideoImpressionNotification;
 extern NSString *const kATUnityUtilitiesRewardedVideoCloseNotification;
 extern NSString *const kATUnityUtilitiesAdShowingExtraScenarioKey;
+extern NSString *const kATUnityUserExtraDataKey;
+extern NSString *const kATUnityCheckLoadModelAdInfoKey;
+
+
 @interface ATUnityUtilities : NSObject
 +(BOOL)isEmpty:(id)object;
 @end
 
 @interface NSDictionary (KAKit)
 -(NSString*) jsonString;
+
+// 过滤SDK返回参数的 user_load_extra_data 中不支持的类型
+-(NSString*) jsonFilterString;
+
 -(BOOL)containsObjectForKey:(id)key;
 @end
 
 @interface NSArray (KAKit)
 -(NSString*) jsonString;
+
+// 过滤SDK返回参数的 user_load_extra_data 中不支持的类型
+-(NSString*) jsonFilterString;
 @end
 
 @interface NSData(ATKit)

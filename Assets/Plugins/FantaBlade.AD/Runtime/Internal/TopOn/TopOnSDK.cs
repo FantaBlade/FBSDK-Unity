@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using AnyThinkAds.Api;
-using FantaBlade.Platform.AD;
 
-namespace FantaBlade.Platform.SDK.AD.TopOn
+namespace FantaBlade.AD.TopOn
 {
     public static class TopOnSDK
     {

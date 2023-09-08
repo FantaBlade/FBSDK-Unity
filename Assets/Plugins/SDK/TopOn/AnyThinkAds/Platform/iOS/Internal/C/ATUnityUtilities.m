@@ -13,6 +13,9 @@ NSString *const kATUnityUtilitiesRewardedVideoImpressionNotification = @"kATUnit
 NSString *const kATUnityUtilitiesRewardedVideoCloseNotification = @"kATUnityUtilitiesRewardedVideoCloseNotification";
 NSString *const kATUnityUtilitiesAdShowingExtraScenarioKey = @"Scenario";
 
+NSString *const kATUnityUserExtraDataKey = @"user_load_extra_data";
+NSString *const kATUnityCheckLoadModelAdInfoKey = @"adInfo";
+
 @implementation ATUnityUtilities
 +(BOOL)isEmpty:(id)object {
     return (object == nil || [object isKindOfClass:[NSNull class]] || ([object respondsToSelector:@selector(length)] && [(NSData *)object length] == 0) || ([object respondsToSelector:@selector(count)] && [(NSArray *)object count] == 0));
@@ -35,6 +38,41 @@ NSString *const kATUnityUtilitiesAdShowingExtraScenarioKey = @"Scenario";
     } else {
         return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     }
+}
+
+- (NSString*)jsonFilterString {
+    
+    NSError *error;
+    NSData *jsonData;
+    
+    NSMutableDictionary *extraDictM = [NSMutableDictionary dictionaryWithDictionary:self[kATUnityCheckLoadModelAdInfoKey]];
+    NSMutableDictionary *extraDataTemp = [NSMutableDictionary dictionary];
+    NSMutableDictionary *extraDataDictM = [NSMutableDictionary dictionaryWithDictionary:self[kATUnityCheckLoadModelAdInfoKey][kATUnityUserExtraDataKey]];
+    for (NSString *key in extraDataDictM.allKeys) {
+        if ([extraDataDictM[key] isKindOfClass:[NSString class]] || [extraDataDictM[key] isKindOfClass:[NSNumber class]]) {
+            [extraDataTemp setValue:extraDataDictM[key] forKey:key];
+        }
+    }
+    if ([extraDataTemp count]) {
+        [extraDictM setValue:extraDataTemp forKey:kATUnityUserExtraDataKey];
+    } else {
+        [extraDictM removeObjectForKey:kATUnityUserExtraDataKey];
+    }
+    
+    @try {
+        jsonData = [NSJSONSerialization dataWithJSONObject:extraDictM
+                                                           options:kNilOptions
+                                                             error:&error];
+    } @catch (NSException *exception) {
+        return @"{}";
+    } @finally {}
+    
+    if (!jsonData) {
+        return @"{}";
+    } else {
+        return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    
 }
 
 -(BOOL)containsObjectForKey:(id)key {
@@ -60,6 +98,46 @@ NSString *const kATUnityUtilitiesAdShowingExtraScenarioKey = @"Scenario";
         return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     }
 }
+
+- (NSString*)jsonFilterString {
+    
+    NSError *error;
+    NSData *jsonData;
+    
+    NSMutableArray *filterArrayM = [NSMutableArray arrayWithCapacity:self.count];
+    for (NSDictionary *adTempDict in self) {
+        
+        NSMutableDictionary *extraDictM = [NSMutableDictionary dictionaryWithDictionary:adTempDict];
+        NSMutableDictionary *extraDataTemp = [NSMutableDictionary dictionary];
+        NSMutableDictionary *extraDataDictM = [NSMutableDictionary dictionaryWithDictionary:adTempDict[kATUnityUserExtraDataKey]];
+        for (NSString *key in extraDataDictM.allKeys) {
+            if ([extraDataDictM[key] isKindOfClass:[NSString class]] || [extraDataDictM[key] isKindOfClass:[NSNumber class]]) {
+                [extraDataTemp setValue:extraDataDictM[key] forKey:key];
+            }
+        }
+        if ([extraDataTemp count]) {
+            [extraDictM setValue:extraDataTemp forKey:kATUnityUserExtraDataKey];
+        } else {
+            [extraDictM removeObjectForKey:kATUnityUserExtraDataKey];
+        }
+        [filterArrayM addObject:extraDictM];
+    }
+    
+    @try {
+        jsonData = [NSJSONSerialization dataWithJSONObject:filterArrayM
+                                                           options:kNilOptions
+                                                             error:&error];
+    } @catch (NSException *exception) {
+        return @"[]";
+    } @finally {}
+    
+    if (!jsonData) {
+        return @"[]";
+    } else {
+        return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+}
+
 
 @end
 

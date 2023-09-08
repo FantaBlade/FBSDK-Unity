@@ -84,7 +84,7 @@
 - (NSString*)getValidAdCaches:(NSString *)placementID {
     NSArray *array = [[ATAdManager sharedManager] getSplashValidAdsForPlacementID:placementID];
     NSLog(@"ATSplashAdWrapper::array = %@", array);
-    return array.jsonString;
+    return array.jsonFilterString;
 }
 
 - (void)showSplashAdWithPlacementID:(NSString*)placementID extraJsonString:(NSString*)extraJsonString {
@@ -98,7 +98,7 @@
     statusDict[@"isReady"] = @(checkLoadModel.isReady);
     statusDict[@"adInfo"] = checkLoadModel.adOfferInfo;
     NSLog(@"ATSplashAdWrapper::statusDict = %@", statusDict);
-    return statusDict.jsonString;
+    return statusDict.jsonFilterString;
 }
 
 - (void)entryScenarioWithPlacementID:(NSString *)placementID scenarioID:(NSString *)scenarioID{

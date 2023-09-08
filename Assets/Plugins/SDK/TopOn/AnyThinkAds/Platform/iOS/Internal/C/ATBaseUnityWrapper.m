@@ -70,6 +70,25 @@
             NSMutableDictionary *msgDict = [NSMutableDictionary dictionary];
             
             if (![ATUnityUtilities isEmpty:extra]) {
+                
+                // 过滤SDK返回参数的 user_load_extra_data 中不支持的类型
+                if (extra[kATUnityUserExtraDataKey] != nil) {
+                    NSMutableDictionary *extraDictM = [NSMutableDictionary dictionaryWithDictionary:extra];
+                    NSMutableDictionary *extraDataTemp = [NSMutableDictionary dictionary];
+                    NSMutableDictionary *extraDataDictM = [NSMutableDictionary dictionaryWithDictionary:extra[kATUnityUserExtraDataKey]];
+                    for (NSString *key in extraDataDictM.allKeys) {
+                        if ([extraDataDictM[key] isKindOfClass:[NSString class]] || [extraDataDictM[key] isMemberOfClass:[NSNumber class]]) {
+                            [extraDataTemp setValue:extraDataDictM[key] forKey:key];
+                        }
+                    }
+                    if ([extraDataTemp count]) {
+                        [extraDictM setValue:extraDataTemp forKey:kATUnityUserExtraDataKey];
+                    } else {
+                        [extraDictM removeObjectForKey:kATUnityUserExtraDataKey];
+                    }
+                    extra = extraDictM;
+                }
+                
                 if (extra[@"extra"] != nil) {
                     msgDict[@"extra"] = extra[@"extra"];
                     msgDict[@"rewarded"] = extra[@"rewarded"];

@@ -22,6 +22,7 @@ namespace AnyThinkAds.Api
         private string adLogoKey = "adLogo";
         private string ctaButtonKey = "cta";
         private string dislikeButtonKey = "dislike";
+        private string elementsKey = "elements";
 
         public string toJSON()
         {
@@ -85,6 +86,14 @@ namespace AnyThinkAds.Api
                 builder.Append("\"").Append(dislikeButtonKey).Append("\"");
                 builder.Append(":");
                 builder.Append(JsonUtility.ToJson(config.dislikeButtonProperty));
+                builder.Append(",");
+            }
+
+            if (config.elementsProperty != null)
+            {
+                builder.Append("\"").Append(elementsKey).Append("\"");
+                builder.Append(":");
+                builder.Append(JsonUtility.ToJson(config.elementsProperty));
             }
 
             string temp = builder.ToString();

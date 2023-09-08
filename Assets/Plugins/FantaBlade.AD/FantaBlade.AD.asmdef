@@ -1,6 +1,6 @@
 {
-    "name": "FantaBlade.SDK.AD",
-    "rootNamespace": " FantaBlade.SDK.AD",
+    "name": "FantaBlade.AD",
+    "rootNamespace": " FantaBlade.AD",
     "references": [
         "FantaBlade.Common",
         "AnyThinkAds"

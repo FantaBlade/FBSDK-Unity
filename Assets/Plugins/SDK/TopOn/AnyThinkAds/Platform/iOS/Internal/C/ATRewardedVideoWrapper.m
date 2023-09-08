@@ -101,13 +101,13 @@ NSString *const kLoadExtraMediaExtraKey = @"UserExtraData";
     statusDict[@"isReady"] = @(checkLoadModel.isReady);
     statusDict[@"adInfo"] = checkLoadModel.adOfferInfo;
     NSLog(@"ATRewardedVideoWrapper::statusDict = %@", statusDict);
-    return statusDict.jsonString;
+    return statusDict.jsonFilterString;
 }
 
 -(NSString*) getValidAdCaches:(NSString *)placementID {
     NSArray *array = [[ATAdManager sharedManager] getRewardedVideoValidAdsForPlacementID:placementID];
     NSLog(@"ATNativeAdWrapper::array = %@", array);
-    return array.jsonString;
+    return array.jsonFilterString;
 }
 
 -(void) showRewardedVideoWithPlacementID:(NSString*)placementID extraJsonString:(NSString*)extraJsonString {
@@ -177,7 +177,7 @@ NSString *const kLoadExtraMediaExtraKey = @"UserExtraData";
 -(NSString*) getAutoValidAdCaches:(NSString *)placementID{
     NSArray *array = [[ATRewardedVideoAutoAdManager sharedInstance] checkValidAdCachesWithPlacementID:placementID];
     NSLog(@"Unity: getAutoValidAdCaches::array = %@", array);
-    return array.jsonString;
+    return array.jsonFilterString;
 }
 
 -(NSString*) checkAutoAdStatus:(NSString *)placementID {
@@ -187,7 +187,7 @@ NSString *const kLoadExtraMediaExtraKey = @"UserExtraData";
     statusDict[@"isReady"] = @(checkLoadModel.isReady);
     statusDict[@"adInfo"] = checkLoadModel.adOfferInfo;
     NSLog(@"ATRewardedVideoWrapper::checkAutoAdStatus statusDict = %@", statusDict);
-    return statusDict.jsonString;
+    return statusDict.jsonFilterString;
     
 }
 

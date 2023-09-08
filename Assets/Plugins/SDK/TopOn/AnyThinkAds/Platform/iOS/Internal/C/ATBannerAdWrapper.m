@@ -123,13 +123,13 @@ static NSString *kATBannerAdLoadingExtraInlineAdaptiveOrientationKey = @"inline_
     statusDict[@"isReady"] = @(checkLoadModel.isReady);
     statusDict[@"adInfo"] = checkLoadModel.adOfferInfo;
     NSLog(@"ATBannerAdWrapper::statusDict = %@", statusDict);
-    return statusDict.jsonString;
+    return statusDict.jsonFilterString;
 }
 
 -(NSString*) getValidAdCaches:(NSString *)placementID {
     NSArray *array = [[ATAdManager sharedManager] getBannerValidAdsForPlacementID:placementID];
     NSLog(@"ATNativeAdWrapper::array = %@", array);
-    return array.jsonString;
+    return array.jsonFilterString;
 }
 
 UIEdgeInsets SafeAreaInsets_ATUnityBanner() {

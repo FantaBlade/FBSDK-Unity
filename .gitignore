@@ -141,6 +141,9 @@ typings/
 Users
 ============
 
+# UserSettings
+/UserSettings/
+
 /Assets/StreamingAssets/*
 /Assets/StreamingAssets.meta
 /MemoryCaptures/
@@ -177,21 +180,21 @@ __pycache__.meta
 /Assets/ExternalDependencyManager.meta
 
 # HybridCLR
-/Assets/HybridCLRData/generated
-/Assets/HybridCLRData/generated.meta
-/Assets/HybridCLRData/HotfixData/
-!/Assets/HybridCLRData/HotfixData/.gitkeep
-!/Assets/HybridCLRData/HotfixData/.gitkeep.meta
+/Assets/StaticAssets/HybridCLRGenerate/*
+!/Assets/StaticAssets/HybridCLRGenerate/AOTGenericReferences.cs
+!/Assets/StaticAssets/HybridCLRGenerate/AOTGenericReferences.cs.meta
+/Assets/StaticAssets/HybridCLRData/*
+!/Assets/StaticAssets/HybridCLRData/.gitkeep
 /HybridCLRData/
 /QuickToolsBate/
-/auto_collected_dependencies_for_GameAssets.txt
 
-# XAsset
+# XAsset and YooAssets
 /Bundles/
 /Build/
 /Assets/BuildReports/
 /Assets/BuildReports.meta
 /collected_assets_for*.txt
+/yoo/
 
 # TapTap
 /Assets/TapTap

@@ -34,6 +34,10 @@ namespace AnyThinkAds.Api
         public readonly string sub_channel;
         public readonly string channel;
         public readonly Dictionary<string, object> custom_rule;
+        
+        public readonly Dictionary<string, object> ext_info;
+        public readonly string user_load_extra_data;
+        public readonly int abtest_id;
 
         public readonly string reward_custom_data;
 
@@ -72,15 +76,20 @@ namespace AnyThinkAds.Api
 
                 network_placement_id = jsonData.ContainsKey("network_placement_id") ? (string)jsonData["network_placement_id"] : "";
                 ecpm_level = int.Parse(jsonData.ContainsKey("ecpm_level") ? jsonData["ecpm_level"].ToString() : "0");
+                abtest_id = int.Parse(jsonData.ContainsKey("abtest_id") ? jsonData["abtest_id"].ToString() : "0");
                 segment_id = int.Parse(jsonData.ContainsKey("segment_id") ? jsonData["segment_id"].ToString() : "0");
                 scenario_id = jsonData.ContainsKey("scenario_id") ? (string)jsonData["scenario_id"] : "";// RewardVideo & Interstitial
-
+                if (jsonData.ContainsKey("user_load_extra_data")) {
+                    user_load_extra_data = jsonData.ContainsKey("user_load_extra_data") ? (string)jsonData["user_load_extra_data"] : "";
+                }
+                
                 scenario_reward_name = jsonData.ContainsKey("scenario_reward_name") ? (string)jsonData["scenario_reward_name"] : "";
                 scenario_reward_number = int.Parse(jsonData.ContainsKey("scenario_reward_number") ? jsonData["scenario_reward_number"].ToString() : "0");
 
                 channel = jsonData.ContainsKey("channel") ? (string)jsonData["channel"] : "";
                 sub_channel = jsonData.ContainsKey("sub_channel") ? (string)jsonData["sub_channel"] : "";
                 custom_rule = jsonData.ContainsKey("custom_rule") ? JsonMapper.ToObject<Dictionary<string, object>>(jsonData["custom_rule"].ToJson()) : null;
+                ext_info = jsonData.ContainsKey("ext_info") ? JsonMapper.ToObject<Dictionary<string, object>>(jsonData["ext_info"].ToJson()) : null;
 
                 reward_custom_data = jsonData.ContainsKey("reward_custom_data") ? (string)jsonData["reward_custom_data"] : "";
 
@@ -130,12 +139,15 @@ namespace AnyThinkAds.Api
             dataDictionary.Add("ecpm_level", ecpm_level);
             dataDictionary.Add("segment_id", segment_id);
             dataDictionary.Add("scenario_id", scenario_id);
+            dataDictionary.Add("user_load_extra_data", user_load_extra_data);
             dataDictionary.Add("scenario_reward_name", scenario_reward_name);
             dataDictionary.Add("scenario_reward_number", scenario_reward_number);
+            dataDictionary.Add("abtest_id", abtest_id);
 
             dataDictionary.Add("sub_channel", sub_channel);
             dataDictionary.Add("channel", channel);
             dataDictionary.Add("custom_rule", custom_rule);
+            dataDictionary.Add("ext_info", ext_info);
             dataDictionary.Add("reward_custom_data", reward_custom_data);
 
             return dataDictionary;

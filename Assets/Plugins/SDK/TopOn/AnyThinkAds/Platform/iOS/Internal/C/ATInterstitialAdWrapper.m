@@ -108,7 +108,7 @@ static NSString *kATInterstitialSizeUsesPixelFlagKey = @"uses_pixel";
 -(NSString*) getValidAdCaches:(NSString *)placementID {
     NSArray *array = [[ATAdManager sharedManager] getInterstitialValidAdsForPlacementID:placementID];
     NSLog(@"ATNativeAdWrapper::array = %@", array);
-    return array.jsonString;
+    return array.jsonFilterString;
 }
 
 -(void) showInterstitialAdWithPlacementID:(NSString*)placementID extraJsonString:(NSString*)extraJsonString {
@@ -123,7 +123,7 @@ static NSString *kATInterstitialSizeUsesPixelFlagKey = @"uses_pixel";
     statusDict[@"isReady"] = @(checkLoadModel.isReady);
     statusDict[@"adInfo"] = checkLoadModel.adOfferInfo;
     NSLog(@"ATInterstitialAdWrapper::statusDict = %@", statusDict);
-    return statusDict.jsonString;
+    return statusDict.jsonFilterString;
 }
 - (void)entryScenarioWithPlacementID:(NSString *)placementID scenarioID:(NSString *)scenarioID{
     
@@ -177,7 +177,7 @@ static NSString *kATInterstitialSizeUsesPixelFlagKey = @"uses_pixel";
     
     NSLog(@"Unity: getAutoValidAdCaches::array = %@", array);
     
-    return array.jsonString;
+    return array.jsonFilterString;
 }
 
 -(NSString*) checkAutoAdStatus:(NSString *)placementID {
@@ -190,7 +190,7 @@ static NSString *kATInterstitialSizeUsesPixelFlagKey = @"uses_pixel";
     statusDict[@"adInfo"] = checkLoadModel.adOfferInfo;
     
     NSLog(@":checkAutoAdStatus statusDict = %@", statusDict);
-    return statusDict.jsonString;
+    return statusDict.jsonFilterString;
 }
 
 -(void) setAutoLocalExtra:(NSString*)placementID customDataJSONString:(NSString*)customDataJSONString{
