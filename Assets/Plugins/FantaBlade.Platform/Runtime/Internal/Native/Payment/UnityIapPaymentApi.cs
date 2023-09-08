@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using FantaBlade.Common;
 using UnityEngine.Purchasing;
+using UnityEngine.Purchasing.Extension;
 
 namespace FantaBlade.Platform.Internal.Native
 {
-    internal class UnityIapPaymentApi : IPaymentApi, IStoreListener
+    internal class UnityIapPaymentApi : IPaymentApi, IDetailedStoreListener
     {
         private IStoreController _controller;
 
@@ -134,9 +135,14 @@ namespace FantaBlade.Platform.Internal.Native
             return PurchaseProcessingResult.Pending;
         }
 
-        public void OnPurchaseFailed(Product item, PurchaseFailureReason p)
+        public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
         {
-            Log.Info("Purchase failed: " + item.definition.id);
+            OnPurchaseFailed(product, new PurchaseFailureDescription(null, failureReason, failureReason.ToString()));
+        }
+        
+        public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
+        {
+            Log.Info("Purchase failed: " + product.definition.id);
             // Detailed debugging information
             // Log.Info("Store specific error code: " +
             //          _transactionHistoryExtensions.GetLastStoreSpecificPurchaseErrorCode());
@@ -148,13 +154,13 @@ namespace FantaBlade.Platform.Internal.Native
 
             _purchaseInProgress = false;
 
-            switch (p)
+            switch (failureDescription.reason)
             {
                 case PurchaseFailureReason.UserCancelled:
                     FantaBladePlatform.OnPayCancel();
                     break;
                 default:
-                    FantaBladePlatform.OnPayFailure(p.ToString());
+                    FantaBladePlatform.OnPayFailure(failureDescription.message);
                     break;
             }
         }

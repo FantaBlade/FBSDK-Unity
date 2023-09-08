@@ -224,7 +224,6 @@ namespace FantaBlade.Platform.Internal
             }
             else
             {
-                Log.Debug("手机认证不支持，调起常规登录");
                 ShowNormalUI(NormalUIID.Login);
             }
         }
