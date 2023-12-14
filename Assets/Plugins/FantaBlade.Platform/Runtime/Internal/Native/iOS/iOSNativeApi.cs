@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using AOT;
 using UnityEngine;
 
-namespace FantaBlade.Internal.Native
+namespace FantaBlade.Platform.Internal.Native
 {
     internal class iOSNativeApi : INativeApi
     {

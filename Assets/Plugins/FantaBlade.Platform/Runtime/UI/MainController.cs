@@ -48,7 +48,7 @@ namespace FantaBlade.Platform.UI
 			}
 			var active = SdkManager.IsLoginChannelEnable(loginChannel);
 			#if UNITY_IOS
-			active = active && SdkManager.NativeApi.IsInstall(loginChannel);
+			active = active && SdkManager.NativeApi.IsInstall((int)loginChannel);
 			#endif
 			go.SetActive(active);
 		}
